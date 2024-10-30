@@ -1,0 +1,106 @@
+/* Navbar.css */
+
+* {
+  box-sizing: border-box; /* Ensure proper box model */
+}
+
+body {
+  margin: 0; /* Remove default body margin */
+}
+
+.navbar {
+  display: flex; /* Flexbox for layout */
+  align-items: center; /* Center items vertically */
+  justify-content: space-between; /* Space between logo and links */
+  padding: 10px 20px; /* Padding around the navbar */
+  background-color: #f3f4f6; /* Light grey background to suit white background */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* More pronounced shadow for depth */
+  position: fixed; /* Fixed to the top */
+  top: 0; /* Align to the top */
+  left: 0; /* Align to the left */
+  right: 0; /* Align to the right */
+  z-index: 1000; /* Stay above other content */
+}
+
+.box1 {
+  display: flex; /* Flexbox for layout */
+  align-items: center; /* Center items vertically */
+  width: 100%; /* Full width */
+}
+
+.logo {
+  margin: 0; /* Remove default margin */
+  font-size: 1.5rem; /* Font size for logo */
+  font-weight: bold; /* Bold font */
+  color: #333; /* Dark text color */
+}
+
+.highlight {
+  color: #007bff; /* Blue color for highlighted text */
+}
+
+.box2 {
+  margin-left: auto; /* Push the nav links to the right */
+}
+
+.box21 {
+  display: flex; /* Flexbox for nav links */
+  list-style-type: none; /* Remove bullet points */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margin */
+}
+
+.box21 li {
+  margin-left: 20px; /* Space between items */
+  font-weight: 500; /* Medium font weight */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: medium;
+  transition: color 0.3s; /* Transition effect for hover */
+}
+
+.box21 li:hover {
+  color: #007bff; /* Change color on hover to blue */
+}
+
+.signup-button {
+  padding: 12px 25px; /* Padding for the button */
+  font-size: 0.9rem; /* Font size for button */
+  font-weight: bold; /* Bold font */
+  border-radius: 30px; /* Rounded corners */
+  border: none; /* Remove border */
+  background-color: #007bff; /* Blue button background */
+  color: #fff; /* White text */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Transition for hover effect */
+}
+
+.signup-button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .box21 {
+    flex-direction: column; /* Stack links vertically on smaller screens */
+    position: absolute; /* Position for dropdown */
+    background-color: #f3f4f6; /* Ensure background color matches navbar */
+    width: 100%; /* Full width */
+    top: 60px; /* Below navbar */
+    left: 0; /* Align left */
+    display: none; /* Hide by default */
+    z-index: 999; /* Ensure dropdown is above other content */
+  }
+
+  .navbar:hover .box21 {
+    display: flex; /* Show on hover */
+  }
+
+  .box21 li {
+    margin: 10px 0; /* Space between items in vertical layout */
+  }
+}
+.change{
+  display:flex;
+  margin-top: 10px;
+  gap: 10px;
+}

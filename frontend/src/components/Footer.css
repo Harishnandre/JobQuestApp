@@ -1,0 +1,81 @@
+/* Footer.css */
+
+
+.wrapper {
+  display: flex; /* Flexbox for layout */
+  flex-direction: column; /* Column layout for the wrapper */
+  min-height: 100vh; /* Full height */
+}
+
+.footer {
+  background-color: #282c34; /* Dark background */
+  color: #ffffff; /* White text */
+  padding: 20px; /* Padding */
+  text-align: center;
+  width: 100%; /* Full width */
+  margin: 0; /* No margin */
+  position: relative; /* Position relative for positioning elements */
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.footer-content {
+  display: flex; /* Flexbox layout */
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  justify-content: space-between; /* Space between items */
+  max-width: 1200px; /* Max width */
+  margin: 0 auto; /* Center the content */
+  padding: 10px; /* Padding */
+}
+
+.footer-links,
+.footer-social {
+  flex: 1; /* Each section takes equal space */
+  min-width: 200px; /* Minimum width for responsiveness */
+}
+
+.footer-links ul {
+  list-style-type: none; /* Remove bullet points */
+  padding: 0; /* Remove padding */
+}
+
+.footer-links ul li {
+  margin: 5px 0; 
+}
+
+.footer-links a {
+  color: #ffffff; /* White text */
+  text-decoration: none; /* Remove underline */
+}
+
+.footer-links a:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+.footer-social .social-icons {
+  display: flex; /* Flexbox for social icons */
+  justify-content: center; /* Center the icons */
+  gap: 10px; /* Space between icons */
+}
+
+.footer-bottom {
+  border-top: 1px solid #444; /* Top border */
+  padding-top: 10px; /* Space above bottom text */
+}
+
+.footer-bottom p {
+  margin: 0; /* Remove default margin */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column; /* Stack items vertically on smaller screens */
+    align-items: center; /* Center items */
+  }
+  
+  .footer-links,
+  .footer-social {
+    flex: none; /* Reset flex for stacking */
+    margin-bottom: 10px; /* Space between stacked sections */
+  }
+}
