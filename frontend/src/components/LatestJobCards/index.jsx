@@ -1,6 +1,6 @@
 import React from 'react';
 // import { useNavigate } from 'react-router-dom';
-import './LatestJobCards.css'; // Import the CSS file
+import './index.css'; // Import the CSS file
 
 const LatestJobCards = ({ job }) => {
     

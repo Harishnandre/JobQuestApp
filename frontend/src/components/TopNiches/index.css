@@ -1,0 +1,12 @@
+.card-container {
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px; /* Space between cards */
+    padding: 20px; /* Padding around the grid */
+  }
+
+  .changecolor {
+    color: #021ffa;
+    margin-left: 16px;
+  }
+  

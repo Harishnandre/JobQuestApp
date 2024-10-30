@@ -1,6 +1,6 @@
 import React from 'react'
-import LatestJobCards from './LatestJobCards';
-import './LatestJobCards.css'
+import LatestJobCards from '../LatestJobCards';
+import './index.css'
 const TopNiches = () => {
   const alljobs = [
     {
