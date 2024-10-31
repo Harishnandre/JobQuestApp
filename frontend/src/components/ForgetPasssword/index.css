@@ -1,0 +1,118 @@
+/* Main container styling */
+.form-container1 {
+  max-width: 550px;
+  margin: 80px auto;
+  padding: 30px;
+  background-color: #e6f2ff; /* Light gray background */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+}
+
+/* Form title */
+.form-container1 h3 {
+  font-size: 24px;
+  color: #333333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Wrapper for row-style layout */
+.wrapper7,
+.wrapper5,
+.wrapper6{
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  margin-top: 20px;
+  flex-wrap: wrap; 
+  /* Adjusted margin for consistency */
+} 
+
+/* Input label and box styling */
+.inputTags {
+  display: flex;
+  flex-direction: column;
+  flex: 1;  /* Flex basis set to 300px for responsive size */
+  min-width: 250px; /* Ensures minimum width */
+  box-sizing: border-box;
+}
+
+.inputTags label {
+  font-size: 14px;
+  color: #333333;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+/* Styling for input, select, and textarea */
+.inputTags input,
+.inputTags select,
+.inputTags textarea {
+  padding: 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 2px solid #c4b5fd; /* Light purple border */
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+
+
+/* Button Styling */
+.button input[type="submit"] {
+  background-color: #7c3aed;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.button input[type="submit"]:hover {
+  background-color: #5b21b6;
+}
+
+/* Terms & Conditions section with responsive styling */
+
+@media (max-width: 768px) {
+  .wrapper {
+    flex-direction: column;
+    gap: 15px; /* Reduces gap to fit on smaller screens */
+  }
+  
+  /* Policy section alignment for smaller screens */
+ 
+  /* Adjust form container padding */
+  .form-container1 {
+    padding: 13px;
+    margin: 53px;
+    margin-top:104px;
+  }
+
+  /* Input field adjustments for smaller screens */
+  .inputTags {
+    flex: 1 1 100%; /* Each input takes full width */
+  }
+
+
+@media (max-width: 480px) {
+  /* Extra small screen adjustments */
+  .form-container1 {
+    padding: 8px;
+    margin: 25px;
+    margin-top:128px;
+  }
+  
+  /* Smaller text for policy section */
+
+}
+
+/* Additional margin for the resume input */
+
+

@@ -7,6 +7,7 @@ import Footer from './components/Footer'
 import LoginRoute from './components/LoginRoute'
 import JobsSection from './components/JobsSection'
 import Register from './components/Register'
+import ForgetPassword from './components/ForgetPasssword'
 const App = () => {
   return (
     <BrowserRouter>
@@ -16,12 +17,9 @@ const App = () => {
       <Route exact path='/login' Component={LoginRoute}/>
       <Route exact path='/jobs' Component={JobsSection}/>
       <Route exact path='/register' Component={Register}/>
+      <Route exact path='/forget-password' Component={ForgetPassword}/>
      </Routes>
      <Footer/>
-     <Routes>
-   
-     </Routes>
-    
     </BrowserRouter>
   )
 }
