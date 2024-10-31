@@ -1,11 +1,11 @@
 import Hero from "../Hero"
-import LatestJobCards from "../LatestJobCards"
+import TopNiches from "../TopNiches"
 
 
 const Home = () => {
      return <>
        <Hero/>
-       <LatestJobCards/>
+       <TopNiches></TopNiches>
      </>
 }
 export default Home

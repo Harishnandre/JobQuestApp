@@ -1,0 +1,165 @@
+/* Main container styling */
+.form-container {
+  max-width: 900px;
+  margin: 80px auto;
+  padding: 30px;
+  background-color: #e6f2ff; /* Light gray background */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+}
+
+/* Form title */
+.form-container h3 {
+  font-size: 24px;
+  color: #333333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Wrapper for row-style layout */
+.wrapper2,
+.wrapper3,
+.wrapper1{
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  margin-top: 20px;
+  flex-wrap: wrap; 
+  /* Adjusted margin for consistency */
+} 
+
+/* Input label and box styling */
+.inputTag {
+  display: flex;
+  flex-direction: column;
+  flex: 1;  /* Flex basis set to 300px for responsive size */
+  min-width: 250px; /* Ensures minimum width */
+  box-sizing: border-box;
+}
+
+.inputTag label {
+  font-size: 14px;
+  color: #333333;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+/* Styling for input, select, and textarea */
+.inputTag input,
+.inputTag select,
+.inputTag textarea {
+  padding: 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 2px solid #c4b5fd; /* Light purple border */
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+
+
+/* Button Styling */
+.button input[type="submit"] {
+  background-color: #7c3aed;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.button input[type="submit"]:hover {
+  background-color: #5b21b6;
+}
+
+/* Terms & Conditions section with responsive styling */
+.policy {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  gap: 10px;
+  font-size: 14px;
+  color: #333333;
+  flex-wrap: wrap;  /* Wraps items if necessary */
+}
+
+.policy input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.text h3 {
+  text-align: center;
+  font-size: 14px;
+  color: #333333;
+  margin-top: 20px;
+}
+
+.text h3 a {
+  color: #7c3aed;
+  text-decoration: none;
+}
+
+.text h3 a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .wrapper {
+    flex-direction: column;
+    gap: 15px; /* Reduces gap to fit on smaller screens */
+  }
+  
+  /* Policy section alignment for smaller screens */
+  .policy {
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 13px;
+  }
+
+  /* Adjust form container padding */
+  .form-container {
+    padding: 20px;
+    margin: 20px;
+  }
+
+  /* Input field adjustments for smaller screens */
+  .inputTag {
+    flex: 1 1 100%; /* Each input takes full width */
+  }
+}
+
+@media (max-width: 850px) {
+  /* Adjust margin for .fornow class */
+  .fornow {
+    margin-top: 80px; /* Move .fornow down by 80px */
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small screen adjustments */
+  .form-container {
+    padding: 15px;
+    margin: 15px;
+  }
+  
+  /* Smaller text for policy section */
+  .policy {
+    font-size: 12px;
+  }
+}
+
+/* Additional margin for the resume input */
+.newone {
+  margin-top: 100px; /* Maintain this margin for resume input */
+}
+.registerbox{
+  margin-top:20px;
+}
+
