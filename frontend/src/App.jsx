@@ -18,6 +18,10 @@ const App = () => {
       <Route exact path='/register' Component={Register}/>
      </Routes>
      <Footer/>
+     <Routes>
+   
+     </Routes>
+    
     </BrowserRouter>
   )
 }
