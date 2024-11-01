@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { FaSearch, FaBookmark, FaMapMarkerAlt } from "react-icons/fa";
 import "./index.css";
-import { useNavigate } from "react-router-dom";
+
 
 
 import "./index.css";
@@ -44,7 +44,7 @@ function JobsSection() {
 
 
 
-  const navigate=useNavigate();
+ 
 
   // States for each filter
   const [location, setLocation] = useState("");
@@ -136,26 +136,7 @@ function JobsSection() {
         {/* Display filtered jobs or 'No results' */}
         {filteredJobs.length > 0 ? (
           filteredJobs.map((job) => (
-            <>
-            <div key={job.id} className="job-card">
-              <div className="card-header">
-                <h4>{job.company}</h4>
-                <FaBookmark className="bookmark-icon" />
-              </div>
-              <p className="location">
-                <FaMapMarkerAlt className="location-icon" /> {job.location}
-              </p>
-              <p className="description">{job.description}</p>
-              <div className="card-footer">
-                <span>{job.role}</span>
-                <span>{job.salary} LPA</span>
-                <span>{job.type}</span> 
-                <span>{job.positions} positions</span>
-              </div>
-              <button className="details-button" onClick={()=>navigate(`/job-details/${job.id}`)}>Details</button>
-            </div>
               <JobCard key={job.id} job={job}/>
-              </>
           ))
         ) : (
           <div className="no-results">

@@ -1,8 +1,9 @@
 import './index.css'
 import {  FaBookmark, FaMapMarkerAlt } from "react-icons/fa";
-
+import { useNavigate } from "react-router-dom";
 const JobCard = (props) => {
     const {job} = props
+    const navigate=useNavigate();
 
      return  <div key={job.id} className="job-card">
      <div className="card-header">
@@ -19,7 +20,7 @@ const JobCard = (props) => {
        <span>{job.type}</span>
        <span>{job.positions} positions</span>
      </div>
-     <button className="details-button">Details</button>
+     <button className="details-button" onClick={()=>navigate(`/job-details/${job.id}`)}>Details</button>
    </div>
 }
 export default JobCard
