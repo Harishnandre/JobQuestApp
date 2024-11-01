@@ -1,3 +1,65 @@
-.job{
-  margin-top: 59px;
+.job-details-container {
+  padding: 20px;
+  margin-right: 500px;
+  max-width: 700px;
+  margin: auto;
 }
+
+.job-details-card {
+  
+  border-radius: 8px;
+  padding: 20px;
+  /* background-color: #f9f9f9; */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top:25px;
+}
+
+.job-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.job-location,
+.job-type,
+.job-salary,
+.job-positions,
+.about-company,
+.duties-title {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.duties-list {
+  margin: 10px 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.apply-button {
+  background-color: #007BFF; /* Button color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.apply-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.back-button {
+  margin-bottom:-15px;
+  margin-top:70px;
+  padding: 10px 15px;
+  background-color: #ccc; /* Light gray for back button */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background-color: #bbb; /* Darker gray on hover */
+}
+
