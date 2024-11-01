@@ -1,7 +1,13 @@
 import React, { useState } from "react";
+
 import { FaSearch, FaBookmark, FaMapMarkerAlt } from "react-icons/fa";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
+
+
+import "./index.css";
+import JobCard from "../JobCard";
+
 
 // Sample data with numerical salary values
 const jobData = [
@@ -37,7 +43,9 @@ const employmentTypes = [
 function JobsSection() {
 
 
+
   const navigate=useNavigate();
+
   // States for each filter
   const [location, setLocation] = useState("");
   const [salaryRange, setSalaryRange] = useState("");
@@ -70,6 +78,7 @@ function JobsSection() {
   };
 
   return (
+    
     <div className="jobs-section">
       {/* Filter Panel */}
       <div className="filters">
@@ -127,6 +136,7 @@ function JobsSection() {
         {/* Display filtered jobs or 'No results' */}
         {filteredJobs.length > 0 ? (
           filteredJobs.map((job) => (
+            <>
             <div key={job.id} className="job-card">
               <div className="card-header">
                 <h4>{job.company}</h4>
@@ -144,14 +154,18 @@ function JobsSection() {
               </div>
               <button className="details-button" onClick={()=>navigate(`/job-details/${job.id}`)}>Details</button>
             </div>
+              <JobCard key={job.id} job={job}/>
+              </>
           ))
         ) : (
           <div className="no-results">
             <img src="https://img.freepik.com/premium-vector/search-result-find-illustration_585024-17.jpg" alt="No results" />
           </div>
         )}
+
       </div>
     </div>
+    
   );
 }
 
