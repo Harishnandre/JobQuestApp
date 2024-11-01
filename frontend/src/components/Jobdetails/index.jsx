@@ -51,7 +51,7 @@ const   Jobdetails = () => {
    const job=jobData.find(job=>job.id===parseInt(JobId));
   //  console.log(job);
   if (!job) {
-    return <h1 style={{ textAlign: 'center', color: 'red' }}>Job not found</h1>;
+    return <h1 style={{ textAlign: 'center', color: 'red',margin:'100px' }}>Job not found</h1>;
   }
 
   return (
