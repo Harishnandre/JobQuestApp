@@ -8,6 +8,9 @@ import LoginRoute from './components/LoginRoute'
 import JobsSection from './components/JobsSection'
 import Register from './components/Register'
 import ForgetPassword from './components/ForgetPasssword'
+import Jobdetails from './components/Jobdetails/Index'
+
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -18,6 +21,7 @@ const App = () => {
       <Route exact path='/jobs' Component={JobsSection}/>
       <Route exact path='/register' Component={Register}/>
       <Route exact path='/forget-password' Component={ForgetPassword}/>
+      <Route exact path='/job-details/:JobId' Component={Jobdetails}/>
      </Routes>
      <Footer/>
     </BrowserRouter>
