@@ -14,11 +14,9 @@ const Dashboard = () => {
   };
   
   const handleLogout = () => {
-    // Perform logout operation
     console.log('User logged out');
-    // You might want to redirect or clear user state here
   };
-  // Function to render the selected component
+
   const renderComponent = () => {
     switch (activeComponent) {
       case 'Profile':
@@ -49,11 +47,33 @@ const Dashboard = () => {
         {/* Sidebar Navigation */}
         <nav className="sidebar">
           <ul>
-            <li onClick={() => setActiveComponent('Profile')}>Profile</li>
-            <li onClick={() => setActiveComponent('Update Profile')}>Update Profile</li>
-            <li onClick={() => setActiveComponent('Update Password')}>Update Password</li>
-            <li onClick={() => setActiveComponent('My Applicants')}>My Applicants</li>
-            <li onClick={handleLogout} className="logout-btn">Logout</li>
+            <li
+              className={activeComponent === 'Profile' ? 'active' : ''}
+              onClick={() => setActiveComponent('Profile')}
+            >
+              Profile
+            </li>
+            <li
+              className={activeComponent === 'Update Profile' ? 'active' : ''}
+              onClick={() => setActiveComponent('Update Profile')}
+            >
+              Update Profile
+            </li>
+            <li
+              className={activeComponent === 'Update Password' ? 'active' : ''}
+              onClick={() => setActiveComponent('Update Password')}
+            >
+              Update Password
+            </li>
+            <li
+              className={activeComponent === 'My Applicants' ? 'active' : ''}
+              onClick={() => setActiveComponent('My Applicants')}
+            >
+              My Applicants
+            </li>
+            <li onClick={handleLogout} className="logout-btn">
+              Logout
+            </li>
           </ul>
         </nav>
 

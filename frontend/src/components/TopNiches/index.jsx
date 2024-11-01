@@ -5,7 +5,7 @@ import './index.css'
 const TopNiches = () => {
   const alljobs = [
     {
-      id: 1,
+      id: 9,
       company: {
         name: "Tech Solutions Inc."
       },
@@ -17,7 +17,7 @@ const TopNiches = () => {
       salary: 10, // Salary in LPA (Lakhs Per Annum)
     },
     {
-      id: 2,
+      id: 10,
       company: {
         name: "Green Energy Corp."
       },
@@ -29,7 +29,7 @@ const TopNiches = () => {
       salary: 12,
     },
     {
-      id: 3,
+      id: 11,
       company: {
         name: "Finance Experts LLC"
       },
@@ -41,7 +41,7 @@ const TopNiches = () => {
       salary: 6,
     },
     {
-      id: 4,
+      id: 12,
       company: {
         name: "Health Solutions"
       },
@@ -53,7 +53,7 @@ const TopNiches = () => {
       salary: 8,
     },
     {
-      id: 5,
+      id: 13,
       company: {
         name: "E-commerce Ltd."
       },
@@ -65,7 +65,7 @@ const TopNiches = () => {
       salary: 9,
     },
     {
-      id: 6,
+      id: 14,
       company: {
         name: "Smart Tech Solutions"
       },
@@ -77,7 +77,7 @@ const TopNiches = () => {
       salary: 15,
     },
     {
-      id: 7,
+      id: 15,
       company: {
         name: "Creative Design Agency"
       },
@@ -89,7 +89,7 @@ const TopNiches = () => {
       salary: 5,
     },
     {
-      id: 8,
+      id: 16,
       company: {
         name: "Global Logistics"
       },
@@ -101,7 +101,7 @@ const TopNiches = () => {
       salary: 11,
     },
     {
-      id: 9,
+      id: 17,
       company: {
         name: "Cyber Security Solutions"
       },
@@ -113,7 +113,7 @@ const TopNiches = () => {
       salary: 14,
     },
     {
-      id: 10,
+      id: 18,
       company: {
         name: "Mobile Apps Inc."
       },

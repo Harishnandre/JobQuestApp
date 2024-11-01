@@ -3,9 +3,6 @@ import React, { useState } from "react";
 import { FaSearch, FaBookmark, FaMapMarkerAlt } from "react-icons/fa";
 import "./index.css";
 
-
-
-import "./index.css";
 import JobCard from "../JobCard";
 
 
@@ -134,15 +131,18 @@ function JobsSection() {
         </div>
 
         {/* Display filtered jobs or 'No results' */}
+        <div className="card-containers">
         {filteredJobs.length > 0 ? (
-          filteredJobs.map((job) => (
-              <JobCard key={job.id} job={job}/>
-          ))
-        ) : (
+          
+          filteredJobs?.map((job) => (<JobCard key={job.id} job={job}/>))
+          
+          ) : (
           <div className="no-results">
             <img src="https://img.freepik.com/premium-vector/search-result-find-illustration_585024-17.jpg" alt="No results" />
           </div>
         )}
+        </div>
+       
 
       </div>
     </div>

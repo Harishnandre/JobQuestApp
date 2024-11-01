@@ -1,8 +1,7 @@
 import React from 'react'
 import './index.css'
 import { useNavigate, useParams } from 'react-router-dom';
-
-
+import Swal from 'sweetalert2';
 
 
 const jobData = [
@@ -43,15 +42,45 @@ const jobData = [
   
 ];
 const   Jobdetails = () => {
+
+const handlealert=()=>{
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You want to apply this role",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes,Submit"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Thank you!",
+        text: "Your submission has been sent",
+        icon: "success"
+      });
+      
+    }
+  });
+}
+
+
+
+
+
+
   const params=useParams();
   console.log(params);
   const { JobId } = params;
   console.log(Number(JobId));
   const  navigate=useNavigate();
    const job=jobData.find(job=>job.id===parseInt(JobId));
+
+
+
   //  console.log(job);
   if (!job) {
-    return <h1 style={{ textAlign: 'center', color: 'red' }}>Job not found</h1>;
+    return <h1 style={{ textAlign: 'center', color: 'red',margin:'100px' }}>Job not found</h1>;
   }
 
   return (
@@ -77,7 +106,7 @@ const   Jobdetails = () => {
           ))}
         </ul>
         
-        <button className="apply-button">Apply Now</button>
+        <button className="apply-button" onClick={handlealert}>Apply Now</button>
       </div>
     </div>
   );
