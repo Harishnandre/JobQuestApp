@@ -30,7 +30,17 @@ import { ToastContainer } from 'react-toastify';
 };
   const handleSubmit= async(event)=>{
     event.preventDefault();
-    console.log(event);
+    // console.log(event);
+    const formData = {
+      
+      role,
+      email,
+      password,
+    };
+  
+    console.log("Form Data:", formData);
+
+
    try{   //to handle the response and error
    const res=await  axios.post(`${import.meta.env.REACT_APP_API}/api/v1/auth/login`,{email,password});
   
@@ -89,16 +99,12 @@ import { ToastContainer } from 'react-toastify';
 			
 			<br></br>
 		<div class="remember-me--forget-password">
-				
-	<label>
-		<input type="checkbox" name="item" checked/>
-		<span class="text-checkbox">Remember me</span>
-	</label>
+
 			<Link to='/forget-password'>forget password?</Link>
 		</div>
 			
 			<br/>
-			<button >Login</button>
+			<button type='submit'>Login</button>
       </form>
 	</div>
 	

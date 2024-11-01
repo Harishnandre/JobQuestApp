@@ -22,7 +22,19 @@ import axios from 'axios';
   };
   const handleSubmit= async(event)=>{
     event.preventDefault();
-    console.log(event);
+    // console.log(event);
+    const formData = {
+      
+      newpassword,
+      email,
+      answer,
+    };
+  
+    console.log("Form Data:", formData);
+
+
+
+
    try{   //to handle the response and error
   const res=await  axios.post(`${import.meta.env.REACT_APP_API}/api/v1/auth/forget-password`,{email,newpassword,answer});
   console.log(res);

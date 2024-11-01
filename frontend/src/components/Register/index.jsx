@@ -92,7 +92,18 @@ const handlerolechange=(event)=>{
   };
   const handleSubmit= async(event)=>{
   event.preventDefault();
-  console.log(event);
+  // console.log(event);
+  const formData = {
+    name,
+    role,
+    email,
+    password,
+    phone,
+    address,
+    answer,
+  };
+
+  console.log("Form Data:", formData);
  try{   //to handle the response and error
 const res=await  axios.post(`${import.meta.env.REACT_APP_API}/api/v1/auth/register`,{name,email,password,phone,address,answer});
 
@@ -118,7 +129,6 @@ else{
  }
   };
   
-
   return (
     <>
  <div className="form-container">
