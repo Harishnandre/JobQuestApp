@@ -127,7 +127,7 @@ else{
      <div className="registerbox">
      <div className="wrapper1">
      <div className='inputTag'>
-          <label>Register As</label>
+          <p>Register As</p>
           <select value={role} onChange={handlerolechange}>
           <option value="">Select Role</option>
           <option value="Employer">Register as an Employer</option>
@@ -135,34 +135,34 @@ else{
           </select>
      </div>
      <div className='inputTag'>
-          <label>Name</label>
+          <p>Name</p>
         <input type="text"onChange={handlenameChange} placeholder="Enter your name" required value={name} ></input>
       </div>
      </div>
 
      <div className="wrapper2">
      <div className='inputTag'>
-          <label>Email</label>
+          <p>Email</p>
         <input type="text"onChange={handleemailChange} placeholder="youremail@gmail.com" required value={email}></input>
       </div>
       <div className="inputTag">
-      <label>Phone Number</label>
+      <p>Phone Number</p>
         <input type="text"onChange={handlephoneChange} placeholder="111-222-333" required value={phone}></input>
 </div>
 </div>
 
 <div className="wrapper3">
      <div className='inputTag'>
-          <label>Address</label>
+          <p>Address</p>
         <input type="text"onChange={handleaddressChange} placeholder="Address" required  value={address}></input>
       </div>
       <div className="inputTag">
-      <label>Password</label>
+      <p>Password</p>
       <input type="password"onChange={handlepasswordChange} placeholder="Create password" required value={password}></input>
      
 </div>
 <div className='inputTag'>
-          <label>Your Answer</label>
+          <p>Your Answer</p>
         <input type="text"onChange={handleanswerChange} placeholder="What is Your Favourite Actor" required value={answer}></input>
 </div>
 </div>
