@@ -4,14 +4,15 @@ import UpdateProfile from './UpdateProfile';
 import UpdatePassword from './UpdatePassword';
 import MyApplicants from './MyApplicants';
 import './index.css';
+import { useLocation  } from 'react-router-dom';
 
 const Dashboard = () => {
+  const location = useLocation();
+  const { user } = location.state || {};
+  console.log(user)
   const [activeComponent, setActiveComponent] = useState('Profile'); // State to track active component
-
-  const user = {
-    name: 'Nandre Harish',
-    imageUrl: 'https://static.vecteezy.com/system/resources/previews/020/911/740/original/user-profile-icon-profile-avatar-user-icon-male-icon-face-icon-profile-icon-free-png.png', // Replace with actual user image URL
-  };
+  const {profile,fullName} = user
+  const {profilePhoto} = profile
   
   const handleLogout = () => {
     console.log('User logged out');
@@ -20,15 +21,15 @@ const Dashboard = () => {
   const renderComponent = () => {
     switch (activeComponent) {
       case 'Profile':
-        return <Profile />;
+        return <Profile user={user}/>;
       case 'Update Profile':
-        return <UpdateProfile />;
+        return <UpdateProfile user={user}/>;
       case 'Update Password':
         return <UpdatePassword />;
       case 'My Applicants':
         return <MyApplicants />;
       default:
-        return <Profile />;
+        return <Profile user={user}/>;
     }
   };
 
@@ -37,8 +38,8 @@ const Dashboard = () => {
       {/* Header Section */}
       <header className="dashboard-header">
         <div className="user-info">
-          <img src={user.imageUrl} alt="User" className="user-image" />
-          <h2>Hi {user.name}!</h2>
+          <img src={profilePhoto} alt="User" className="user-image" />
+          <h2>Hi {fullName}!</h2>
         </div>
       </header>
 

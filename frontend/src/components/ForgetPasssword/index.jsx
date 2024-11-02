@@ -9,7 +9,7 @@ import axios from 'axios';
   const navigate=useNavigate();
   const [email ,setemail]=useState("");
 
-  const [newpassword ,setnewPassword]=useState("");
+  const [newPassword ,setnewPassword]=useState("");
   const [answer ,checkanswer]=useState("");
   const handleemailChange=(event)=>{
     setemail(event.target.value);
@@ -25,7 +25,7 @@ import axios from 'axios';
     // console.log(event);
     const formData = {
       
-      newpassword,
+      newPassword,
       email,
       answer,
     };
@@ -36,13 +36,14 @@ import axios from 'axios';
 
 
    try{   //to handle the response and error
-  const res=await  axios.post(`${import.meta.env.REACT_APP_API}/api/v1/auth/forget-password`,{email,newpassword,answer});
+  const res=await  axios.patch('http://localhost:5000/api/v1/user/forget-password',formData);
   console.log(res);
   
   if(res.data.success){
     toast.success(res.data.message);
-    //navigation to login page tauqeer work
-    navigate('/login');
+    setTimeout(() => {
+      navigate('/login'); // Change '/dashboard' to the route you want to navigate to
+    }, 1000);
   }
   else{
     toast.error(res.data.message);
@@ -79,7 +80,7 @@ import axios from 'axios';
     <div className="wrapper6">
           <div className="inputTags">
           <label >New Password</label>
-          <input type="password"onChange={handleresetpasswordChange} placeholder="Create password" required value={newpassword}></input>
+          <input type="password"onChange={handleresetpasswordChange} placeholder="Create password" required value={newPassword}></input>
          
     </div>
     </div>

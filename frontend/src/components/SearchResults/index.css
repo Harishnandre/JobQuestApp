@@ -1,0 +1,49 @@
+/* index.css */
+
+.jobs-search-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    margin-top: 50px;
+    min-height: 100vh;
+  }
+  
+  h1 {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .search-card-containers {
+    display: flex;
+    justify-content: space-around;
+    max-width: 90%;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+  }
+  
+  
+  .search-no-results {
+    text-align: center;
+    color: #555;
+    margin-top: 30px;
+  }
+  
+  .search-no-results img {
+    max-width: 300px;
+    margin-top: 20px;
+    opacity: 0.8;
+  }
+  
+  .search-no-results p {
+    font-size: 1.2em;
+    color: #333;
+    margin-top: 10px;
+  }
+  
+  

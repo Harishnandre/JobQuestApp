@@ -128,3 +128,6 @@ body {
     position: relative;
     margin-left: 3px;
   }
+  button{
+    cursor: pointer;
+  }

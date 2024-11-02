@@ -73,6 +73,9 @@
   cursor: pointer;
   color: #555;
   font-size: 1.5rem;
+   background-color: transparent;
+   outline: none;
+   border: 0px solid;
 }
 
 .ctaContainer {
