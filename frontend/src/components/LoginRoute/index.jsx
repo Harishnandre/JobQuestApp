@@ -50,8 +50,7 @@ const Login = () => {
         const {data}  = res
          const {auth} = data
          const {token,user} = auth
-         Cookies.set('job_quest_jwt_token',token,{expires:30});
-         
+          console.log(user)
         toast.success(res.data.message);
         
         // Wait for 1 second before navigating
