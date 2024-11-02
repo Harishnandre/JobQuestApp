@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-
 import { FaSearch, FaBookmark, FaMapMarkerAlt } from "react-icons/fa";
 import "./index.css";
-
 import JobCard from "../JobCard";
-
 
 // Sample data with numerical salary values
 const jobData = [
@@ -38,11 +35,6 @@ const employmentTypes = [
 ];
 
 function JobsSection() {
-
-
-
- 
-
   // States for each filter
   const [location, setLocation] = useState("");
   const [salaryRange, setSalaryRange] = useState("");
@@ -51,19 +43,26 @@ function JobsSection() {
 
   // Function to filter jobs based on selected criteria
   const filteredJobs = jobData.filter(job => {
-    const salaryCondition = salaryRange ? 
-      (salaryRange === "Below 10 LPA" ? job.salary < 10 :
-        salaryRange === "10 LPA and above" ? job.salary >= 10 && job.salary < 20 :
-        salaryRange === "20 LPA and above" ? job.salary >= 20 && job.salary < 30 :
-        salaryRange === "30 LPA and above" ? job.salary >= 30 && job.salary < 40 :
-        salaryRange === "40 LPA and above" ? job.salary >= 40 :
-        true) : true;
+    const salaryCondition = salaryRange 
+      ? (salaryRange === "Below 10 LPA" ? job.salary < 10 :
+         salaryRange === "10 LPA and above" ? job.salary >= 10 && job.salary < 20 :
+         salaryRange === "20 LPA and above" ? job.salary >= 20 && job.salary < 30 :
+         salaryRange === "30 LPA and above" ? job.salary >= 30 && job.salary < 40 :
+         salaryRange === "40 LPA and above" ? job.salary >= 40 :
+         true)
+      : true;
+
+    const matchesSearchTerm = searchTerm
+      ? job.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.description.toLowerCase().includes(searchTerm.toLowerCase())
+      : true;
 
     return (
-      (salaryCondition) &&
+      salaryCondition &&
       (!location || job.location === location) &&
       (!employmentType || job.type === employmentType) &&
-      (!searchTerm || job.role.toLowerCase().includes(searchTerm.toLowerCase()))
+      matchesSearchTerm
     );
   });
 
@@ -75,7 +74,6 @@ function JobsSection() {
   };
 
   return (
-    
     <div className="jobs-section">
       {/* Filter Panel */}
       <div className="filters">
@@ -124,7 +122,7 @@ function JobsSection() {
           <FaSearch className="search-icon" />
           <input
             type="text"
-            placeholder="Search by job title"
+            placeholder="Search by job title, company, or description"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -132,21 +130,16 @@ function JobsSection() {
 
         {/* Display filtered jobs or 'No results' */}
         <div className="card-containers">
-        {filteredJobs.length > 0 ? (
-          
-          filteredJobs?.map((job) => (<JobCard key={job.id} job={job}/>))
-          
+          {filteredJobs.length > 0 ? (
+            filteredJobs.map((job) => <JobCard key={job.id} job={job} />)
           ) : (
-          <div className="no-results">
-            <img src="https://img.freepik.com/premium-vector/search-result-find-illustration_585024-17.jpg" alt="No results" />
-          </div>
-        )}
+            <div className="no-results">
+              <img src="https://img.freepik.com/premium-vector/search-result-find-illustration_585024-17.jpg" alt="No results" />
+            </div>
+          )}
         </div>
-       
-
       </div>
     </div>
-    
   );
 }
 

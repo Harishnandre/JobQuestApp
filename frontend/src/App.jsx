@@ -11,6 +11,7 @@ import Dashboard from './components/Dashboard'
 import ForgetPassword from './components/ForgetPasssword'
 import Jobdetails from './components/Jobdetails/Index'
 import AuthcontextProvider from './components/ContextAPI/AuthContext'
+import SearchResults from './components/SearchResults'
 
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
       <Route exact path='/forget-password' Component={ForgetPassword}/>
       <Route exact path='/job-details/:JobId' Component={Jobdetails}/>
       <Route exact path='/dashboard' Component={Dashboard}/>
+      <Route exact path='/jobs-search/:searchTerm' Component={SearchResults} />
      </Routes>
      <Footer/>
     </BrowserRouter>
