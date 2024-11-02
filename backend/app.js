@@ -18,10 +18,11 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
 
-//Routes are here
-readdirSync('./routes').map((route)=>{
-app.use('/api/v1/',require('./routes')+route);
-})
+// Load routes dynamically
+readdirSync('./routes').forEach(async (file) => {
+    const route = await import(`./routes/${file}`);
+    app.use('/api/v1/', route.default);
+});
 
 const server=()=>{
     db();
