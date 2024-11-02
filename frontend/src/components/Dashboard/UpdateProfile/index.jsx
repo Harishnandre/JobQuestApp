@@ -1,28 +1,37 @@
 // UpdateProfile.js
-import React, { useState } from 'react';
-import './index.css'
-const initialData = {
-  fullname: "John Doe",
-  gender: "Male",
-  email: "johndoe@example.com",
-  phoneNumber: "123-456-7890",
-  bio: "A software engineer with a passion for developing innovative programs.",
-  skills: ["JavaScript", "React", "CSS", "HTML"],
-  resume: "https://example.com/resume.pdf", // replace with an actual link if available
-  address: "123 Main St, Anytown, USA"
-};
+import React, { useState, useEffect } from 'react';
+import './index.css';
 
-const UpdateProfile = () => {
+const UpdateProfile = (props) => { 
+  const { user } = props;
+  const { fullName, gender, email, phoneNumber, profile, resume, address, role } = user;
+  const { bio, profilePhoto } = profile;
+
+  // Initialize formData from user prop
   const [formData, setFormData] = useState({
-    fullname: initialData.fullname || "",
-    gender: initialData.gender || "",
-    email: initialData.email || "",
-    phoneNumber: initialData.phoneNumber || "",
-    bio: initialData.bio || "",
-    skills: initialData.skills ? initialData.skills.join(', ') : "",
-    resume: initialData.resume || null,
-    address: initialData.address || "",
+    fullName: fullName || '',
+    gender: gender || '',
+    email: email || '',
+    phoneNumber: phoneNumber || '',
+    resume: resume || null,
+    address: address || '',
+    bio: bio || '',
+    profilePhoto: profilePhoto || '',
   });
+
+  // Update formData if user prop changes
+  useEffect(() => {
+    setFormData({
+      fullName: fullName || '',
+      gender: gender || '',
+      email: email || '',
+      phoneNumber: phoneNumber || '',
+      resume: resume || null,
+      address: address || '',
+      bio: bio || '',
+      profilePhoto: profilePhoto || ''
+    });
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,8 +62,8 @@ const UpdateProfile = () => {
           Full Name:
           <input
             type="text"
-            name="fullname"
-            value={formData.fullname}
+            name="fullName" // Change name to match state
+            value={formData.fullName}
             onChange={handleChange}
           />
         </label>

@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import Cookies from 'js-cookie'
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -46,11 +47,16 @@ const Login = () => {
       const res = await axios.post('http://localhost:5000/api/v1/user/login', formData);
 
       if (res.data.success) {
+        const {data}  = res
+         const {auth} = data
+         const {token,user} = auth
+         Cookies.set('job_quest_jwt_token',token,{expires:30});
+         
         toast.success(res.data.message);
         
         // Wait for 1 second before navigating
         setTimeout(() => {
-          navigate('/dashboard'); // Change '/dashboard' to the route you want to navigate to
+          navigate('/dashboard',{state:{user}}); // Change '/dashboard' to the route you want to navigate to
         }, 1000);
       } else {
         toast.error(res.data.message);
@@ -75,7 +81,7 @@ const Login = () => {
           <div className="right">
             <h3>Login Form</h3><br/>
             <form onSubmit={handleSubmit}>
-              <p>Don't have an account? <Link to="/signup">Create Your Account</Link> it takes less than a minute</p>
+              <p>Don't have an account? <Link to="/register">Create Your Account</Link> it takes less than a minute</p>
               <div className="inputs">
                 <div className='inputTag'>
                   <select value={role} onChange={handleRoleChange}>
@@ -103,4 +109,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Login; 

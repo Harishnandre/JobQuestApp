@@ -1,6 +1,6 @@
 
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
@@ -194,7 +194,7 @@ const Register = () => {
                 <input type="submit" className='reg-link' value="Register Now" />
               </div>
               <div className="text">
-                <h3>Already have an account? <a href="#">Login now</a></h3>
+                <h3><Link to='/login'>Already have an account? </Link></h3>
               </div>
             </div>
           </div>
