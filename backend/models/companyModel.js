@@ -4,7 +4,8 @@ const companySchema= new mongoose.Schema({
     name:{
         type:String,
         trim:true,
-        required:true
+        required:true,
+        unique:true
     },
     description:{
         type:String,
@@ -21,7 +22,7 @@ const companySchema= new mongoose.Schema({
     logo:{
         type:String
     },
-    requiterId:{
+    reqruiterId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
         required:true
