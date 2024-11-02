@@ -62,4 +62,8 @@
 .back-button:hover {
   background-color: #bbb; /* Darker gray on hover */
 }
+.apply-changes{
+  display:flex;
+  gap: 15px;
+}
 

@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './index.css'
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { Authcontext } from '../ContextAPI/AuthContext';
 
 
 const jobData = [
@@ -42,6 +43,14 @@ const jobData = [
   
 ];
 const   Jobdetails = () => {
+  let [auth,setauth]=useContext(Authcontext);
+  const navigate1=useNavigate();
+  const handlenavigate1=()=>{
+    navigate1('/login');
+  }
+  const handlenavigate2=()=>{
+    navigate1('/register');
+  }
 
 const handlealert=()=>{
   Swal.fire({
@@ -105,8 +114,14 @@ const handlealert=()=>{
             <li key={index}>{duty}</li>
           ))}
         </ul>
+        {auth?.user?<>
+          <button className="apply-button" onClick={handlealert}>Apply Now</button>
+        </>: <div className='apply-changes'>
+        <button className="apply-button" onClick={handlenavigate1}>Login</button>
+        <button className="apply-button" onClick={handlenavigate2}>Register</button>
+        </div>
         
-        <button className="apply-button" onClick={handlealert}>Apply Now</button>
+}
       </div>
     </div>
   );
