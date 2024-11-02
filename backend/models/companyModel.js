@@ -21,8 +21,9 @@ const companySchema= new mongoose.Schema({
     },
     logo:{
         type:String,
+        default:""
     },
-    requiterId:{
+    recruiterId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
         required:[true,"Recruiter id is required"]

@@ -1,5 +1,5 @@
 
-import { Company } from "../models/companyModel";
+import { Company } from "../models/companyModel.js";
 
 export const createCompany=async(req,res)=>{
      try{
@@ -10,7 +10,7 @@ export const createCompany=async(req,res)=>{
         if(!name||!description||!website||!location||!recruiterId){
             return res.status(400).send({
                 success:false,
-                message:"A user with this email id is already exist"
+                message:"All fields are required"
            }); 
         }
         const existCompany=await Company.findOne({name});
@@ -25,11 +25,10 @@ export const createCompany=async(req,res)=>{
             description,
             website,
             location,
-            logo,
             recruiterId
         });
         const newCompany=await company.save();
-        res.status(201).send({
+        return res.status(201).send({
             success:true,
             message:"Company created successfullly",
             newCompany
@@ -53,10 +52,10 @@ export const updateCompany=async(req,res)=>{
                 message:"Company not found while updating"    
             }); 
         }
-        res.status(200).send({
+        return res.status(200).send({
             success:true,
             message:"Company Updated Successfully",
-            updateUser
+            updatedData
         });
     } catch (error) {
         return res.status(500).send("Server error:" + error);  
@@ -73,7 +72,7 @@ export const getCompanyById=async(req,res)=>{
                 message:"Company not found"    
             });
         }
-        res.status(200).send({
+        return res.status(200).send({
             success:true,
             company
         });
@@ -85,14 +84,14 @@ export const getCompanyById=async(req,res)=>{
 export const getAllCompanies=async(req,res)=>{
     try{
        const {recruiterId}=req.body;
-       const companies=await Company.findOne({recruiterId});
+       const companies=await Company.find({recruiterId});
        if(!companies){
         return res.status(404).send({
             success:false,
             message:"Company not found"    
         });
      }
-        res.status(200).send({
+    return res.status(200).send({
             success:true,
             companies
         });
@@ -111,7 +110,7 @@ export const deleteCompany=async(req,res)=>{
                 message:"Company not found"    
             });
         }
-        res.status(200).send({
+        return res.status(200).send({
             success:true,
             message:"Company Deleted Successfylly"
         });
