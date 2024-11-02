@@ -76,7 +76,10 @@ export const loginUser=async (req,res)=>{
                  .send({
                     success:true,
                     message:`Welcome user: ${user.fullName}`,
-                    user
+                    auth:{
+                        user,
+                        token
+                    }
                  });
 
     } catch (error) {
