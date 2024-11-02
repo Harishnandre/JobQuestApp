@@ -75,7 +75,8 @@ export const loginUser=async (req,res)=>{
         return res.status(200).cookie("token",token,{maxAge:1*24*60*60*1000,httpsOnly:true,secure:true,sameSite:'strict'})
                  .send({
                     success:true,
-                    message:`Welcome user: ${user.fullName}`,
+                    message:`Welcome user: ${user.fullName} 
+                             Please Update the Profile`,
                     user
                  });
 
