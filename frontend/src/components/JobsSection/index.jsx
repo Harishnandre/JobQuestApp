@@ -2,10 +2,7 @@ import React, { useState } from "react";
 
 import { FaSearch, FaBookmark, FaMapMarkerAlt } from "react-icons/fa";
 import "./index.css";
-import { useNavigate } from "react-router-dom";
 
-
-import "./index.css";
 import JobCard from "../JobCard";
 
 
@@ -44,7 +41,7 @@ function JobsSection() {
 
 
 
-  const navigate=useNavigate();
+ 
 
   // States for each filter
   const [location, setLocation] = useState("");
@@ -134,15 +131,18 @@ function JobsSection() {
         </div>
 
         {/* Display filtered jobs or 'No results' */}
-{filteredJobs.length > 0 ? (
-  filteredJobs.map((job) => (
-    <JobCard key={job.id} job={job} />
-  ))
-) : (
-  <div className="no-results">
-    <img src="https://img.freepik.com/premium-vector/search-result-find-illustration_585024-17.jpg" alt="No results" />
-  </div>
-)}
+        <div className="card-containers">
+        {filteredJobs.length > 0 ? (
+          
+          filteredJobs?.map((job) => (<JobCard key={job.id} job={job}/>))
+          
+          ) : (
+          <div className="no-results">
+            <img src="https://img.freepik.com/premium-vector/search-result-find-illustration_585024-17.jpg" alt="No results" />
+          </div>
+        )}
+        </div>
+       
 
       </div>
     </div>

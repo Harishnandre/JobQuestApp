@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './index.css'
 import { useNavigate, useParams } from 'react-router-dom';
-
-
+import Swal from 'sweetalert2';
+import { Authcontext } from '../ContextAPI/AuthContext';
 
 
 const jobData = [
@@ -43,12 +43,50 @@ const jobData = [
   
 ];
 const   Jobdetails = () => {
+  let [auth,setauth]=useContext(Authcontext);
+  const navigate1=useNavigate();
+  const handlenavigate1=()=>{
+    navigate1('/login');
+  }
+  const handlenavigate2=()=>{
+    navigate1('/register');
+  }
+
+const handlealert=()=>{
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You want to apply this role",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes,Submit"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Thank you!",
+        text: "Your submission has been sent",
+        icon: "success"
+      });
+      
+    }
+  });
+}
+
+
+
+
+
+
   const params=useParams();
   console.log(params);
   const { JobId } = params;
   console.log(Number(JobId));
   const  navigate=useNavigate();
    const job=jobData.find(job=>job.id===parseInt(JobId));
+
+
+
   //  console.log(job);
   if (!job) {
     return <h1 style={{ textAlign: 'center', color: 'red',margin:'100px' }}>Job not found</h1>;
@@ -76,8 +114,14 @@ const   Jobdetails = () => {
             <li key={index}>{duty}</li>
           ))}
         </ul>
+        {auth?.user?<>
+          <button className="apply-button" onClick={handlealert}>Apply Now</button>
+        </>: <div className='apply-changes'>
+        <button className="apply-button" onClick={handlenavigate1}>Login</button>
+        <button className="apply-button" onClick={handlenavigate2}>Register</button>
+        </div>
         
-        <button className="apply-button">Apply Now</button>
+}
       </div>
     </div>
   );

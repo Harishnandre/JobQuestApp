@@ -196,4 +196,14 @@
     margin-bottom: 20px;
   }
   
- 
+ .card-containers{
+  display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px; /* Space between cards */
+    padding: 20px; /* Padding around the grid */
+ }
+ @media (max-width: 1024px) {
+  .card-containers {
+    grid-template-columns: repeat(1, 1fr); /* 2 columns on medium screens */
+  }
+}

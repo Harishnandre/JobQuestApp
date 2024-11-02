@@ -1,16 +1,21 @@
 import React from 'react';
 // import { useNavigate } from 'react-router-dom';
 import './index.css'; // Import the CSS file
+import { useNavigate } from 'react-router-dom';
 
 const LatestJobCards = ({ job }) => {
-    
+    const navigate = useNavigate();
+    const handleDetailsClick = () => {
+        console.log("mnnmn")
+        navigate(`/job-details/${job.id}`);
+    };
     return (
-     
-        <div className='job-card'>
+         
+        <div onClick={handleDetailsClick}   className='job-card'>
             <div className='company-info'>
                 <h1 className='company-name'>{job?.company?.name}</h1>
-                <p className='location'>India</p>
             </div>
+            <p className='location'>India</p>
             <div className='job-info'>
                 <h1 className='job-title'>{job?.title}</h1>
                 <p className='job-description'>{job?.description}</p>

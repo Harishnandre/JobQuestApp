@@ -10,11 +10,13 @@ import Register from './components/Register'
 import Dashboard from './components/Dashboard'
 import ForgetPassword from './components/ForgetPasssword'
 import Jobdetails from './components/Jobdetails/Index'
+import AuthcontextProvider from './components/ContextAPI/AuthContext'
 
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <AuthcontextProvider>
+<BrowserRouter>
      <Navbar/>
      <Routes>
       <Route exact path='/' Component={Home}/>
@@ -27,6 +29,8 @@ const App = () => {
      </Routes>
      <Footer/>
     </BrowserRouter>
+    </AuthcontextProvider>
+    
   )
 }
 
