@@ -1,11 +1,12 @@
 
-import React, { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useContext,useEffect } from 'react';
+import { Link, useNavigate,Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import axios from 'axios'; // for network request
 import './index.css';
+import { Authcontext } from '../ContextAPI/AuthContext';
 
 const Register = () => {
   const [fullName, setName] = useState("");
@@ -16,7 +17,14 @@ const Register = () => {
   const [answer, setAnswer] = useState("");
   const [address, setAddress] = useState("");
   const [gender, setGender] = useState(""); // New state for gender
+  //if already logged in go to home
+  const AuthState = useContext(Authcontext)
+  const [auth,setauth,isLoggedIn,setisLoggedIn] = AuthState
+  
   const navigate = useNavigate();
+  if(isLoggedIn){
+     return <Navigate to='/dashboard'/>
+  }
 
   const handleGenderChange = (event) => {
     setGender(event.target.value);

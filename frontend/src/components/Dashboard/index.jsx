@@ -1,18 +1,23 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Profile from './Profile';
 import UpdateProfile from './UpdateProfile';
 import UpdatePassword from './UpdatePassword';
 import MyApplicants from './MyApplicants';
 import './index.css';
-import { useLocation  } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate  } from 'react-router-dom';
+import { Authcontext  } from '../ContextAPI/AuthContext';
 
 const Dashboard = () => {
-  const location = useLocation();
-  const { user } = location.state || {};
-  console.log(user)
+  let [auth,setauth,isLoggedIn,setisLoggedIn]=useContext(Authcontext);
+  const { user } = auth || {};
+  if(!isLoggedIn){
+    return <Navigate to='/login'/>
+ }
+  
   const [activeComponent, setActiveComponent] = useState('Profile'); // State to track active component
-  const {profile,fullName} = user
-  const {profilePhoto} = profile
+  const { profile, fullName } = user || {};
+  const profilePhoto = profile?.profilePhoto || 'default-image.jpg'; // Add a default image path if needed
+  
   
   const handleLogout = () => {
     console.log('User logged out');
@@ -21,15 +26,15 @@ const Dashboard = () => {
   const renderComponent = () => {
     switch (activeComponent) {
       case 'Profile':
-        return <Profile user={user}/>;
+        return <Profile />;
       case 'Update Profile':
-        return <UpdateProfile user={user}/>;
+        return <UpdateProfile />;
       case 'Update Password':
         return <UpdatePassword />;
       case 'My Applicants':
         return <MyApplicants />;
       default:
-        return <Profile user={user}/>;
+        return <Profile />;
     }
   };
 

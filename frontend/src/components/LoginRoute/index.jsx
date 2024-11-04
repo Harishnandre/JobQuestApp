@@ -1,19 +1,24 @@
 import './index.css';
-import React, { useState } from 'react';
+import React, { useContext, useState,useEffect } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate,Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Cookies from 'js-cookie'
+import { Authcontext } from '../ContextAPI/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+  const AuthState = useContext(Authcontext)
+  const [auth,setauth,isLoggedIn,setisLoggedIn] = AuthState
   
   const navigate = useNavigate();
-
+  if(isLoggedIn){
+     return <Navigate to='/dashboard'/>
+  }
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -51,6 +56,9 @@ const Login = () => {
          const {auth} = data
          const {token,user} = auth
           console.log(user)
+          setauth({user,token})
+          setisLoggedIn(true)
+          localStorage.setItem("auth", JSON.stringify({ user, token }));
         toast.success(res.data.message);
         
         // Wait for 1 second before navigating

@@ -1,14 +1,16 @@
 import React, { useContext } from 'react';
 import './index.css';
 import {Link} from 'react-router-dom'
-import { Authcontext } from '../ContextAPI/AuthContext';
+ import { Authcontext } from '../ContextAPI/AuthContext';
+ 
 const Navbar = () => {
-   let [auth,setauth]=useContext(Authcontext);
+   let [auth,setauth,isLoggedIn,setisLoggedIn]=useContext(Authcontext);
    console.log(auth.user);
    let handlelogout=()=>{
     setauth({
       ...auth,user:null,token:""
     });
+    setisLoggedIn(false)
     localStorage.removeItem('auth');
    }
   return (
@@ -27,7 +29,7 @@ const Navbar = () => {
               <li><Link to='/register'>Register</Link></li> 
             
                      
-          <li><Link to='/dashboard'>Dashboard</Link></li> 
+         {isLoggedIn && <li><Link to='/dashboard'>Dashboard</Link></li> }
             </>
             :
             <>
@@ -36,7 +38,7 @@ const Navbar = () => {
                         {auth?.user?.name}
                       </Link>
                       <ul className="dropdown-menu dropdown-menu-dark">
-                        <li><Link className="dropdown-item" to={`/dashboard/${auth?.user?.role===1?"admin":"user"}`}>Dashboard</Link></li>
+                        <li><Link className="dropdown-item" to={`/dashboard/${auth?.user?.role===1?"admin":""}`}>Dashboard</Link></li>
                         <li><Link onClick={handlelogout} className="dropdown-item" to="/">LogOut</Link></li>
                       </ul>
                     </li>
