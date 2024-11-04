@@ -6,10 +6,11 @@ const applicationSchema=new mongoose.Schema({
         ref:'JobModel',
         required:true
     },
-    applicants:[{
+    applicant:{
         type:mongoose.Schema.Types.ObjectId,
+        required:true,
         ref:'User'
-    }],
+    },
     status:{
         type:String,
         enum:["Pending","Rejected","Accepted"],

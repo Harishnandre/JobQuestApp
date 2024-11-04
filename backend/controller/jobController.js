@@ -4,7 +4,7 @@ export const createJob=async(req,res)=>{
     try {
         const {title,description,requirements,salary,location,jobType,vacancies,experience,company}=req.body;
         const createdBy=req.id;
-        if(!title||!description||!requirements||!salary||!location||!jobType||!vacancies||!company||!createdBy){
+        if(!title||!description||!requirements||!salary||!location||!jobType||!vacancies||!company||!createdBy||!experience){
             return res.status(400).send({
                 success:false,
                 message:"All fields are required"

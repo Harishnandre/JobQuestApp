@@ -38,7 +38,7 @@ const jobSchema = new mongoose.Schema({
     },
     experience:{
         type:String,
-        default:"No Experience is Required"
+        required:true
     },
     vacancies: {
         type: Number,
