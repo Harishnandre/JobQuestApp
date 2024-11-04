@@ -36,6 +36,10 @@ const jobSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    experience:{
+        type:String,
+        required:true
+    },
     vacancies: {
         type: Number,
         required: true,
