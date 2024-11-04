@@ -75,9 +75,17 @@ export const loginUser=async (req,res)=>{
         return res.status(200).cookie("token",token,{maxAge:1*24*60*60*1000,httpsOnly:true,secure:true,sameSite:'strict'})
                  .send({
                     success:true,
+                    message:`Welcome user: ${user.fullName}`,
+                    auth:{
+                        user,
+                        token
+                    }
                     message:`Welcome user: ${user.fullName} 
                              Please Update the Profile`,
-                    user
+                    auth:{
+                    user,
+                    token
+                    }
                  });
 
     } catch (error) {
@@ -113,10 +121,17 @@ export const forgetPassword=async(req,res)=>{
             });   
         }
         const hashedPassword=await bcrypt.hash(newPassword,10);
-        const updateUser=await User.findByIdAndUpdate({_id:user._id},{password:hashedPassword,new:true});
+        const updateUser=await User.findByIdAndUpdate({_id:user._id},{password:hashedPassword},{new:true});
+        if(!updateUser){
+            return res.status(404).send({
+                success:false,
+                message:"User not found while updating"    
+            }); 
+        }
         res.status(200).send({
             success:true,
-            message:"Password Updated Successfully"
+            message:"Password Updated Successfully",
+            updateUser
         });
      } catch (error) {
         return res.status(500).send("Server error:" + error);

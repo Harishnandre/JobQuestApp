@@ -12,19 +12,21 @@ const companySchema= new mongoose.Schema({
         required:true
     },
     website:{
-        type:String
+        type:String,
+        required:true
     },
     location:{
-        type:String,
-        trim:true
+        type:[String],
+        required:[true,"Atleast one location is required"]
     },
     logo:{
-        type:String
+        type:String,
+        default:""
     },
-    requiterId:{
+    recruiterId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
-        required:true
+        required:[true,"Recruiter id is required"]
     }
 },{timestamps:true});
 
