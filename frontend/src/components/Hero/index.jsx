@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './index.css';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
+  const [searchValue,setSearchValue] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = (event) => {
+      setSearchValue(event.target.value)
+  };
+  const onClickSearch = ()=>{
+       navigate(`/jobs-search/${searchValue}`)
+  }
+
   return (
     <div className="heroContainer">
       <div className="content">
@@ -15,12 +26,13 @@ const Hero = () => {
         <div className="searchContainer">
           <input 
             type="text" 
-            placeholder="Search jobs, titles, or keywords..." 
+            placeholder="Search by job title, company, or description" 
             className="searchInput"
+            onChange={handleSearch} // Trigger handleSearch on input change
           />
-          <div className="searchIconContainer">
+          <button className="searchIconContainer" onClick={onClickSearch}>
             🔍
-          </div>
+          </button>
         </div>
 
         <div className="ctaContainer">

@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Profile from './Profile';
 import UpdateProfile from './UpdateProfile';
 import UpdatePassword from './UpdatePassword';
 import MyApplicants from './MyApplicants';
 import './index.css';
+import { Navigate, useLocation, useNavigate  } from 'react-router-dom';
+import { Authcontext  } from '../ContextAPI/AuthContext';
 
 const Dashboard = () => {
+  let [auth,setauth,isLoggedIn,setisLoggedIn]=useContext(Authcontext);
+  const { user } = auth || {};
+  if(!isLoggedIn){
+    return <Navigate to='/login'/>
+ }
+  
   const [activeComponent, setActiveComponent] = useState('Profile'); // State to track active component
-
-  const user = {
-    name: 'Nandre Harish',
-    imageUrl: 'https://static.vecteezy.com/system/resources/previews/020/911/740/original/user-profile-icon-profile-avatar-user-icon-male-icon-face-icon-profile-icon-free-png.png', // Replace with actual user image URL
-  };
+  const { profile, fullName } = user || {};
+  const profilePhoto = profile?.profilePhoto || 'default-image.jpg'; // Add a default image path if needed
+  
   
   const handleLogout = () => {
     console.log('User logged out');
@@ -37,8 +43,8 @@ const Dashboard = () => {
       {/* Header Section */}
       <header className="dashboard-header">
         <div className="user-info">
-          <img src={user.imageUrl} alt="User" className="user-image" />
-          <h2>Hi {user.name}!</h2>
+          <img src={profilePhoto} alt="User" className="user-image" />
+          <h2>Hi {fullName}!</h2>
         </div>
       </header>
 

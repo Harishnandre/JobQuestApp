@@ -80,6 +80,12 @@ export const loginUser=async (req,res)=>{
                         user,
                         token
                     }
+                    message:`Welcome user: ${user.fullName} 
+                             Please Update the Profile`,
+                    auth:{
+                    user,
+                    token
+                    }
                  });
 
     } catch (error) {

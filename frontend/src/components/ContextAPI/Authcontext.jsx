@@ -1,31 +1,45 @@
-import { createContext,useEffect,useState} from "react";
+import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 
-export const Authcontext=createContext({
-  user:"", //default value
-  token:"",
-})  //this context will pass to all child when it needed
+// Define default context value
+export const Authcontext = createContext({
+  user: null,
+  token: null,
+  isLoggedIn: false,
+});
 
-const AuthcontextProvider=({children})=>{
-  const [auth,setauth]=useState(Authcontext);
-  console.log(auth.user);
-  axios.defaults.headers.common["Authorization"] = auth?.token; //every axios request contains token in header by default for authorization purpose
-useEffect(()=>{
-  const data=JSON.parse(localStorage.getItem('auth'));
-  if (data){
-    setauth({
-      ...auth,
-      user:data.user,
-      token:data.token
-    })
-  }
+// Provider component
+const AuthcontextProvider = ({ children }) => {
+  const [auth, setAuth] = useState({ user: null, token: null });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-},[]);
-return(
-  <Authcontext.Provider value={[auth,setauth]}>
+  // Set axios default header for authorization if token is present
+  useEffect(() => {
+    if (auth.token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${auth.token}`;
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+    }
+  }, [auth.token]);
+
+  // Load user data from local storage on component mount
+  useEffect(() => {
+    try {
+      const data = JSON.parse(localStorage.getItem("auth"));
+      if (data && data.token) {
+        setAuth({ user: data.user, token: data.token });
+        setIsLoggedIn(true);
+      }
+    } catch (error) {
+      console.error("Error loading auth data from local storage:", error);
+    }
+  }, []);
+
+  return (
+    <Authcontext.Provider value={[auth, setAuth, isLoggedIn, setIsLoggedIn]}>
       {children}
-  </Authcontext.Provider>
-);  
+    </Authcontext.Provider>
+  );
+};
 
-}
 export default AuthcontextProvider;

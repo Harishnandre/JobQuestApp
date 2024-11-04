@@ -1,29 +1,41 @@
-// UpdateProfile.js
-import React, { useState } from 'react';
-import './index.css'
-const initialData = {
-  fullname: "John Doe",
-  gender: "Male",
-  email: "johndoe@example.com",
-  phoneNumber: "123-456-7890",
-  bio: "A software engineer with a passion for developing innovative programs.",
-  skills: ["JavaScript", "React", "CSS", "HTML"],
-  resume: "https://example.com/resume.pdf", // replace with an actual link if available
-  address: "123 Main St, Anytown, USA"
-};
+import React, { useState, useEffect, useContext } from 'react';
+import './index.css';
+import { Authcontext } from '../../ContextAPI/AuthContext';
 
 const UpdateProfile = () => {
+  const [auth, setAuth] = useContext(Authcontext); // Get auth data and setAuth function from context
+  const { user } = auth || {}; // Destructure user data from auth
+  const { fullName, gender, email, phoneNumber, profile, resume, address, role } = user || {}; // Destructure user data
+
+  const { bio, profilePhoto } = profile || {}; // Safe destructuring of profile object
+
+  // Initialize formData state based on user data
   const [formData, setFormData] = useState({
-    fullname: initialData.fullname || "",
-    gender: initialData.gender || "",
-    email: initialData.email || "",
-    phoneNumber: initialData.phoneNumber || "",
-    bio: initialData.bio || "",
-    skills: initialData.skills ? initialData.skills.join(', ') : "",
-    resume: initialData.resume || null,
-    address: initialData.address || "",
+    fullName: fullName || '',
+    gender: gender || '',
+    email: email || '',
+    phoneNumber: phoneNumber || '',
+    resume: resume || null,
+    address: address || '',
+    bio: bio || '',
+    profilePhoto: profilePhoto || '',
   });
 
+  // Update formData when user data changes
+  useEffect(() => {
+    setFormData({
+      fullName: fullName || '',
+      gender: gender || '',
+      email: email || '',
+      phoneNumber: phoneNumber || '',
+      resume: resume || null,
+      address: address || '',
+      bio: bio || '',
+      profilePhoto: profilePhoto || '',
+    });
+  }, [user]);
+
+  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -32,17 +44,31 @@ const UpdateProfile = () => {
     }));
   };
 
+  // Handle file input change
   const handleFileChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
       resume: e.target.files[0],
     }));
+    console.log(e.target.files[0])
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Updated profile data:", formData);
-    // Logic for submitting data to the server or handling updates can go here
+
+    // Prepare updated user data
+    const updatedUser = {
+      ...user,
+      ...formData,
+    };
+
+    // Update context with the updated user data
+    setAuth((prevAuth) => ({
+      ...prevAuth,
+      user: updatedUser,
+    }));
   };
 
   return (
@@ -53,20 +79,25 @@ const UpdateProfile = () => {
           Full Name:
           <input
             type="text"
-            name="fullname"
-            value={formData.fullname}
+            name="fullName"
+            value={formData.fullName}
             onChange={handleChange}
           />
         </label>
+        
         <label>
           Gender:
-          <input
-            type="text"
+          <select
             name="gender"
             value={formData.gender}
             onChange={handleChange}
-          />
+          >
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
         </label>
+        
         <label>
           Email:
           <input
@@ -76,6 +107,7 @@ const UpdateProfile = () => {
             onChange={handleChange}
           />
         </label>
+        
         <label>
           Phone Number:
           <input
@@ -85,6 +117,8 @@ const UpdateProfile = () => {
             onChange={handleChange}
           />
         </label>
+        
+      {role === "Job-Seeker" &&  <div>
         <label>
           Bio:
           <textarea
@@ -93,15 +127,7 @@ const UpdateProfile = () => {
             onChange={handleChange}
           />
         </label>
-        <label>
-          Skills (comma-separated):
-          <input
-            type="text"
-            name="skills"
-            value={formData.skills}
-            onChange={handleChange}
-          />
-        </label>
+        
         <label>
           Resume (PDF):
           <input
@@ -111,6 +137,8 @@ const UpdateProfile = () => {
             onChange={handleFileChange}
           />
         </label>
+        </div>
+        }
         <label>
           Address:
           <input
@@ -120,6 +148,11 @@ const UpdateProfile = () => {
             onChange={handleChange}
           />
         </label>
+        
+        <div className="profile-role">
+          <strong>Role: </strong>{role} {/* Display-only field for role */}
+        </div>
+        
         <button type="submit">Update Profile</button>
       </form>
     </div>
