@@ -6,7 +6,6 @@ const UpdateProfile = () => {
   const [auth, setAuth] = useContext(Authcontext); // Get auth data and setAuth function from context
   const { user } = auth || {}; // Destructure user data from auth
   const { fullName, gender, email, phoneNumber, profile, resume, address, role } = user || {}; // Destructure user data
-
   const { bio, profilePhoto } = profile || {}; // Safe destructuring of profile object
 
   // Initialize formData state based on user data
@@ -48,9 +47,9 @@ const UpdateProfile = () => {
   const handleFileChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
-      resume: e.target.files[0],
+      profilePhoto: e.target.files[0], // Update profilePhoto
     }));
-    console.log(e.target.files[0])
+    console.log(e.target.files[0]);
   };
 
   // Handle form submission
@@ -61,8 +60,16 @@ const UpdateProfile = () => {
     // Prepare updated user data
     const updatedUser = {
       ...user,
-      ...formData,
+      profile: {
+        ...user.profile, // Keep the existing profile data
+        bio: formData.bio, // Update bio
+        profilePhoto: formData.profilePhoto, // Update profile photo
+      },
+      ...formData, // Include other user fields
     };
+
+    // Log updated user for debugging
+    console.log("Updated User Object:", updatedUser);
 
     // Update context with the updated user data
     setAuth((prevAuth) => ({
@@ -118,27 +125,29 @@ const UpdateProfile = () => {
           />
         </label>
         
-      {role === "Job-Seeker" &&  <div>
-        <label>
-          Bio:
-          <textarea
-            name="bio"
-            value={formData.bio}
-            onChange={handleChange}
-          />
-        </label>
+        {role === "Job-Seeker" && (
+          <div>
+            <label>
+              Bio:
+              <textarea
+                name="bio"
+                value={formData.bio}
+                onChange={handleChange}
+              />
+            </label>
+            
+            <label>
+              Profile Photo:
+              <input
+                type="file"
+                name="profilePhoto"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+            </label>
+          </div>
+        )}
         
-        <label>
-          Resume (PDF):
-          <input
-            type="file"
-            name="resume"
-            accept=".pdf"
-            onChange={handleFileChange}
-          />
-        </label>
-        </div>
-        }
         <label>
           Address:
           <input
