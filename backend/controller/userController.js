@@ -77,7 +77,9 @@ export const loginUser=async (req,res)=>{
                     success:true,
                     message:`Welcome user: ${user.fullName} 
                              Please Update the Profile`,
-                    user
+                    auth : {
+                         user,token
+                    }
                  });
 
     } catch (error) {
