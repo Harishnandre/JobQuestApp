@@ -3,7 +3,8 @@ import { Company } from "../models/companyModel.js";
 
 export const createCompany=async(req,res)=>{
      try{
-        const {name,description,website,location,recruiterId}=req.body;
+        const {name,description,website,location}=req.body;
+        const recruiterId=req.id;
         const file=req.file;
         //Cloudinary work
 
@@ -83,7 +84,7 @@ export const getCompanyById=async(req,res)=>{
 
 export const getAllCompanies=async(req,res)=>{
     try{
-       const {recruiterId}=req.body;
+       const recruiterId=req.id;
        const companies=await Company.find({recruiterId});
        if(!companies){
         return res.status(404).send({
@@ -98,7 +99,7 @@ export const getAllCompanies=async(req,res)=>{
     }catch (error) {
         return res.status(500).send("Server error:" + error);   
     }
-}
+};
 
 export const deleteCompany=async(req,res)=>{
     try {
