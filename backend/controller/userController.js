@@ -17,6 +17,13 @@ export const registerNewUser=async(req,res)=>{
                message:"A user with this email id is already exist"
           });  
         }
+        if(password.length < 8){
+            return res.status(400).send({
+                 success : false,
+                 message : "Password must contain at least 8 characters"
+             })
+
+        }
         const hashedPassword=await bcrypt.hash(password,10);
         const user=new User({
             fullName,
@@ -80,17 +87,6 @@ export const loginUser=async (req,res)=>{
                         user,
                         token
                     }
-                    message:`Welcome user: ${user.fullName} 
-                             Please Update the Profile`,
-<<<<<<< HEAD
-                    auth : {
-                         user,token
-=======
-                    auth:{
-                    user,
-                    token
->>>>>>> 42879262af98f890d5acb2d16acc7e269c52218a
-                    }
                  });
 
     } catch (error) {
@@ -124,6 +120,13 @@ export const forgetPassword=async(req,res)=>{
                 success:false,
                 message:"Invalid Email or Answer"    
             });   
+        }
+        if(newPassword.length < 8){
+            return res.status(400).send({
+                 success : false,
+                 message : "Password must contain at least 8 characters"
+             })
+
         }
         const hashedPassword=await bcrypt.hash(newPassword,10);
         const updateUser=await User.findByIdAndUpdate({_id:user._id},{password:hashedPassword},{new:true});
