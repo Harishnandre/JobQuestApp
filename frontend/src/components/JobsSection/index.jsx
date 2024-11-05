@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaSearch } from "react-icons/fa";
 import "./index.css";
+import Loader from 'react-loader-spinner'
 import JobCard from "../JobCard";
 
 // Filter options
@@ -28,19 +29,24 @@ function JobsSection() {
   const [salaryRange, setSalaryRange] = useState("");
   const [employmentType, setEmploymentType] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetchJobs() {
-      setLoading(true); // Start loading
+      setLoading(true);
+      setError(null);
       try {
-        const response = await axios.get("http://localhost:5000/api/v1/job/get"); // Replace with your backend URL
-        setJobs(response.data);
-        console.log(1)
-        console.log(response)
+        const response = await axios.get("http://localhost:5000/api/v1/job/get");
+        if (response.data.success) {
+          setJobs(response.data.jobs);
+        } else {
+          setError("Failed to load jobs.");
+        }
       } catch (error) {
         console.error("Error fetching jobs:", error);
+        setError("Error fetching jobs. Please try again later.");
       } finally {
-        setLoading(false); // End loading
+        setLoading(false);
       }
     }
 
@@ -135,11 +141,13 @@ function JobsSection() {
 
         {/* Display loading spinner, filtered jobs, or 'No results' */}
         {loading ? (
-          <div className="loading">Loading jobs...</div> 
+         <div className="jobs-loader-container">
+         <Loader type="ThreeDots" color="#2596be" height="50" width="50" />
+       </div>
         ) : (
           <div className="card-containers">
-            {filteredJobs.length > 0 ? (
-              filteredJobs.map((job) => <JobCard key={job.id} job={job} />)
+            {jobs.length > 0 ? ( 
+              jobs.map((job) => <JobCard key={job.id} job={job} />)
             ) : (
               <div className="no-results">
                 <img src="https://img.freepik.com/premium-vector/search-result-find-illustration_585024-17.jpg" alt="No results" />
