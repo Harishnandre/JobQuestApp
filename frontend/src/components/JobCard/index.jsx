@@ -35,7 +35,7 @@ const JobCard = ({ job }) => {
                 <div className="badges-container">
                     <span className="badge blue">{job.vacancies} Positions</span>
                     <span className="badge orange">{job.jobType}</span>
-                    <span className="badge purple">${job.salary}</span>
+                    <span className="badge purple">{job.salary} LPA</span>
                 </div>
                 <button className="details-button" onClick={handleDetailsClick}>Details</button>
             </div>

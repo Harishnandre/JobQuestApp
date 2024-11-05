@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaSearch } from "react-icons/fa";
 import "./index.css";
-import Loader from 'react-loader-spinner'
 import JobCard from "../JobCard";
+import JobQuestLoader from "../Loader";
 
 // Filter options
 const locations = [
@@ -31,27 +31,29 @@ function JobsSection() {
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    async function fetchJobs() {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await axios.get("http://localhost:5000/api/v1/job/get");
-        if (response.data.success) {
-          setJobs(response.data.jobs);
-        } else {
-          setError("Failed to load jobs.");
-        }
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
-        setError("Error fetching jobs. Please try again later.");
-      } finally {
-        setLoading(false);
+  // Function to fetch jobs from the backend
+  const fetchJobs = async (search = "") => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(`http://localhost:5000/api/v1/job/get?keyword=${search}`);
+      if (response.data.success) {
+        setJobs(response.data.jobs);
+      } else {
+        setError("Failed to load jobs.");
       }
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+      setError("Error fetching jobs. Please try again later.");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    fetchJobs();
-  }, []);
+  // useEffect to fetch jobs on initial load and when filters/search change
+  useEffect(() => {
+    fetchJobs(searchTerm);
+  }, [searchTerm]);
 
   const filteredJobs = jobs.filter(job => {
     const salaryCondition = salaryRange 
@@ -63,17 +65,10 @@ function JobsSection() {
          true)
       : true;
 
-    const matchesSearchTerm = searchTerm
-      ? job.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.description.toLowerCase().includes(searchTerm.toLowerCase())
-      : true;
-
     return (
       salaryCondition &&
       (!location || job.location === location) &&
-      (!employmentType || job.type === employmentType) &&
-      matchesSearchTerm
+      (!employmentType || job.jobType === employmentType)
     );
   });
 
@@ -82,6 +77,7 @@ function JobsSection() {
     setSalaryRange("");
     setEmploymentType("");
     setSearchTerm("");
+    fetchJobs(""); // Fetch all jobs after clearing filters
   };
 
   return (
@@ -92,7 +88,10 @@ function JobsSection() {
 
         <div className="filter-group">
           <p>Location</p>
-          <select value={location} onChange={(e) => setLocation(e.target.value)}>
+          <select value={location} onChange={(e) => { 
+            setLocation(e.target.value);
+            fetchJobs(searchTerm); // Re-fetch jobs with search term
+          }}>
             {locations.map((loc, index) => (
               <option key={index} value={loc === "All Locations" ? "" : loc}>
                 {loc}
@@ -103,7 +102,10 @@ function JobsSection() {
 
         <div className="filter-group">
           <p>Salary Range</p>
-          <select value={salaryRange} onChange={(e) => setSalaryRange(e.target.value)}>
+          <select value={salaryRange} onChange={(e) => { 
+            setSalaryRange(e.target.value);
+            fetchJobs(searchTerm); // Re-fetch jobs with search term
+          }}>
             {salaryRanges.map((range, index) => (
               <option key={index} value={range === "All Salaries" ? "" : range}>
                 {range}
@@ -114,7 +116,10 @@ function JobsSection() {
 
         <div className="filter-group">
           <p>Type of Employment</p>
-          <select value={employmentType} onChange={(e) => setEmploymentType(e.target.value)}>
+          <select value={employmentType} onChange={(e) => { 
+            setEmploymentType(e.target.value);
+            fetchJobs(searchTerm); // Re-fetch jobs with search term
+          }}>
             {employmentTypes.map((type, index) => (
               <option key={index} value={type === "All Types" ? "" : type}>
                 {type}
@@ -135,19 +140,20 @@ function JobsSection() {
             type="text"
             placeholder="Search by job title, company, or description"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => { 
+              setSearchTerm(e.target.value);
+              fetchJobs(e.target.value); // Fetch jobs with updated search term
+            }}
           />
         </div>
 
         {/* Display loading spinner, filtered jobs, or 'No results' */}
         {loading ? (
-         <div className="jobs-loader-container">
-         <Loader type="ThreeDots" color="#2596be" height="50" width="50" />
-       </div>
+ <JobQuestLoader/>
         ) : (
           <div className="card-containers">
-            {jobs.length > 0 ? ( 
-              jobs.map((job) => <JobCard key={job.id} job={job} />)
+            {filteredJobs.length > 0 ? ( 
+              filteredJobs.map((job) => <JobCard key={job._id} job={job} />) // Use job._id for the key
             ) : (
               <div className="no-results">
                 <img src="https://img.freepik.com/premium-vector/search-result-find-illustration_585024-17.jpg" alt="No results" />
