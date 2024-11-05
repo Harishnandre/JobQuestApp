@@ -3,7 +3,7 @@ import { JobModel } from "../models/jobModel.js";
 
 export const applyForJob=async(req,res)=>{
     try {
-        const userId=req.id;
+        const userId=req.body.id;
         const jobId=req.params.id;
         const alreadyApplyForJob=await Application.findOne({jobInquiry:jobId,applicant:userId});
         if(alreadyApplyForJob){

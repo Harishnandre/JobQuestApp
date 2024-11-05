@@ -4,12 +4,14 @@ import './index.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { Authcontext } from '../ContextAPI/AuthContext';
-import ClipLoader from 'react-spinners/ClipLoader';  // import a loader
+import ClipLoader from 'react-spinners/ClipLoader';
 
 const Jobdetails = () => {
   const [auth, setAuth] = useContext(Authcontext);
+  const { user, token } = auth
+  const {_id } = user || {}
   const [job, setJob] = useState(null);
-  const [loading, setLoading] = useState(true);  // loader state
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { JobId } = useParams();
 
@@ -30,24 +32,48 @@ const Jobdetails = () => {
     fetchJobDetails();
   }, [JobId]);
 
-  const handleAlert = () => {
-    Swal.fire({
+  const handleAlert = async () => {
+    const result = await Swal.fire({
       title: "Are you sure?",
       text: "You want to apply for this role",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Submit"
-    }).then((result) => {
-      if (result.isConfirmed) {
+      confirmButtonText: "Yes, Submit",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await axios.post(
+          `http://localhost:5000/api/v1/application/apply/${JobId}`,
+          { id: _id,
+            token : token
+          }
+        );
+
+        if (response.data.success) {
+          Swal.fire({
+            title: "Thank you!",
+            text: "Your application has been sent",
+            icon: "success",
+          });
+        } else {
+          Swal.fire({
+            title: "Oops!",
+            text: response.data.message,
+            icon: "error",
+          });
+        }
+      } catch (error) {
+        console.log(error)
         Swal.fire({
-          title: "Thank you!",
-          text: "Your application has been sent",
-          icon: "success"
+          title: "Error!",
+          text: error.response.data.message,
+          icon: "error",
         });
       }
-    });
+    }
   };
 
   if (loading) {
