@@ -4,6 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import "./index.css";
 import JobCard from "../JobCard";
 import JobQuestLoader from "../Loader";
+import { ToastContainer } from 'react-toastify';
 
 // Filter options
 const locations = [
@@ -162,6 +163,7 @@ function JobsSection() {
           </div>
         )}
       </div>
+      <ToastContainer/>
     </div>
   );
 }

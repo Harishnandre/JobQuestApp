@@ -151,7 +151,7 @@ export const forgetPassword=async(req,res)=>{
 export const bookmarkAnyJobs=async(req,res)=>{
     try {
         const jobId=req.params.id;
-        const userId=req.id;
+        const userId=req.headers.id;
         const user=await User.findById({_id:userId});
         if(!user){
             return res.status(404).send({
@@ -175,7 +175,7 @@ export const bookmarkAnyJobs=async(req,res)=>{
 export const unbookmarkJob=async(req,res)=>{
     try {
         const jobId=req.params.id;
-        const userId=req.id;
+        const userId=req.headers.id;
         const user=await User.findById({_id:userId});
         if(!user){
             return res.status(404).send({
