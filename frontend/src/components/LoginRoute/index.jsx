@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Link, useNavigate,Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Cookies from 'js-cookie'
-import { Authcontext } from '../ContextAPI/AuthContext';
+import { Authcontext } from '../ContextAPI/Authcontext';
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,11 +14,14 @@ const Login = () => {
   const [role, setRole] = useState("");
   const AuthState = useContext(Authcontext)
   const [auth,setauth,isLoggedIn,setisLoggedIn] = AuthState
-  
+  const {user} = auth
   const navigate = useNavigate();
-  if(isLoggedIn){
-     return <Navigate to='/dashboard'/>
-  }
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/dashboard', { state: { user } });
+    }
+  }, [isLoggedIn, navigate, user]);
+  
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -53,12 +56,11 @@ const Login = () => {
 
       if (res.data.success) {
         const {data}  = res
-         const {auth} = data
+         const {auth} = data || {}
          const {token,user} = auth
-          console.log(user)
+          localStorage.setItem("auth", JSON.stringify({ user_id:user._id, token }));
           setauth({user,token})
           setisLoggedIn(true)
-          localStorage.setItem("auth", JSON.stringify({ user, token }));
         toast.success(res.data.message);
         
         // Wait for 1 second before navigating

@@ -4,7 +4,7 @@ import { FaBookmark, FaMapMarkerAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useState,useContext,useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { Authcontext } from '../ContextAPI/AuthContext';
+import { Authcontext } from '../ContextAPI/Authcontext';
 import axios from 'axios';
 
 const JobCard = ({ job }) => {
@@ -22,7 +22,7 @@ const JobCard = ({ job }) => {
         navigate(`/job-details/${job._id}`);
     };
 
-    const handleBookmarkClick =async() => {
+    const handleBookmarkClick = async () => {
         try {
             const url = isBookmarked 
                 ? `http://localhost:5000/api/v1/user/unbookmark/${job._id}` 
@@ -32,13 +32,33 @@ const JobCard = ({ job }) => {
             const response = await axios({
                 method: method,
                 url: url,
-                 headers : {
-                     id : _id 
-                 }
+                data: {
+                    token: token,
+                    id: _id
+                }
             });
-
+    
             if (response.data.success) {
-                setIsBookmarked(!isBookmarked); // Toggle bookmark state
+                // Toggle bookmark state
+                setIsBookmarked(!isBookmarked); 
+                
+                // Update bookmarkJob in context state
+                const updatedBookmarkJobs = isBookmarked 
+                    ? user.profile.bookmarkJob.filter((jobId) => jobId !== job._id) // Remove bookmark
+                    : [...user.profile.bookmarkJob, job._id]; // Add bookmark
+    
+                // Update the context with the new list of bookmarked jobs
+                setAuth({
+                    ...auth,
+                    user: {
+                        ...user,
+                        profile: {
+                            ...user.profile,
+                            bookmarkJob: updatedBookmarkJobs // Update bookmarkJob
+                        }
+                    }
+                });
+    
                 const message = isBookmarked ? "Job unbookmarked successfully!" : "Job bookmarked successfully!";
                 toast.success(message); // Show success toast
             }
@@ -47,6 +67,7 @@ const JobCard = ({ job }) => {
             console.error("Error bookmarking job:", error);
         }
     };
+    
 
     return (
         <div key={job._id} className="job-card">

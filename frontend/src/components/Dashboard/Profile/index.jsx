@@ -1,7 +1,7 @@
 // Profile.js
 import React, { useContext } from 'react';
 import './index.css';
-import { Authcontext } from '../../ContextAPI/AuthContext';
+import { Authcontext } from '../../ContextAPI/Authcontext';
 
 const Profile = () => {
   const [auth] = useContext(Authcontext); // Destructure only the needed auth object

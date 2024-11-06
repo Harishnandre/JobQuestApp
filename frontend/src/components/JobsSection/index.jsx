@@ -139,7 +139,7 @@ function JobsSection() {
           <FaSearch className="search-icon" />
           <input
             type="text"
-            placeholder="Search by job title, company, or description"
+            placeholder="Search by job title or description"
             value={searchTerm}
             onChange={(e) => { 
               setSearchTerm(e.target.value);

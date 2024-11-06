@@ -26,7 +26,7 @@ const Hero = () => {
         <div className="searchContainer">
           <input 
             type="text" 
-            placeholder="Search by job title, company, or description" 
+            placeholder="Search by job title or description" 
             className="searchInput"
             onChange={handleSearch} // Trigger handleSearch on input change
           />

@@ -5,11 +5,12 @@ import UpdatePassword from './UpdatePassword';
 import MyApplicants from './MyApplicants';
 import './index.css';
 import { Navigate, useLocation, useNavigate  } from 'react-router-dom';
-import { Authcontext  } from '../ContextAPI/AuthContext';
+import { Authcontext  } from '../ContextAPI/Authcontext';
 
 const Dashboard = () => {
   let [auth,setauth,isLoggedIn,setisLoggedIn]=useContext(Authcontext);
   const { user } = auth || {};
+  console.log(user)
   if(!isLoggedIn){
     return <Navigate to='/login'/>
  }

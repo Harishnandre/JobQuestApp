@@ -83,7 +83,7 @@ export const loginUser=async (req,res)=>{
                     success:true,
                     message:`Welcome user: ${user.fullName}`,
                     auth:{
-                        userId:user._id,
+                        user,
                         token
                     }
                  });
@@ -150,7 +150,7 @@ export const forgetPassword=async(req,res)=>{
 export const bookmarkAnyJobs=async(req,res)=>{
     try {
         const jobId=req.params.id;
-        const userId=req.headers.id;
+        const userId=req.id;
         const user=await User.findById({_id:userId});
         if(!user){
             return res.status(404).send({
@@ -174,7 +174,7 @@ export const bookmarkAnyJobs=async(req,res)=>{
 export const unbookmarkJob=async(req,res)=>{
     try {
         const jobId=req.params.id;
-        const userId=req.headers.id;
+        const userId=req.id;
         const user=await User.findById({_id:userId});
         if(!user){
             return res.status(404).send({
@@ -199,7 +199,7 @@ export const unbookmarkJob=async(req,res)=>{
 //Get user by Id
 export const getUserById=async(req,res)=>{
     try {
-        const userId=req.id;
+        const userId=req.params.id;
         const user=await User.findById({_id:userId});
         if(!user){
             return res.status(404).send({

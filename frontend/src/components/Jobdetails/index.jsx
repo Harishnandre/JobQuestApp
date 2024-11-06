@@ -3,7 +3,7 @@ import axios from 'axios';
 import './index.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { Authcontext } from '../ContextAPI/AuthContext';
+import { Authcontext } from '../ContextAPI/Authcontext';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 const Jobdetails = () => {

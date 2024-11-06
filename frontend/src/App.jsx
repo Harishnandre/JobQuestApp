@@ -10,7 +10,7 @@ import Register from './components/Register'
 import Dashboard from './components/Dashboard'
 import ForgetPassword from './components/ForgetPasssword'
 import Jobdetails from './components/Jobdetails'
-import AuthcontextProvider from './components/ContextAPI/AuthContext'
+import AuthcontextProvider from './components/ContextAPI/Authcontext'
 import SearchResults from './components/SearchResults'
 import NotFound from './components/NotFound'
 

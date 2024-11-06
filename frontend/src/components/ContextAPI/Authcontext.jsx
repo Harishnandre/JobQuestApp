@@ -24,16 +24,28 @@ const AuthcontextProvider = ({ children }) => {
 
   // Load user data from local storage on component mount
   useEffect(() => {
-    try {
-      const data = JSON.parse(localStorage.getItem("auth"));
-      if (data && data.token) {
-        setAuth({ user: data.user, token: data.token });
-        setIsLoggedIn(true);
+    const loadUserData = async () => {
+      const storedData = JSON.parse(localStorage.getItem("auth"));
+      if (storedData && storedData.user_id && storedData.token) {
+        try {
+          // Set token in axios headers for the request
+          axios.defaults.headers.common["Authorization"] = `Bearer ${storedData.token}`;
+          
+          // Fetch full user data from the backend using user_id
+          const response = await axios.get(`http://localhost:5000/api/v1/user/get/${storedData.user_id}`);
+          setAuth({ user: response.data.user, token: storedData.token });
+          setIsLoggedIn(true);
+        } catch (error) {
+          console.error("Error fetching user data from backend:", error);
+          setIsLoggedIn(false);
+          setAuth({ user: null, token: null });
+        }
       }
-    } catch (error) {
-      console.error("Error loading auth data from local storage:", error);
-    }
+    };
+    
+    loadUserData();
   }, []);
+
 
   return (
     <Authcontext.Provider value={[auth, setAuth, isLoggedIn, setIsLoggedIn]}>

@@ -7,8 +7,8 @@ router.post('/user/register',registerNewUser)
       .post('/user/login',loginUser)
       .patch('/user/forget-password',forgetPassword)
       .post('/user/logout',isAuthenticated,logoutUser)
-      .post('/user/bookmark/:id',bookmarkAnyJobs)  //id= job id
-      .patch('/user/unbookmark/:id',unbookmarkJob)  //id= job id
-      .get('/user/get/:id',isAuthenticated,getUserById) //id=user id
+      .post('/user/bookmark/:id',isAuthenticated,bookmarkAnyJobs)  //id= job id
+      .patch('/user/unbookmark/:id',isAuthenticated,unbookmarkJob)  //id= job id
+      .get('/user/get/:id',getUserById) //id=user id
 export default router      
 
