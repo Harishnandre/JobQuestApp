@@ -1,7 +1,6 @@
 import { User } from "../models/userModel.js";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
-import mongoose from "mongoose";
 export const registerNewUser=async(req,res)=>{
     try {
         const {fullName,gender,email,address,phoneNumber,password,role,answer}=req.body;
@@ -84,7 +83,7 @@ export const loginUser=async (req,res)=>{
                     success:true,
                     message:`Welcome user: ${user.fullName}`,
                     auth:{
-                        user,
+                        userId:user._id,
                         token
                     }
                  });
@@ -190,6 +189,26 @@ export const unbookmarkJob=async(req,res)=>{
         return res.status(200).send({
             success:true,
             message:"Job UnBookmark Successfully",
+            user
+        });
+    } catch (error) {
+        return res.status(500).send("Server error:" + error); 
+    }
+}
+
+//Get user by Id
+export const getUserById=async(req,res)=>{
+    try {
+        const userId=req.id;
+        const user=await User.findById({_id:userId});
+        if(!user){
+            return res.status(404).send({
+                success:false,
+                message:"User not found"
+            });
+        }
+        return res.status(200).send({
+            success:true,
             user
         });
     } catch (error) {
