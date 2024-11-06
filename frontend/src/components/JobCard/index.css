@@ -188,3 +188,12 @@
     justify-content: space-between;
   }
 
+
+  .bookmark-icon {
+    cursor: pointer;
+    color: gray; /* Default color */
+}
+
+.bookmark-icon.bookmarked {
+    color: gold; /* Color when bookmarked */
+}

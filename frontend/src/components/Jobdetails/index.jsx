@@ -1,130 +1,124 @@
-import React, { useContext } from 'react'
-import './index.css'
+import React, { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
+import './index.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { Authcontext } from '../ContextAPI/AuthContext';
+import ClipLoader from 'react-spinners/ClipLoader';
 
+const Jobdetails = () => {
+  const [auth, setAuth] = useContext(Authcontext);
+  const { user, token } = auth
+  const {_id } = user || {}
+  const [job, setJob] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { JobId } = useParams();
 
-const jobData = [
-  {
-    id: 1,
-    company: "Tata Consultancy Services",
-    role: "Software Engineer",
-    location: "Mumbai",
-    salary: 20,
-    type: "Full Time",
-    positions: 3,
-    description: "Exciting opportunity to work on new technologies.",
-    about: "Tata Consultancy Services is a leading global IT services, consulting and business solutions organization.",
-    duties: [
-      "Develop and maintain software applications.",
-      "Collaborate with cross-functional teams.",
-      "Participate in code reviews.",
-      "Troubleshoot and debug applications."
-    ]
-  },
-  {
-    id: 2,
-    company: "Infosys",
-    role: "Data Scientist",
-    location: "Bangalore",
-    salary: 30,
-    type: "Intern",
-    positions: 1,
-    description: "Data analytics role focused on machine learning.",
-    about: "Infosys is a global leader in technology services and consulting.",
-    duties: [
-      "Analyze data to derive insights.",
-      "Develop predictive models.",
-      "Communicate findings to stakeholders.",
-      "Collaborate with data engineers."
-    ]
-  },
-  
-];
-const   Jobdetails = () => {
-  let [auth,setauth]=useContext(Authcontext);
-  const navigate1=useNavigate();
-  const handlenavigate1=()=>{
-    navigate1('/login');
-  }
-  const handlenavigate2=()=>{
-    navigate1('/register');
-  }
-
-const handlealert=()=>{
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You want to apply this role",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes,Submit"
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire({
-        title: "Thank you!",
-        text: "Your submission has been sent",
-        icon: "success"
-      });
-      
+  const fetchJobDetails = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/v1/job/get/${JobId}`);
+      if (response.data.success) {
+        setJob(response.data.jobs);
+      }
+    } catch (error) {
+      console.error("Error fetching job details:", error);
+    } finally {
+      setLoading(false);
     }
-  });
-}
+  };
 
+  useEffect(() => {
+    fetchJobDetails();
+  }, [JobId]);
 
+  const handleAlert = async () => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You want to apply for this role",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Submit",
+    });
 
+    if (result.isConfirmed) {
+      try {
+        const response = await axios.post(
+          `http://localhost:5000/api/v1/application/apply/${JobId}`,
+          { id: _id,
+            token : token
+          }
+        );
 
+        if (response.data.success) {
+          Swal.fire({
+            title: "Thank you!",
+            text: "Your application has been sent",
+            icon: "success",
+          });
+        } else {
+          Swal.fire({
+            title: "Oops!",
+            text: response.data.message,
+            icon: "error",
+          });
+        }
+      } catch (error) {
+        console.log(error)
+        Swal.fire({
+          title: "Error!",
+          text: error.response.data.message,
+          icon: "error",
+        });
+      }
+    }
+  };
 
+  if (loading) {
+    return (
+      <div className="loader-container">
+        <ClipLoader color="#007bff" loading={loading} size={50} />
+      </div>
+    );
+  }
 
-  const params=useParams();
-  console.log(params);
-  const { JobId } = params;
-  console.log(Number(JobId));
-  const  navigate=useNavigate();
-   const job=jobData.find(job=>job.id===parseInt(JobId));
-
-
-
-  //  console.log(job);
   if (!job) {
-    return <h1 style={{ textAlign: 'center', color: 'red',margin:'100px' }}>Job not found</h1>;
+    return <h1 style={{ textAlign: 'center', color: 'red', margin: '100px' }}>Job not found</h1>;
   }
 
   return (
     <div className="job-details-container">
       <button className="back-button" onClick={() => navigate(-1)}>← Back</button>
       <div className="job-details-card">
-        <h1 className="job-title">{job.role} at {job.company}</h1>
+        <h1 className="job-title">{job.title} at {job.company.name}</h1>
         <p className="job-location"><strong>Location:</strong> {job.location}</p>
-        <p className="job-type"><strong>Type:</strong> {job.type}</p>
-        <p className="job-salary"><strong>Salary:</strong> ${job.salary} Lakhs per year</p>
-        <p className="job-positions"><strong>Open Positions:</strong> {job.positions}</p>
+        <p className="job-type"><strong>Type:</strong> {job.jobType}</p>
+        <p className="job-salary"><strong>Salary:</strong> {job.salary} LPA</p>
+        <p className="job-positions"><strong>Open Positions:</strong> {job.vacancies}</p>
         
         <h2 className="job-description-title">Job Description</h2>
         <p className="job-description">{job.description}</p>
         
-        <h2 className="about-company-title">About the Company</h2>
-        <p className="about-company">{job.about}</p>
-        
-        <h2 className="duties-title">Duties and Responsibilities</h2>
-        <ul className="duties-list">
-          {job.duties.map((duty, index) => (
-            <li key={index}>{duty}</li>
+        <h2 className="requirements-title">Requirements</h2>
+        <ul className="requirements-list">
+          {job.requirements.map((requirement, index) => (
+            <li key={index}>{requirement}</li>
           ))}
         </ul>
-        {auth?.user?<>
-          <button className="apply-button" onClick={handlealert}>Apply Now</button>
-        </>: <div className='apply-changes'>
-        <button className="apply-button" onClick={handlenavigate1}>Login</button>
-        <button className="apply-button" onClick={handlenavigate2}>Register</button>
-        </div>
-        
-}
+
+        {auth?.user ? (
+          <button className="apply-button" onClick={handleAlert}>Apply Now</button>
+        ) : (
+          <div className='apply-changes'>
+            <button className="apply-button" onClick={() => navigate('/login')}>Login</button>
+            <button className="apply-button" onClick={() => navigate('/register')}>Register</button>
+          </div>
+        )}
       </div>
     </div>
   );
-}
+};
 
-export default Jobdetails
+export default Jobdetails;

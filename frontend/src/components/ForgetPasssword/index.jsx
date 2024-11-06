@@ -5,6 +5,7 @@ import {ToastContainer, toast} from 'react-toastify'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 
+
  const Forgetpassword=()=> {
   const navigate=useNavigate();
   const [email ,setemail]=useState("");
@@ -51,9 +52,8 @@ import axios from 'axios';
   
    }
    catch(error){ 
-  //   console.log(error.response.data)
-  console.log(error);
-    toast.error("Incorrect Answer or email");
+ 
+   toast.error(error.response.data.message)
    }
     
     };

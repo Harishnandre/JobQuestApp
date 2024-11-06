@@ -63,7 +63,7 @@ export const getAllJobs=async(req,res)=>{
 export const getJobById=async(req,res)=>{
     try {
         const _id=req.params.id;
-        const jobs=await JobModel.findById({_id});
+        const jobs=await JobModel.findById({_id}).populate("company");
         if(!jobs){
             return res.status(404).send({
                 success:false,

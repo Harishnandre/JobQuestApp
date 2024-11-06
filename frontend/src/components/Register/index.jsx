@@ -90,7 +90,7 @@ const Register = () => {
     } catch (error) {
       console.log("Error during registration:", error); // Log the entire error
       if (error.response) {
-        toast.error(error.response.data.message || "Registration failed");
+        toast.error(error.response.data.message);
       } else {
         toast.error("Registration failed. Please try again later.");
       }

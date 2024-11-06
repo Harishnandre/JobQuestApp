@@ -17,12 +17,12 @@ export const registerNewUser=async(req,res)=>{
                message:"A user with this email id is already exist"
           });  
         }
-        if(password.length<8){
+        if(password.length < 8){
             return res.status(400).send({
-                success:false,
-                message:"Password must contain at least 8 characters"
-            })
-        }
+                 success : false,
+                 message : "Password must contain at least 8 characters"
+             })
+            }
         const hashedPassword=await bcrypt.hash(password,10);
         const user=new User({
             fullName,
@@ -120,12 +120,14 @@ export const forgetPassword=async(req,res)=>{
                 message:"Invalid Email or Answer"    
             });   
         }
-        if(newPassword.length<8){
+
+        if(newPassword.length < 8){
             return res.status(400).send({
-                success:false,
-                message:"Password must contain at least 8 characters"
-            })
-        }
+                 success : false,
+                 message : "Password must contain at least 8 characters"
+             })
+            }
+
         const hashedPassword=await bcrypt.hash(newPassword,10);
         const updateUser=await User.findByIdAndUpdate({_id:user._id},{password:hashedPassword},{new:true});
         if(!updateUser){
@@ -148,7 +150,7 @@ export const forgetPassword=async(req,res)=>{
 export const bookmarkAnyJobs=async(req,res)=>{
     try {
         const jobId=req.params.id;
-        const userId=req.id;
+        const userId=req.headers.id;
         const user=await User.findById({_id:userId});
         if(!user){
             return res.status(404).send({
@@ -172,7 +174,7 @@ export const bookmarkAnyJobs=async(req,res)=>{
 export const unbookmarkJob=async(req,res)=>{
     try {
         const jobId=req.params.id;
-        const userId=req.id;
+        const userId=req.headers.id;
         const user=await User.findById({_id:userId});
         if(!user){
             return res.status(404).send({

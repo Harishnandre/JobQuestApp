@@ -1,21 +1,10 @@
-import React, { useState } from "react";
-import { FaSearch, FaBookmark, FaMapMarkerAlt } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { FaSearch } from "react-icons/fa";
 import "./index.css";
 import JobCard from "../JobCard";
-
-// Sample data with numerical salary values
-const jobData = [
-  { id: 1, company: "Tata Consultancy Services", role: "Software Engineer", location: "Mumbai", salary: 20, type: "Full Time", positions: 3, description: "Exciting opportunity to work on new technologies." },
-  { id: 2, company: "Infosys", role: "Data Scientist", location: "Bangalore", salary: 30, type: "Intern", positions: 1, description: "Data analytics role focused on machine learning." },
-  { id: 3, company: "Wipro", role: "Web Developer", location: "Hyderabad", salary: 15, type: "Full Time", positions: 2, description: "Developing user-friendly web applications." },
-  { id: 4, company: "HCL Technologies", role: "Mobile Developer", location: "Chennai", salary: 25, type: "Full Time", positions: 1, description: "Building high-performance mobile applications." },
-  { id: 5, company: "Accenture", role: "Business Analyst", location: "Pune", salary: 22, type: "Full Time", positions: 2, description: "Analyzing business needs and proposing solutions." },
-  { id: 6, company: "Cognizant", role: "Cloud Engineer", location: "Noida", salary: 28, type: "Full Time", positions: 2, description: "Managing cloud-based infrastructure." },
-  { id: 7, company: "Tech Mahindra", role: "DevOps Engineer", location: "Gurgaon", salary: 10, type: "Intern", positions: 1, description: "Implementing DevOps practices and tools." },
-  { id: 8, company: "L&T Technology Services", role: "Data Engineer", location: "Ahmedabad", salary: 24, type: "Full Time", positions: 3, description: "Building and maintaining data pipelines." },
-  { id: 9, company: "Mindtree", role: "UX Designer", location: "Kolkata", salary: 18, type: "Intern", positions: 1, description: "Designing intuitive user experiences." },
-  { id: 10, company: "Zensar Technologies", role: "System Administrator", location: "Jaipur", salary: 50, type: "Full Time", positions: 2, description: "Maintaining system operations and performance." },
-];
+import JobQuestLoader from "../Loader";
+import { ToastContainer } from 'react-toastify';
 
 // Filter options
 const locations = [
@@ -35,14 +24,39 @@ const employmentTypes = [
 ];
 
 function JobsSection() {
-  // States for each filter
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
   const [location, setLocation] = useState("");
   const [salaryRange, setSalaryRange] = useState("");
   const [employmentType, setEmploymentType] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState(null);
 
-  // Function to filter jobs based on selected criteria
-  const filteredJobs = jobData.filter(job => {
+  // Function to fetch jobs from the backend
+  const fetchJobs = async (search = "") => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(`http://localhost:5000/api/v1/job/get?keyword=${search}`);
+      if (response.data.success) {
+        setJobs(response.data.jobs);
+      } else {
+        setError("Failed to load jobs.");
+      }
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+      setError("Error fetching jobs. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // useEffect to fetch jobs on initial load and when filters/search change
+  useEffect(() => {
+    fetchJobs(searchTerm);
+  }, [searchTerm]);
+
+  const filteredJobs = jobs.filter(job => {
     const salaryCondition = salaryRange 
       ? (salaryRange === "Below 10 LPA" ? job.salary < 10 :
          salaryRange === "10 LPA and above" ? job.salary >= 10 && job.salary < 20 :
@@ -52,17 +66,10 @@ function JobsSection() {
          true)
       : true;
 
-    const matchesSearchTerm = searchTerm
-      ? job.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.description.toLowerCase().includes(searchTerm.toLowerCase())
-      : true;
-
     return (
       salaryCondition &&
       (!location || job.location === location) &&
-      (!employmentType || job.type === employmentType) &&
-      matchesSearchTerm
+      (!employmentType || job.jobType === employmentType)
     );
   });
 
@@ -71,6 +78,7 @@ function JobsSection() {
     setSalaryRange("");
     setEmploymentType("");
     setSearchTerm("");
+    fetchJobs(""); // Fetch all jobs after clearing filters
   };
 
   return (
@@ -81,7 +89,10 @@ function JobsSection() {
 
         <div className="filter-group">
           <p>Location</p>
-          <select value={location} onChange={(e) => setLocation(e.target.value)}>
+          <select value={location} onChange={(e) => { 
+            setLocation(e.target.value);
+            fetchJobs(searchTerm); // Re-fetch jobs with search term
+          }}>
             {locations.map((loc, index) => (
               <option key={index} value={loc === "All Locations" ? "" : loc}>
                 {loc}
@@ -92,7 +103,10 @@ function JobsSection() {
 
         <div className="filter-group">
           <p>Salary Range</p>
-          <select value={salaryRange} onChange={(e) => setSalaryRange(e.target.value)}>
+          <select value={salaryRange} onChange={(e) => { 
+            setSalaryRange(e.target.value);
+            fetchJobs(searchTerm); // Re-fetch jobs with search term
+          }}>
             {salaryRanges.map((range, index) => (
               <option key={index} value={range === "All Salaries" ? "" : range}>
                 {range}
@@ -103,7 +117,10 @@ function JobsSection() {
 
         <div className="filter-group">
           <p>Type of Employment</p>
-          <select value={employmentType} onChange={(e) => setEmploymentType(e.target.value)}>
+          <select value={employmentType} onChange={(e) => { 
+            setEmploymentType(e.target.value);
+            fetchJobs(searchTerm); // Re-fetch jobs with search term
+          }}>
             {employmentTypes.map((type, index) => (
               <option key={index} value={type === "All Types" ? "" : type}>
                 {type}
@@ -124,21 +141,29 @@ function JobsSection() {
             type="text"
             placeholder="Search by job title, company, or description"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => { 
+              setSearchTerm(e.target.value);
+              fetchJobs(e.target.value); // Fetch jobs with updated search term
+            }}
           />
         </div>
 
-        {/* Display filtered jobs or 'No results' */}
-        <div className="card-containers">
-          {filteredJobs.length > 0 ? (
-            filteredJobs.map((job) => <JobCard key={job.id} job={job} />)
-          ) : (
-            <div className="no-results">
-              <img src="https://img.freepik.com/premium-vector/search-result-find-illustration_585024-17.jpg" alt="No results" />
-            </div>
-          )}
-        </div>
+        {/* Display loading spinner, filtered jobs, or 'No results' */}
+        {loading ? (
+ <JobQuestLoader/>
+        ) : (
+          <div className="card-containers">
+            {filteredJobs.length > 0 ? ( 
+              filteredJobs.map((job) => <JobCard key={job._id} job={job} />) // Use job._id for the key
+            ) : (
+              <div className="no-results">
+                <img src="https://img.freepik.com/premium-vector/search-result-find-illustration_585024-17.jpg" alt="No results" />
+              </div>
+            )}
+          </div>
+        )}
       </div>
+      <ToastContainer/>
     </div>
   );
 }
