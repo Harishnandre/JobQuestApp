@@ -6,7 +6,7 @@ import MyApplicants from './MyApplicants';
 import './index.css';
 import { Navigate, useLocation, useNavigate  } from 'react-router-dom';
 import { Authcontext  } from '../ContextAPI/Authcontext';
-
+import MyApplications from './MyApplications';
 const Dashboard = () => {
   let [auth,setauth,isLoggedIn,setisLoggedIn]=useContext(Authcontext);
   const { user } = auth || {};
@@ -28,6 +28,8 @@ const Dashboard = () => {
     switch (activeComponent) {
       case 'Profile':
         return <Profile />;
+      case 'My Applications':
+         return <MyApplications/>
       case 'Update Profile':
         return <UpdateProfile />;
       case 'Update Password':
@@ -67,6 +69,12 @@ const Dashboard = () => {
               Update Profile
             </li>
             <li
+              className={activeComponent === 'My Applicantions' ? 'active' : ''}
+              onClick={() => setActiveComponent('My Applications')}
+            >
+              My Applications
+            </li>
+            <li
               className={activeComponent === 'Update Password' ? 'active' : ''}
               onClick={() => setActiveComponent('Update Password')}
             >
@@ -78,6 +86,7 @@ const Dashboard = () => {
             >
               My Applicants
             </li>
+            
             <li onClick={handleLogout} className="logout-btn">
               Logout
             </li>

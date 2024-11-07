@@ -1,0 +1,40 @@
+.my-applications {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.loader {
+    font-size: 18px;
+    color: #555;
+    text-align: center;
+}
+
+.error {
+    color: red;
+    text-align: center;
+}
+
+.applications-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.applications-table th, .applications-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.applications-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.applications-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.applications-table tr:hover {
+    background-color: #f1f1f1;
+}

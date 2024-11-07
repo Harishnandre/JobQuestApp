@@ -28,7 +28,7 @@ const JobCard = ({ job }) => {
                 ? `http://localhost:5000/api/v1/user/unbookmark/${job._id}` 
                 : `http://localhost:5000/api/v1/user/bookmark/${job._id}`;
                 
-            const method = isBookmarked ? 'PATCH' : 'POST';
+            const method = 'PATCH'
             const response = await axios({
                 method: method,
                 url: url,
