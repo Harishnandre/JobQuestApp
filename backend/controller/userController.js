@@ -177,6 +177,41 @@ export const updateProfile=async(req,res)=>{
     }
 }
 
+//update Password when user loggein
+export const updatePassword=async(req,res)=>{
+    try {
+        const {newPassword}=req.body;
+        const userId=req.id;
+        if(!newPassword){
+            return res.status(400).send({
+                success:false,
+                message:"Please provide new Password for updation"
+            });
+        }
+        if(newPassword.length < 8){
+            return res.status(400).send({
+                 success : false,
+                 message : "Password must contain at least 8 characters"
+             })
+            }
+        const hashedPassword=await bcrypt.hash(newPassword,10);
+        const updateUserPassword=await User.findByIdAndUpdate({_id:userId},{password:hashedPassword},{new:true});
+        if(!updateUserPassword){
+            return res.status(404).send({
+                success:false,
+                message:"User not found while updating"    
+            });
+        }
+        res.status(200).send({
+            success:true,
+            message:"Password Updated Successfully",
+            updateUserPassword
+        }); 
+    } catch (error) {
+        return res.status(500).send("Server error:" + error);
+    }
+}
+
 //For bookmark Job
 export const bookmarkAnyJobs=async(req,res)=>{
     try {
