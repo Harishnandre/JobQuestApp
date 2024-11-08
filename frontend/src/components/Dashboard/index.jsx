@@ -3,6 +3,7 @@ import Profile from './Profile';
 import UpdateProfile from './UpdateProfile';
 import UpdatePassword from './UpdatePassword';
 import MyApplicants from './MyApplicants';
+import Bookmarks from './Bookmarks';
 import './index.css';
 import { Navigate, useLocation, useNavigate  } from 'react-router-dom';
 import { Authcontext  } from '../ContextAPI/Authcontext';
@@ -36,6 +37,8 @@ const Dashboard = () => {
         return <UpdatePassword />;
       case 'My Applicants':
         return <MyApplicants />;
+      case 'Bookmarks':
+        return <Bookmarks/>
       default:
         return <Profile />;
     }
@@ -68,11 +71,17 @@ const Dashboard = () => {
             >
               Update Profile
             </li>
-            <li
+         { user.role === 'Job-Seeker' &&  <li
               className={activeComponent === 'My Applicantions' ? 'active' : ''}
               onClick={() => setActiveComponent('My Applications')}
             >
               My Applications
+            </li>
+}              
+<li
+              className={activeComponent === 'Bookmarks' ? 'active' : ''}
+              onClick={() => setActiveComponent('Bookmarks')}>
+              Bookmarks
             </li>
             <li
               className={activeComponent === 'Update Password' ? 'active' : ''}

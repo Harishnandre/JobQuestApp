@@ -68,12 +68,12 @@ const userSchema = new mongoose.Schema({
         profilePhoto: {
             type: String,
             default: ""
-        },
-        bookmarkJob:[{
-           type:mongoose.Schema.Types.ObjectId,
-           ref:'JobModel',
-        }]
+        }
     },
+    bookmarkJob:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'JobModel',
+     }],
     recommendedJobs:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'JobModel'

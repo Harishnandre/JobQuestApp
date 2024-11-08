@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Authcontext } from '../ContextAPI/Authcontext';
 import JobCard from '../JobCard';
+import './index.css'
 
 const RecommendedJobs = () => {
   const [auth] = useContext(Authcontext);

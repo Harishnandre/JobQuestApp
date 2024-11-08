@@ -159,7 +159,7 @@ export const bookmarkAnyJobs=async(req,res)=>{
                 message:"User not found",
             });
         }
-        user.profile.bookmarkJob.push(jobId);
+        user.bookmarkJob.push(jobId);
         await user.save();
         return res.status(200).send({
             success:true,
@@ -183,7 +183,7 @@ export const unbookmarkJob=async(req,res)=>{
                 message:"User not found"
             });
         }
-        user.profile.bookmarkJob = user.profile.bookmarkJob.filter(
+        user.bookmarkJob = user.bookmarkJob.filter(
             _id => !_id.equals(jobId) 
         );
         await user.save();
@@ -206,6 +206,12 @@ export const getUserById=async(req,res)=>{
             options:{sort:{createdAt:-1}},
             populate:{path:"company",options:{sort:{createdAt:-1}}}
         })
+        .populate({
+            path:"bookmarkJob",
+            options:{sort:{createdAt:-1}},
+            populate:{path:"company",options:{sort:{createdAt:-1}}}
+        })
+
         if(!user){
             return res.status(404).send({
                 success:false,
