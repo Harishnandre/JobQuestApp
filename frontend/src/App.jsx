@@ -13,6 +13,7 @@ import Jobdetails from './components/Jobdetails'
 import AuthcontextProvider from './components/ContextAPI/Authcontext'
 import SearchResults from './components/SearchResults'
 import NotFound from './components/NotFound'
+import RecommendedJobs from './components/jobrecommendation'
 
 
 const App = () => {
@@ -29,7 +30,9 @@ const App = () => {
       <Route exact path='/job-details/:JobId' Component={Jobdetails}/>
       <Route exact path='/dashboard' Component={Dashboard}/>
       <Route exact path='/jobs-search/:searchTerm' Component={SearchResults} />
+     <Route exact path='/recommended-jobs' Component={RecommendedJobs}/>
       <Route path='*' Component={NotFound}/>
+
      </Routes>
      <Footer/>
     </BrowserRouter>

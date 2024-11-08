@@ -58,9 +58,9 @@ const userSchema = new mongoose.Schema({
     profile: {
         bio: { type: String, default: "" },
         preferredJobRole:{
-            role1:{type:String},
-            role2:{type:String},
-            role3:{type:String}
+            role1:{type:String,default: "" },
+            role2:{type:String,default: "" },
+            role3:{type:String,default: "" }
         },
         resume: { type: String }, // URL to resume file
         resumeOriginalName: { type: String }, // Ensuring to store resume file format like .pdf or other extension
@@ -73,7 +73,12 @@ const userSchema = new mongoose.Schema({
            type:mongoose.Schema.Types.ObjectId,
            ref:'JobModel',
         }]
-    }
+    },
+    recommendedJobs:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'JobModel'
+           }
+       ]
 }, { timestamps: true });
 
 export const User = mongoose.model('User', userSchema); 

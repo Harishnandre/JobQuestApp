@@ -1,6 +1,7 @@
 import { User } from "../models/userModel.js";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
+import { JobModel } from './../models/jobModel.js';
 export const registerNewUser=async(req,res)=>{
     try {
         const {fullName,gender,email,address,phoneNumber,password,role,answer}=req.body;
@@ -200,7 +201,11 @@ export const unbookmarkJob=async(req,res)=>{
 export const getUserById=async(req,res)=>{
     try {
         const userId=req.params.id;
-        const user=await User.findById({_id:userId});
+        const user=await User.findById({_id:userId}).populate({
+            path:"recommendedJobs",
+            options:{sort:{createdAt:-1}},
+            populate:{path:"company",options:{sort:{createdAt:-1}}}
+        })
         if(!user){
             return res.status(404).send({
                 success:false,
@@ -213,5 +218,31 @@ export const getUserById=async(req,res)=>{
         });
     } catch (error) {
         return res.status(500).send("Server error:" + error); 
+    }
+}
+
+export const getRecomendedJobs=async(req,res)=>{
+    try{
+        const userId= req.id;
+  const user=await User.findById(userId);//sirf prference job role aaega user ke saath in profile me
+  if(!user){
+    return res.status(404).json({
+        success:false,
+        message:'user not found'
+    })
+  }
+  const {role1, role2,role3}=user.profile.preferredJobRole;
+  let matchedJobs=await JobModel.find({
+        $or:[{title:role1},{title:role2},{title:role3}]
+  }).sort({createdAt:-1}).limit(10);
+    user.recommendedJobs=matchedJobs.map(job=>job._id);  // Save only job IDs
+   //user.profile.recommendedJobs=matchedJobs;  // Save only job IDs
+await user.save();  // Save the updated recommendedJobs array to the user
+res.json({success:true, jobs:matchedJobs});
+
+    }
+    catch(error){
+        console.error('Error fetching and saving recommended jobs:', error);
+    res.status(500).json({ success: false, message: 'Server error' ,error});
     }
 }
