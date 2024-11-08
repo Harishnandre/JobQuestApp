@@ -146,6 +146,37 @@ export const forgetPassword=async(req,res)=>{
      }
 }
 
+export const updateProfile=async(req,res)=>{
+    try {
+        const {fullName,gender,email,address,phoneNumber,bio,role1,role2,role3}=req.body;
+        if(!fullName||!gender||!email||!address||!phoneNumber||!bio||!role1||!role2||!role3){
+            return res.status(400).send({
+                success:false,
+                message:"All fields are required to complete Profile"
+            });
+        }
+        const userId=req.id;
+        const updateUser=await User.findByIdAndUpdate({_id:userId},{fullName,gender,email,address,phoneNumber,
+                                         profile:{
+                                            bio,
+                                            preferredJobRole:{role1,role2,role3}
+                                         }},{new:true});
+        if(!updateUser){
+            return res.status(404).send({
+                success:false,
+                message:"User not found while updating"    
+            }); 
+        } 
+        res.status(200).send({
+            success:true,
+            message:"Profile Updated Successfully",
+            updateUser
+        });                               
+    } catch (error) {
+        return res.status(500).send("Server error:" + error);
+    }
+}
+
 //For bookmark Job
 export const bookmarkAnyJobs=async(req,res)=>{
     try {
