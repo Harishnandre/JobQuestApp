@@ -38,7 +38,7 @@ export const applyForJob=async(req,res)=>{
 // Get all application in which Job seeker applied for job
 export const getAllUserApplication=async(req,res)=>{
     try {
-        const userId=req.id;
+        const userId=req.params.id;
         const applications=await Application.find({applicant:userId})
                                 .sort({createdAt:-1})
                                 .populate({

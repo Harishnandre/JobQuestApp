@@ -73,7 +73,12 @@ const userSchema = new mongoose.Schema({
     bookmarkJob:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'JobModel',
-     }]
+     }],
+    recommendedJobs:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'JobModel'
+           }
+       ]
 }, { timestamps: true });
 
 export const User = mongoose.model('User', userSchema); 

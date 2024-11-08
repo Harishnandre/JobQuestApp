@@ -3,10 +3,11 @@ import Profile from './Profile';
 import UpdateProfile from './UpdateProfile';
 import UpdatePassword from './UpdatePassword';
 import MyApplicants from './MyApplicants';
+import Bookmarks from './Bookmarks';
 import './index.css';
 import { Navigate, useLocation, useNavigate  } from 'react-router-dom';
 import { Authcontext  } from '../ContextAPI/Authcontext';
-
+import MyApplications from './MyApplications';
 const Dashboard = () => {
   let [auth,setauth,isLoggedIn,setisLoggedIn]=useContext(Authcontext);
   const { user } = auth || {};
@@ -28,12 +29,16 @@ const Dashboard = () => {
     switch (activeComponent) {
       case 'Profile':
         return <Profile />;
+      case 'My Applications':
+         return <MyApplications/>
       case 'Update Profile':
         return <UpdateProfile />;
       case 'Update Password':
         return <UpdatePassword />;
       case 'My Applicants':
         return <MyApplicants />;
+      case 'Bookmarks':
+        return <Bookmarks/>
       default:
         return <Profile />;
     }
@@ -66,6 +71,18 @@ const Dashboard = () => {
             >
               Update Profile
             </li>
+         { user.role === 'Job-Seeker' &&  <li
+              className={activeComponent === 'My Applicantions' ? 'active' : ''}
+              onClick={() => setActiveComponent('My Applications')}
+            >
+              My Applications
+            </li>
+}              
+<li
+              className={activeComponent === 'Bookmarks' ? 'active' : ''}
+              onClick={() => setActiveComponent('Bookmarks')}>
+              Bookmarks
+            </li>
             <li
               className={activeComponent === 'Update Password' ? 'active' : ''}
               onClick={() => setActiveComponent('Update Password')}
@@ -78,6 +95,7 @@ const Dashboard = () => {
             >
               My Applicants
             </li>
+            
             <li onClick={handleLogout} className="logout-btn">
               Logout
             </li>

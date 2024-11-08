@@ -4,8 +4,8 @@ import { applyForJob, getAllApplicationForJob, getAllUserApplication, updateStat
 
 const router=new express.Router();
 router.post('/application/apply/:id',isAuthenticated,applyForJob)      //id=Job id
-      .get('/application/get',isAuthenticated,getAllUserApplication)
-      .get('/application/get/:id',isAuthenticated,getAllApplicationForJob)  //id=Job id
+      .get('/application/get/:id',getAllUserApplication)
+      .get('/application/get/job/:id',getAllApplicationForJob)  //id=Job id
       .patch('/application/status/:id',isAuthenticated,updateStatus)    // id=application id
 
       
