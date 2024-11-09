@@ -7,7 +7,7 @@ const router=new express.Router();
 router.post('/user/register',registerNewUser)
       .post('/user/login',loginUser)
       .patch('/user/forget-password',forgetPassword)
-      .patch('/user/update-profile',singleUpload,updateProfile)
+      .post('/user/update-profile',singleUpload,updateProfile)
       .patch('/user/update-password',isAuthenticated,updatePassword)
       .post('/user/logout',isAuthenticated,logoutUser)
       .patch('/user/bookmark/:id',isAuthenticated,bookmarkAnyJobs)  //id= job id
