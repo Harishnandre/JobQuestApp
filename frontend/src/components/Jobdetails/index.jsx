@@ -19,7 +19,9 @@ const Jobdetails = () => {
     try {
       const response = await axios.get(`http://localhost:5000/api/v1/job/get/${JobId}`);
       if (response.data.success) {
+        
         setJob(response.data.jobs);
+
       }
     } catch (error) {
       console.error("Error fetching job details:", error);

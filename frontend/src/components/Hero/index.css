@@ -78,16 +78,16 @@
    border: 0px solid;
 }
 
-.ctaContainer {
+/* .ctaContainer {
   display: flex;
   justify-content: center;
   gap: 15px;
   margin-top: 30px;
-}
+} */
 
 
 .ctaButton {
-  padding: 12px 25px;
+  /* padding: 12px 25px;
   font-size: 1rem;
   font-weight: bold;
   border-radius: 30px;
@@ -95,5 +95,45 @@
   background-color: #4a00e0;
   color: #fff;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease; */
+  
+  color: #fff;
+  font-size: 16px;
+  padding: 12px 35px;
+  border-radius: 50px;
+  display: inline-block;
+  border: 0;
+  outline: 0;
+  box-shadow: 0px 4px 20px 0px #49c628a6;
+  background-image: linear-gradient(135deg, #70F570 10%, #49C628 100%);
+
+
 }
+/* Styling for the h3 subtitle text */
+
+
+/* Responsive adjustments */
+
+.textcontainer{
+     /* Styling for the h3 subtitle text */
+     margin-top: -6px;
+     margin-bottom: 45px;
+  font-size: 1.12rem; /* Slightly larger than default, but smaller than main headers */
+  font-weight: 500;
+  color: #cecaca; /* Soft gray color that complements the search bar */
+  /* text-align: center;  */
+  line-height: 1.5; /* Adds readability by increasing line spacing */
+  max-width: 700px; /* Constrains width to improve readability */
+   /* Adds padding on sides for better responsiveness */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .textcontainer{
+      font-size: 1.1rem; /* Slightly smaller font size for smaller screens */
+      margin-top: 0.5rem; /* Adjusts top margin for compact spacing */
+      margin-bottom: 1.5rem; /* Adjusts bottom margin for mobile layout */
+  }
+}
+
+

@@ -64,11 +64,12 @@ const Hero = () => {
             🔍
           </button>
         </div>
-
-        <div className="ctaContainer">
-          <button className="ctaButton">Post a Job</button>
-          <button className="ctaButton" onClick={fetchRecommendedJobs}> {loading?'Loading...':'Browse Jobs'}</button>
-        </div>
+        {auth?.user ? (
+          <button className="ctaButton" onClick={fetchRecommendedJobs}> {loading?'Loading...':'Recommmended Jobs'}</button>
+        ):(
+          <h4 className='textcontainer'>Explore opportunities from across the globe to learn, showcase skills, gain CV points & get hired by your dream company...</h4>
+        )}
+      
       </div>
     </div>
   );

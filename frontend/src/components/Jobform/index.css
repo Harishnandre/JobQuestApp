@@ -1,0 +1,95 @@
+/* Center the form container and give it some padding */
+.form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* Style the back button */
+.back-button {
+  background-color: #0073e6;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 1rem;
+}
+
+.back-button:hover {
+  background-color: #005bb5;
+}
+
+/* Style the title */
+h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Style the labels and inputs */
+.company-form label {
+  display: block;
+  margin-bottom: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.company-form input,
+.company-form textarea,
+.company-form select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #555;
+  transition: border-color 0.2s;
+}
+
+.company-form input:focus,
+.company-form textarea:focus,
+.company-form select:focus {
+  border-color: #0073e6;
+  outline: none;
+}
+
+/* Style text areas */
+textarea {
+  resize: vertical;
+}
+
+/* Style the submit button */
+.submit-btn {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: #0073e6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 1rem;
+}
+
+.submit-btn:hover {
+  background-color: #005bb5;
+}
+
+/* Spacing for form sections */
+.company-form .preferences {
+  display: flex;
+  flex-direction: column;
+}
+
+.company-form .preferences input {
+  margin-top: 0.5rem;
+}
