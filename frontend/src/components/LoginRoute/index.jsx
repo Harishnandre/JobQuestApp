@@ -1,27 +1,33 @@
 import './index.css';
-import React, { useContext, useState,useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-import { Link, useNavigate,Navigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 import { Authcontext } from '../ContextAPI/Authcontext';
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const AuthState = useContext(Authcontext)
-  const [auth,setauth,isLoggedIn,setisLoggedIn] = AuthState
-  const {user} = auth
+  
+  const AuthState = useContext(Authcontext);
+  const [auth, setAuth, isLoggedIn, setIsLoggedIn] = AuthState;
+  const { user } = auth;
   const navigate = useNavigate();
+
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/dashboard', { state: { user } });
+      if (role === 'Recruiter') {
+        navigate('/admin/companies');
+      } else {
+        navigate('/dashboard', { state: { user } });
+      }
     }
-  }, [isLoggedIn, navigate, user]);
-  
+  }, [isLoggedIn, navigate, user, role]);
+
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -55,18 +61,18 @@ const Login = () => {
       const res = await axios.post('http://localhost:5000/api/v1/user/login', formData);
 
       if (res.data.success) {
-        const {data}  = res
-         const {auth} = data || {}
-         const {token,user} = auth
-          localStorage.setItem("auth", JSON.stringify({ user_id:user._id, token }));
-          setauth({user,token})
-          setisLoggedIn(true)
+        const { data } = res;
+        const { auth } = data || {};
+        const { token, user } = auth;
+
+        localStorage.setItem("auth", JSON.stringify({ user_id: user._id, token }));
+        setAuth({ user, token });
+        setIsLoggedIn(true);
         toast.success(res.data.message);
+// setTimeout(() => {
+//           navigate('/dashboard',{state:{user}}); // Change '/dashboard' to the route you want to navigate to
+//         }, 1000);
         
-        // Wait for 1 second before navigating
-        setTimeout(() => {
-          navigate('/dashboard',{state:{user}}); // Change '/dashboard' to the route you want to navigate to
-        }, 1000);
       } else {
         toast.error(res.data.message);
       }
@@ -118,4 +124,4 @@ const Login = () => {
   );
 };
 
-export default Login; 
+export default Login;

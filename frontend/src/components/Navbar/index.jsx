@@ -27,8 +27,22 @@ const Navbar = () => {
         <div className="box2">
           <ul className="box21">
             <div className='change'>
-              <li><Link to='/'>Home</Link></li>
-              {(role === "Job-Seeker" || user === null) && <li><Link to='/jobs'>Jobs</Link></li>}
+{(role==="Recruiter")?(
+  <>
+    <li><Link to='/admin/companies'>Companies</Link></li>
+    <li><Link to='/admin/jobs'>Jobs</Link></li>
+  </>
+
+):(
+  <>
+    <li><Link to='/'>Home</Link></li>
+    <li><Link to='/jobs'>Jobs</Link></li>
+  </>
+)
+}
+
+
+            
               {user ? (
                 <>
                 
@@ -37,7 +51,12 @@ const Navbar = () => {
                       {fullName}
                     </Link>
                     <ul className="dropdown-menu dropdown-menu-dark">
-                      <li><Link className="dropdown-item" to="/dashboard">Dashboard</Link></li>
+                      {
+              role=='Job-Seeker' &&(
+                <li><Link className="dropdown-item" to="/dashboard">Dashboard</Link></li>
+              )          
+           }
+                    
                       <li><Link onClick={handlelogout} className="dropdown-item" to="/">LogOut</Link></li>
                     </ul>
                   </li>

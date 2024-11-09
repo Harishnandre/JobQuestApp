@@ -8,6 +8,7 @@ import './index.css';
 import { Navigate, useLocation, useNavigate  } from 'react-router-dom';
 import { Authcontext  } from '../ContextAPI/Authcontext';
 import MyApplications from './MyApplications';
+import { ToastContainer } from 'react-toastify';
 const Dashboard = () => {
   let [auth,setauth,isLoggedIn,setisLoggedIn]=useContext(Authcontext);
   const { user } = auth || {};
@@ -107,6 +108,7 @@ const Dashboard = () => {
           {renderComponent()}
         </main>
       </div>
+      <ToastContainer/>
     </div>
   );
 };
