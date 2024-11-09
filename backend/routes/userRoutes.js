@@ -1,5 +1,5 @@
 import express from 'express'
-import { bookmarkAnyJobs, forgetPassword, getUserById, loginUser, logoutUser, registerNewUser, unbookmarkJob, updatePassword, updateProfile } from '../controller/userController.js';
+import { bookmarkAnyJobs, forgetPassword, getRecomendedJobs, getUserById, loginUser, logoutUser, registerNewUser, unbookmarkJob, updatePassword, updateProfile } from '../controller/userController.js';
 import isAuthenticated from '../middleware/isAuthenticated.js';
 const router=new express.Router();
 
