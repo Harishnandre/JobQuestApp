@@ -14,6 +14,11 @@ import AuthcontextProvider from './components/ContextAPI/Authcontext'
 import SearchResults from './components/SearchResults'
 import NotFound from './components/NotFound'
 import RecommendedJobs from './components/jobrecommendation'
+import Companies from './components/Companies'
+import Jobs from './components/Jobs'
+import CompanyList from './components/companylists'
+import UpdateCompany from './components/Updatecompany'
+
 
 
 const App = () => {
@@ -31,6 +36,12 @@ const App = () => {
       <Route exact path='/dashboard' Component={Dashboard}/>
       <Route exact path='/jobs-search/:searchTerm' Component={SearchResults} />
      <Route exact path='/recommended-jobs' Component={RecommendedJobs}/>
+     <Route exact path='/admin/companies' Component={Companies}/>
+     <Route exact path='/admin/jobs' Component={Jobs}/>
+     <Route exact path='/admin/companies/create' Component={CompanyList}/>
+     <Route exact path='/admin/companies/update' Component={UpdateCompany}/>
+
+
       <Route path='*' Component={NotFound}/>
 
      </Routes>

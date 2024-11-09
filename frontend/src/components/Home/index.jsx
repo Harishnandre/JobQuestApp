@@ -1,11 +1,19 @@
+
 import Hero from "../Hero"
 import TopNiches from "../TopNiches"
 
 
+
 const Home = () => {
-     return <>
+
+  
+
+
+
+     return( <>
        <Hero/>
        <TopNiches></TopNiches>
      </>
+     )
 }
 export default Home
