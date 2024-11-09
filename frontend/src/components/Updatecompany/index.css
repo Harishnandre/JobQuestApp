@@ -1,0 +1,71 @@
+.form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.company-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.company-form label {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.company-form input[type="text"],
+.company-form input[type="url"],
+.company-form textarea,
+.company-form input[type="file"] {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.company-form input[type="text"]:focus,
+.company-form input[type="url"]:focus,
+.company-form textarea:focus {
+  border-color: #007bff;
+}
+
+.preferences {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.preferences input {
+  flex: 1;
+}
+
+/* Style for the submit button */
+.submit-btn {
+  padding: 0.7rem;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
