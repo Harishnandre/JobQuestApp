@@ -18,12 +18,14 @@ import Companies from './components/Companies'
 import Jobs from './components/Jobs'
 import CompanyList from './components/companylists'
 import UpdateCompany from './components/Updatecompany'
+import CompanycontextProvider from './components/ContextAPI/Companycontext'
 
 
 
 const App = () => {
   return (
     <AuthcontextProvider>
+      <CompanycontextProvider>
 <BrowserRouter>
      <Navbar/>
      <Routes>
@@ -47,6 +49,7 @@ const App = () => {
      </Routes>
      <Footer/>
     </BrowserRouter>
+    </CompanycontextProvider>
     </AuthcontextProvider>
     
   )
