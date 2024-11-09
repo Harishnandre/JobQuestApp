@@ -4,6 +4,7 @@ import db from './db/db.js';
 import dotenv from 'dotenv';
 import { readdirSync } from 'fs';
 import cookieParser from 'cookie-parser';
+import fileUpload from 'express-fileupload';
 dotenv.config();
 const app=express();
 
@@ -17,6 +18,12 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
+
+app.use(fileUpload({
+    useTempFiles:true,
+    tempFileDir:"/tmp/"
+}));
+
 
 // Load routes dynamically
 readdirSync('./routes').forEach(async (file) => {
