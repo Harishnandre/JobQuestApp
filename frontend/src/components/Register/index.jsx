@@ -20,6 +20,7 @@ const Register = () => {
   //if already logged in go to home
   const AuthState = useContext(Authcontext)
   const [auth,setauth,isLoggedIn,setisLoggedIn] = AuthState
+  //const {isLoggedIn} = AuthState
   
   const navigate = useNavigate();
   if(isLoggedIn){
