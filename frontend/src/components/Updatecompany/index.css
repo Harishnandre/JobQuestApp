@@ -1,10 +1,26 @@
 .form-container {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 2rem;
+  position: relative;
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(248, 242, 242, 0.882);
+  color: rgb(37, 36, 36);
+  flex-direction: column;
+  /* z-index: 999; Ensures it overlays everything */
 }
 
 .form-container h2 {
