@@ -155,33 +155,56 @@ export const forgetPassword=async(req,res)=>{
 }
 
 
-
 export const updateProfile = async (req, res) => {
-  try {
-    const { fullName, email, address, phoneNumber, bio, role1, role2, role3, id: userId } = req.body;
-    const resume = req.files?.resume; // handle multiple file uploads
-    const profilePhoto = req.files?.profilePhoto; // handle profile photo field
-    console.log(resume)
-    console.log(profilePhoto)
-    // Check if all required fields and files are provided
-    if (!fullName || !email || !address || !phoneNumber || !bio || !role1 || !role2 || !role3 || !resume || !profilePhoto) {
-      return res.status(400).send({
-        success: false,
-        message: "All fields and files are required to complete Profile",
+    try {
+      const {
+        fullName,
+        email,
+        address,
+        phoneNumber,
+        bio,
+        role1,
+        role2,
+        role3,
+        id: userId,
+        role,
+      } = req.body;
+  
+      let resume = req.files?.resume;
+      let profilePhoto =  req.files?.profilePhoto;
+      // Check required fields and file presence
+      if (!fullName || !email || !address || !phoneNumber || !profilePhoto) {
+        return res.status(400).send({
+          success: false,
+          message: "All fields and files are required to complete Profile",
+        });
+      }
+  
+      if (role === "Job-Seeker" && (!bio || !role1 || !role2 || !role3 || !resume)) {
+        return res.status(400).send({
+          success: false,
+          message: "All fields and files are required to complete Profile",
+        });
+      }
+  
+      // Initialize variables for file upload results
+      let profilePhotoUpload = {};
+      let resumeUpload = {};
+  
+      // Upload profile photo to Cloudinary
+      profilePhotoUpload = await cloudinary.uploader.upload(profilePhoto.tempFilePath, {
+        folder: "Job_Seekers_Photos",
       });
-    }
-
-    const resumeUpload = await cloudinary.uploader.upload(resume.tempFilePath,{
-        folder: "Job_Seekers_Resume"
-    });
-
-    // Upload profile photo to Cloudinary
-    const profilePhotoUpload = await cloudinary.uploader.upload(profilePhoto.tempFilePath,{folder: "Job_Seekers_Photos"});
-
-    // Update user profile in the database
-    const updateUser = await User.findByIdAndUpdate(
-      { _id: userId },
-      {
+  
+      // Upload resume if user role is Job-Seeker
+      if (role === "Job-Seeker" && resume) {
+        resumeUpload = await cloudinary.uploader.upload(resume.tempFilePath, {
+          folder: "Job_Seekers_Resume",
+        });
+      }
+  
+      // Prepare the update data
+      const updateData = {
         fullName,
         email,
         address,
@@ -189,33 +212,43 @@ export const updateProfile = async (req, res) => {
         profile: {
           bio,
           preferredJobRole: { role1, role2, role3 },
-          resume: resumeUpload.secure_url, // save resume URL
-          resumeOriginalName: String(resume.name), // save the original resume name
-          profilePhoto: profilePhotoUpload.secure_url, // save profile photo URL
-          profilePhotoOriginalName: String(profilePhoto.name), // save the original profile photo name
+          profilePhoto: profilePhotoUpload.secure_url,
+          profilePhotoOriginalName: profilePhoto.originalname,
         },
-      },
-      { new: true }
-    );
-
-    if (!updateUser) {
-      return res.status(404).send({
-        success: false,
-        message: "User not found while updating",
+      };
+  
+      // Add resume details if role is Job-Seeker
+      if (role === "Job-Seeker" && resumeUpload.secure_url) {
+        updateData.profile.resume = resumeUpload.secure_url;
+        updateData.profile.resumeOriginalName = resume.originalname;
+      }
+  
+      // Update user profile in the database
+      const updateUser = await User.findByIdAndUpdate(
+        userId,
+        updateData,
+        { new: true }
+      );
+  
+      if (!updateUser) {
+        return res.status(404).send({
+          success: false,
+          message: "User not found while updating",
+        });
+      }
+  
+      // Send success response
+      res.status(200).send({
+        success: true,
+        message: "Profile Updated Successfully",
+        updateUser,
       });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({ success: false, message: "Server error: " + error.message });
     }
-
-    // Send success response
-    res.status(200).send({
-      success: true,
-      message: "Profile Updated Successfully",
-      updateUser,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send({ success: false, message: "Server error: " + error.message });
-  }
-};
+  };
+  
 
 //update Password when user loggein
  // Make sure the path is correct for the User model

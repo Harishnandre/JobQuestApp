@@ -9,7 +9,7 @@ const UpdateProfile = () => {
   const [auth, setAuth] = useContext(Authcontext);
   const { user, token } = auth || {};
 
-  const { fullName, email, phoneNumber, profile, address, _id } = user || {};
+  const { fullName, email, phoneNumber, profile, address, _id, role } = user || {};
   const { role1, role2, role3 } = profile?.preferredJobRole || {};
   const { bio, resume, resumeOriginalName, profilePhoto } = profile || {};
 
@@ -57,25 +57,30 @@ const UpdateProfile = () => {
     const { name, files } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: files[0],
+      [name]: files[0],  // Ensure only the first file is selected
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); // Start loading
-  console.log('Form data :',formData)
+    const form = new FormData();
+
+    // Append form data fields to FormData object
+    Object.keys(formData).forEach((key) => {
+      form.append(key, formData[key]);
+    });
+    form.append('token', token);
+    form.append('id', _id);
+    form.append('role', role);
+
     try {
       const url = 'http://localhost:5000/api/v1/user/update-profile';
-      const res = await axios.post(
-        url,
-        { ...formData, token: token, id: _id },
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
+      const res = await axios.post(url, form, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       setLoading(false); // End loading
 
@@ -91,7 +96,7 @@ const UpdateProfile = () => {
       }
     } catch (error) {
       setLoading(false); // End loading
-      console.log(error)
+      console.log(error);
       toast.error(error.response?.data?.message || 'An error occurred');
     }
   };
@@ -140,7 +145,17 @@ const UpdateProfile = () => {
           />
         </label>
 
-        {user.role === 'Job-Seeker' && (
+        <label>
+          Profile Photo:
+          <input
+            type="file"
+            name="profilePhoto"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+        </label>
+
+        {role === 'Job-Seeker' && (
           <div>
             <label>
               Bio:
@@ -157,15 +172,6 @@ const UpdateProfile = () => {
                 type="file"
                 name="resume"
                 accept=".pdf,.doc,.docx"
-                onChange={handleFileChange}
-              />
-            </label>
-            <label>
-              Profile Photo:
-              <input
-                type="file"
-                name="profilePhoto"
-                accept="image/*"
                 onChange={handleFileChange}
               />
             </label>
@@ -210,9 +216,7 @@ const UpdateProfile = () => {
         </button>
       </form>
 
-      {loading && 
-          <JobQuestLoader/>
-      }
+      {loading && <JobQuestLoader />}
     </div>
   );
 };
