@@ -2,9 +2,13 @@ import { User } from "../models/userModel.js";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import { JobModel } from './../models/jobModel.js';
+import getDataUri from "../utils/datauri.js";
+import cloudinary from "../Cloudinary/cloudinary.js";
+
 export const registerNewUser=async(req,res)=>{
     try {
-        const {fullName,gender,email,address,phoneNumber,password,role,answer}=req.body;
+        const {fullName,gender,email,address,phoneNumber,password,role,answer,profilePhoto}=req.body;
+        
         if(!fullName||!gender||!email||!address||!phoneNumber||!password||!role||!answer){
         return res.status(400).send({
             success:false,
@@ -33,7 +37,10 @@ export const registerNewUser=async(req,res)=>{
             phoneNumber,
             password:hashedPassword,
             role,
-            answer
+            answer,
+            profile: {
+                profilePhoto
+            }
         });
         const newUser=await user.save();
         res.status(201).send({
@@ -147,71 +154,166 @@ export const forgetPassword=async(req,res)=>{
      }
 }
 
-export const updateProfile=async(req,res)=>{
+
+export const updateProfile = async (req, res) => {
     try {
-        const {fullName,email,address,phoneNumber,bio,role1,role2,role3,resume,profilePhoto}=req.body;
-        if(!fullName||!email||!address||!phoneNumber||!bio||!role1||!role2||!role3){
-            return res.status(400).send({
-                success:false,
-                message:"All fields are required to complete Profile"
-            });
-        }
-        const userId=req.body.id;
-        const updateUser=await User.findByIdAndUpdate({_id:userId},{fullName,email,address,phoneNumber,
-                                         profile:{
-                                            bio,
-                                            preferredJobRole:{role1,role2,role3}
-                                         }},{new:true});
-        if(!updateUser){
-            return res.status(404).send({
-                success:false,
-                message:"User not found while updating"    
-            }); 
-        } 
-        res.status(200).send({
-            success:true,
-            message:"Profile Updated Successfully",
-            updateUser
-        });                               
+      const {
+        fullName,
+        email,
+        address,
+        phoneNumber,
+        bio,
+        role1,
+        role2,
+        role3,
+        id: userId,
+        role,
+      } = req.body;
+  
+      let resume = req.files?.resume;
+      let profilePhoto =  req.files?.profilePhoto;
+      // Check required fields and file presence
+      if (!fullName || !email || !address || !phoneNumber || !profilePhoto) {
+        return res.status(400).send({
+          success: false,
+          message: "All fields and files are required to complete Profile",
+        });
+      }
+  
+      if (role === "Job-Seeker" && (!bio || !role1 || !role2 || !role3 || !resume)) {
+        return res.status(400).send({
+          success: false,
+          message: "All fields and files are required to complete Profile",
+        });
+      }
+  
+      // Initialize variables for file upload results
+      let profilePhotoUpload = {};
+      let resumeUpload = {};
+  
+      // Upload profile photo to Cloudinary
+      profilePhotoUpload = await cloudinary.uploader.upload(profilePhoto.tempFilePath, {
+        folder: "Job_Seekers_Photos",
+      });
+  
+      // Upload resume if user role is Job-Seeker
+      if (role === "Job-Seeker" && resume) {
+        resumeUpload = await cloudinary.uploader.upload(resume.tempFilePath, {
+          folder: "Job_Seekers_Resume",
+        });
+      }
+  
+      // Prepare the update data
+      const updateData = {
+        fullName,
+        email,
+        address,
+        phoneNumber,
+        profile: {
+          bio,
+          preferredJobRole: { role1, role2, role3 },
+          profilePhoto: profilePhotoUpload.secure_url,
+          profilePhotoOriginalName: profilePhoto.originalname,
+        },
+      };
+  
+      // Add resume details if role is Job-Seeker
+      if (role === "Job-Seeker" && resumeUpload.secure_url) {
+        updateData.profile.resume = resumeUpload.secure_url;
+        updateData.profile.resumeOriginalName = resume.originalname;
+      }
+  
+      // Update user profile in the database
+      const updateUser = await User.findByIdAndUpdate(
+        userId,
+        updateData,
+        { new: true }
+      );
+  
+      if (!updateUser) {
+        return res.status(404).send({
+          success: false,
+          message: "User not found while updating",
+        });
+      }
+  
+      // Send success response
+      res.status(200).send({
+        success: true,
+        message: "Profile Updated Successfully",
+        updateUser,
+      });
     } catch (error) {
-        return res.status(500).send("Server error:" + error);
+      console.log(error);
+      return res.status(500).send({ success: false, message: "Server error: " + error.message });
     }
-}
+  };
+  
 
 //update Password when user loggein
-export const updatePassword=async(req,res)=>{
+ // Make sure the path is correct for the User model
+
+export const updatePassword = async (req, res) => {
     try {
-        const {newPassword}=req.body;
-        const userId=req.id;
-        if(!newPassword){
+        const { oldPassword, newPassword } = req.body;
+        const userId = req.id;
+
+        if (!oldPassword || !newPassword) {
             return res.status(400).send({
-                success:false,
-                message:"Please provide new Password for updation"
+                success: false,
+                message: "Please provide both current and new passwords for updating."
             });
         }
-        if(newPassword.length < 8){
+
+        if (newPassword.length < 8) {
             return res.status(400).send({
-                 success : false,
-                 message : "Password must contain at least 8 characters"
-             })
-            }
-        const hashedPassword=await bcrypt.hash(newPassword,10);
-        const updateUserPassword=await User.findByIdAndUpdate({_id:userId},{password:hashedPassword},{new:true});
-        if(!updateUserPassword){
+                success: false,
+                message: "New password must contain at least 8 characters."
+            });
+        }
+
+        // Find the user by ID
+        const user = await User.findById(userId);
+        if (!user) {
             return res.status(404).send({
-                success:false,
-                message:"User not found while updating"    
+                success: false,
+                message: "User not found."
             });
         }
+
+        // Check if the current password matches
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).send({
+                success: false,
+                message: "Current password is incorrect."
+            });
+        }
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update the password in the database
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { password: hashedPassword },
+            { new: true }
+        );
+
         res.status(200).send({
-            success:true,
-            message:"Password Updated Successfully",
-            updateUserPassword
-        }); 
+            success: true,
+            message: "Password updated successfully.",
+            updatedUser
+        });
+
     } catch (error) {
-        return res.status(500).send("Server error:" + error);
+        return res.status(500).send({
+            success: false,
+            message: "Server error: " + error.message
+        });
     }
-}
+};
+
 
 //For bookmark Job
 export const bookmarkAnyJobs=async(req,res)=>{

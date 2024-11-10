@@ -3,14 +3,15 @@ import './index.css';
 import { Authcontext } from '../../ContextAPI/Authcontext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import JobQuestLoader from '../../Loader';
 
 const UpdateProfile = () => {
   const [auth, setAuth] = useContext(Authcontext);
-  const { user ,token} = auth || {};
+  const { user, token } = auth || {};
 
-  const { fullName, email, phoneNumber, profile, address,_id } = user || {};
+  const { fullName, email, phoneNumber, profile, address, _id, role } = user || {};
   const { role1, role2, role3 } = profile?.preferredJobRole || {};
-  const { bio ,resume,profilePhoto} = profile || {};
+  const { bio, resume, resumeOriginalName, profilePhoto } = profile || {};
 
   const [formData, setFormData] = useState({
     fullName: fullName || '',
@@ -22,8 +23,11 @@ const UpdateProfile = () => {
     role1: role1 || '',
     role2: role2 || '',
     role3: role3 || '',
-    profilePhoto: profilePhoto || null
+    resumeOriginalName: resumeOriginalName || '',
+    profilePhoto: profilePhoto || '',
   });
+
+  const [loading, setLoading] = useState(false);  // Loading state for showing the loader
 
   useEffect(() => {
     setFormData({
@@ -36,7 +40,8 @@ const UpdateProfile = () => {
       role1: role1 || '',
       role2: role2 || '',
       role3: role3 || '',
-      profilePhoto: profilePhoto || null
+      resumeOriginalName: resumeOriginalName || '',
+      profilePhoto: profilePhoto || '',
     });
   }, [user]);
 
@@ -52,50 +57,48 @@ const UpdateProfile = () => {
     const { name, files } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: files[0],
+      [name]: files[0],  // Ensure only the first file is selected
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Updated profile data:", formData);
+    setLoading(true); // Start loading
+    const form = new FormData();
 
-    const updatedUser = {
-      ...user,
-      profile: {
-        ...user.profile,
-        bio: formData.bio,
-        resume : formData.resume,
-        profilePhoto : formData.profilePhoto,
-        preferredJobRole: {
-          role1: formData.role1,
-          role2: formData.role2,
-          role3: formData.role3
-        }
-      },
-      fullName: formData.fullName,
-      email: formData.email,
-      phoneNumber: formData.phoneNumber,
-      address: formData.address,
-    };
-     try{
-       const url = 'http://localhost:5000/api/v1//user/update-profile';
-       const res = await axios.patch(url,{...formData,token:token,id:_id})
-       if(res.data.success){
+    // Append form data fields to FormData object
+    Object.keys(formData).forEach((key) => {
+      form.append(key, formData[key]);
+    });
+    form.append('token', token);
+    form.append('id', _id);
+    form.append('role', role);
+
+    try {
+      const url = 'http://localhost:5000/api/v1/user/update-profile';
+      const res = await axios.post(url, form, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      setLoading(false); // End loading
+
+      if (res.data.success) {
+        const newUpdatedUser = res.data.updateUser;
         setAuth((prevAuth) => ({
           ...prevAuth,
-          user: updatedUser,
+          user: newUpdatedUser,
         }));
-        toast.success("Profile Updated Successfully")
-       }
-       else{
-         toast.error(res.data.message)
-       }
-     }
-     catch(error){
-        toast.error(error.response.data.message)
-     }
-    
+        toast.success('Profile Updated Successfully');
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      setLoading(false); // End loading
+      console.log(error);
+      toast.error(error.response?.data?.message || 'An error occurred');
+    }
   };
 
   return (
@@ -142,7 +145,17 @@ const UpdateProfile = () => {
           />
         </label>
 
-        {user.role === "Job-Seeker" && (
+        <label>
+          Profile Photo:
+          <input
+            type="file"
+            name="profilePhoto"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+        </label>
+
+        {role === 'Job-Seeker' && (
           <div>
             <label>
               Bio:
@@ -159,16 +172,6 @@ const UpdateProfile = () => {
                 type="file"
                 name="resume"
                 accept=".pdf,.doc,.docx"
-                onChange={handleFileChange}
-              />
-            </label>
-
-            <label>
-              Profile Photo:
-              <input
-                type="file"
-                name="profilePhoto"
-                accept="image/*"
                 onChange={handleFileChange}
               />
             </label>
@@ -208,9 +211,12 @@ const UpdateProfile = () => {
           </div>
         )}
 
-        <button type="submit">Update Profile</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Updating...' : 'Update Profile'}
+        </button>
       </form>
 
+      {loading && <JobQuestLoader />}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { SlPencil } from "react-icons/sl";
 import { IoEye } from "react-icons/io5";
 
 const Jobs = () => {
+    const [keyword,setKeyword] = useState('')
     const { recruiterJobs } = useContext(Jobcontext);
     const navigate = useNavigate();
     
@@ -17,7 +18,9 @@ const Jobs = () => {
         // Toggle dropdown for the specific job
         setDropdownVisible(dropdownVisible === id ? null : id);
     };
-    
+    const filteredJobs =  recruiterJobs.filter((eachJob)=>{
+    return  eachJob.title.toLowerCase().includes(keyword.toLowerCase())
+    })
     return (
         <div>
             <div className="container">
@@ -26,7 +29,7 @@ const Jobs = () => {
                         type="text"
                         className="filter-input"
                         placeholder="Filter by name"
-                        onChange={(e) => setInput(e.target.value)}
+                        onChange={(e) => setKeyword(e.target.value)}
                     />
                     <button className="new-company-btn" onClick={() => navigate("/admin/jobs/createjob")}>
                         New Jobs
@@ -34,7 +37,7 @@ const Jobs = () => {
                 </div>
 
                 <div className="job-item-content">
-                    {recruiterJobs.map((job) => (
+                    {filteredJobs.map((job) => (
                         <div key={job._id} className="job-inner-content">
                             <div className="company-header">
                                 <div>

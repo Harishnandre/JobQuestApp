@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import Profile from './Profile';
 import UpdateProfile from './UpdateProfile';
 import UpdatePassword from './UpdatePassword';
-import MyApplicants from './MyApplicants';
 import Bookmarks from './Bookmarks';
 import './index.css';
 import { Navigate, useLocation, useNavigate  } from 'react-router-dom';
@@ -36,8 +35,6 @@ const Dashboard = () => {
         return <UpdateProfile />;
       case 'Update Password':
         return <UpdatePassword />;
-      case 'My Applicants':
-        return <MyApplicants />;
       case 'Bookmarks':
         return <Bookmarks/>
       default:
@@ -72,34 +69,28 @@ const Dashboard = () => {
             >
               Update Profile
             </li>
-         { user.role === 'Job-Seeker' &&  <li
+         { user.role === 'Job-Seeker' &&  <><li
               className={activeComponent === 'My Applicantions' ? 'active' : ''}
               onClick={() => setActiveComponent('My Applications')}
             >
               My Applications
             </li>
-}              
+        
 <li
               className={activeComponent === 'Bookmarks' ? 'active' : ''}
               onClick={() => setActiveComponent('Bookmarks')}>
               Bookmarks
             </li>
+            </>
+}
             <li
               className={activeComponent === 'Update Password' ? 'active' : ''}
               onClick={() => setActiveComponent('Update Password')}
             >
               Update Password
             </li>
-            <li
-              className={activeComponent === 'My Applicants' ? 'active' : ''}
-              onClick={() => setActiveComponent('My Applicants')}
-            >
-              My Applicants
-            </li>
             
-            <li onClick={handleLogout} className="logout-btn">
-              Logout
-            </li>
+           
           </ul>
         </nav>
 

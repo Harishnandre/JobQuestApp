@@ -53,9 +53,9 @@ const Navbar = () => {
                       {fullName}
                     </Link>
                     <ul className="dropdown-menu dropdown-menu-dark">
-                      {role === 'Job-Seeker' && (
+                      
                         <li><Link className="dropdown-item" to="/dashboard">Dashboard</Link></li>
-                      )}
+                      
                       <li><Link onClick={handlelogout} className="dropdown-item" to="/">LogOut</Link></li>
                     </ul>
                   </li>

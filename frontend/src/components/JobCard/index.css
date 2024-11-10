@@ -82,7 +82,7 @@
 }
 .bookmark-icon {
   cursor: pointer;
-  color: #f39c12;
+  
   font-size: 20px;
 }
 
@@ -193,9 +193,11 @@
 
   .bookmark-icon {
     cursor: pointer;
-    color: gray; /* Default color */
+    font-size: 20px;
+    color: #8888; /* Default color when not bookmarked */
+    transition: color 0.1 ease; /* Smooth color transition */
 }
 
 .bookmark-icon.bookmarked {
-    color: gold; /* Color when bookmarked */
+    color: gold; /* Gold color when bookmarked */
 }
