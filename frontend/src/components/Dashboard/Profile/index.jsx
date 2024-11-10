@@ -40,7 +40,7 @@ const Profile = () => {
           <p className="profile-item">
             <strong>Resume: </strong>
             {resume ? (
-              <a href={`${resume}.pdf`} target="_blank" rel="noopener noreferrer">
+              <a href={resume} target="_blank" rel="noopener noreferrer">
                  View Resume
               </a>
             ) : (
