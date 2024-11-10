@@ -83,7 +83,15 @@ export const getJobById=async(req,res)=>{
 export const getAllRecruiterJobs=async(req,res)=>{
     try {
         const createdBy=req.id;
-        const jobs=await JobModel.find({createdBy});
+        const keyword=req.query.keyword || "";
+        const query={
+           createdBy,
+           $or:[
+                   {title:{$regex:keyword,$options:"i"}},
+                   {description:{$regex:keyword,$options:"i"}}
+               ]
+           }
+        const jobs=await JobModel.find(query).populate({path:"company"}).sort({createdAt:-1});
         if(!jobs){
             return res.status(404).send({
                 success:false,
@@ -94,6 +102,51 @@ export const getAllRecruiterJobs=async(req,res)=>{
         success:true,
         jobs
         });  
+    } catch (error) {
+        return res.status(500).send("Server error:" + error);
+    }
+}
+
+//update job
+export const updateJob=async(req,res)=>{
+    try {
+        const jobId=req.params.id;
+        const createdBy=req.id;
+        const {title,description,requirements,salary,location,jobType,vacancies,experience,company}=req.body;
+        if(!title||!description||!requirements||!salary||!location||!jobType||!vacancies||!company||!createdBy||!experience){
+            return res.status(400).send({
+                success:false,
+                message:"All fields are required"
+           });
+        }
+        if(!jobId){
+            return res.status(400).send({
+                success:false,
+                message:"Job id is required"
+            });
+        }
+        const updatedJob=await JobModel.findByIdAndUpdate({_id:jobId},{title,
+                                                                       description,
+                                                                       requirements:requirements.split(","),
+                                                                       salary,
+                                                                       location,
+                                                                       jobType,
+                                                                       vacancies,
+                                                                       experience,
+                                                                       company,
+                                                                       createdBy
+                                                                       },{new:true});
+        if(!updatedJob){
+            return res.status(404).send({
+                success:false,
+                message:"Job not found while updating"
+            });
+        }   
+        return res.status(200).send({
+            success:true,
+            message:"Job Updated successfully",
+            updatedJob
+        });                                                      
     } catch (error) {
         return res.status(500).send("Server error:" + error);
     }

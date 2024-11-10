@@ -5,9 +5,11 @@ import { Companycontext } from '../ContextAPI/Companycontext';
 import { Authcontext } from '../ContextAPI/Authcontext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import ClipLoader from "react-spinners/ClipLoader";
 const UpdateCompany= () => {
     const {companyData,getAllCompany}=useContext(Companycontext) ;
     const [auth]=useContext(Authcontext); 
+    const [loading,setloading]=useState(false);
     const {token}=auth;
     const navigate = useNavigate();
     const {id}=useParams();
@@ -51,6 +53,7 @@ const UpdateCompany= () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
+        setloading(true);
         console.log(formData);
         try {
             console.log(formData);
@@ -76,10 +79,20 @@ const UpdateCompany= () => {
                 toast.error("Company Registration failed. Please try again later.");
             }
         }
+        finally{
+            setloading(false);
+        }
     };
 
     return (
         <div className="form-container">
+             {loading ? (
+                <div className="loading-overlay">
+                    <ClipLoader size={50} color={"#123abc"} loading={loading} />
+                  
+                </div>
+            ) : (
+                <>
           <button className="back-button" onClick={() => navigate(-1)}>← Back</button>
             <h2>Update Company</h2>
             <form onSubmit={handleSubmit} className="company-form">
@@ -143,6 +156,8 @@ const UpdateCompany= () => {
 
                 <button type="submit" className="submit-btn">Update Company</button>
             </form>
+            </>
+            )}
         </div>
     );
 };

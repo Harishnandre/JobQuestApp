@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import './index.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { Companycontext } from '../ContextAPI/Companycontext';
@@ -6,14 +6,16 @@ import { LuPencil } from "react-icons/lu";
 import JobQuestLoader from "../Loader";
 
 const Companies = () => {
-    const { companyData } = useContext(Companycontext); // Default to empty array if undefined
+    const { companyData } = useContext(Companycontext);
     const navigate = useNavigate();
     const [input, setInput] = useState(""); // Filter input state
     const [loading, setLoading] = useState(true); // Loading state
 
     useEffect(() => {
         // Check if companyData has been populated
-        if (companyData.length > 0) setLoading(false);
+        if (companyData.length > 0) {
+            setLoading(false);
+        }
     }, [companyData]);
 
     // Filtered company data based on user input
@@ -22,7 +24,7 @@ const Companies = () => {
     );
 
     if (loading) {
-        return <JobQuestLoader/>
+        return <JobQuestLoader />;
     }
 
     return (

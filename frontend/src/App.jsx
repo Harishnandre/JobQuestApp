@@ -23,6 +23,11 @@ import Jobform from './components/Jobform'
 import UpdateJobs from './components/Updatejobs'
 
 import CompanycontextProvider from './components/ContextAPI/Companycontext'
+import JobcontextProvider from './components/ContextAPI/Jobcontext'
+import Applicant from './components/Applicant'
+import QuizPage from './components/Assesment'
+import Aboutus from './components/Aboutus'
+import Contactus from './components/Contactus'
 
 
 
@@ -31,6 +36,7 @@ const App = () => {
   return (
     <AuthcontextProvider>
       <CompanycontextProvider>
+      <JobcontextProvider> 
 <BrowserRouter>
 <div className="app-container">
      <Navbar/>
@@ -38,6 +44,8 @@ const App = () => {
      <Routes>
       <Route exact path='/' Component={Home}/>
       <Route exact path='/login' Component={LoginRoute}/>
+      <Route exact path='/about' Component={Aboutus}/>
+      <Route exact path='/contact' Component={Contactus}/>
       <Route exact path='/jobs' Component={JobsSection}/>
       <Route exact path='/register' Component={Register}/>
       <Route exact path='/forget-password' Component={ForgetPassword}/>
@@ -50,14 +58,17 @@ const App = () => {
      <Route exact path='/admin/companies/create' Component={CompanyList}/>
      <Route exact path='/admin/companies/update/:id' Component={UpdateCompany}/>
      <Route exact path='/admin/jobs/createjob' Component={Jobform}/>
+     <Route exact path='/admin/jobs/updatejob/:id' Component={UpdateJobs}/>
+     <Route exact path='/admin/jobs/applicants/:jobId' Component={Applicant}/>
      <Route exact path='/admin/jobs/updatejob' Component={UpdateJobs}/>
+     <Route exact path='/practice' Component={QuizPage}/>
      <Route path='*' Component={NotFound}/>
-
      </Routes>
      </main>
      <Footer/>
      </div>
     </BrowserRouter>
+    </JobcontextProvider> 
     </CompanycontextProvider>
     </AuthcontextProvider>
     
