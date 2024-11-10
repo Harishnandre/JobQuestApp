@@ -50,7 +50,7 @@ const App = () => {
      <Route exact path='/admin/companies/create' Component={CompanyList}/>
      <Route exact path='/admin/companies/update/:id' Component={UpdateCompany}/>
      <Route exact path='/admin/jobs/createjob' Component={Jobform}/>
-     <Route exact path='/admin/jobs/updatejob' Component={UpdateJobs}/>
+     <Route exact path='/admin/jobs/updatejob/:id' Component={UpdateJobs}/>
      <Route path='*' Component={NotFound}/>
 
      </Routes>

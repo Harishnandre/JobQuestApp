@@ -52,11 +52,11 @@ const Jobform = () => {
                 toast.error(res.data.message);
             }
         } catch (error) {
-            console.error("Error during registering Company:", error);
+            console.error("Error during registering new Job:", error);
             if (error.response) {
                 toast.error(error.response.data.message);
             } else {
-                toast.error("Company Registration failed. Please try again later.");
+                toast.error("Job Registration failed. Please try again later.");
             }
         }
     };

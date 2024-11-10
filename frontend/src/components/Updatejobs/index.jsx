@@ -1,108 +1,163 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './index.css'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Jobcontext } from '../ContextAPI/Jobcontext';
+import { Companycontext } from '../ContextAPI/Companycontext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { Authcontext } from '../ContextAPI/Authcontext';
 const UpdateJobs= () => {
-  const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        name: '',
-        description: '',
-        website: '',
-     
-        preference1: '',
-        preference2: '',
-        preference3: '',
-        logo: null
-    });
+    const { recruiterJobs } = useContext(Jobcontext);
+    const navigate = useNavigate();
+    const {id}=useParams();
+    const job = recruiterJobs.find(job =>job._id === id);
+    const [title, setTitle] = useState(job.title);
+    const [description, setDescription] = useState(job.description);
+    const [requirements, setRequirements] = useState(job.requirements.join(", "));
+    const [salary, setSalary] = useState(job.salary);
+    const [location, setLocation] = useState(job.location);
+    const [jobType, setJobtype] = useState(job.jobType);
+    const [experience, setExperience] = useState(job.experience);
+    const [vacancies, setvacancies] = useState(job.vacancies); 
+    const [company, setCompany] = useState(job.company._id); 
+    const {companyData}=useContext(Companycontext);
+    const {getAllRecruiterJobs}=useContext(Jobcontext);
+    const [auth]=useContext(Authcontext);
+    const {token}=auth;
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
+  const handleSubmit = async(e) => {
+      e.preventDefault();
+      const formData = {
+          title,
+          description,
+          requirements,
+          salary,
+          location,
+          jobType,
+          experience,
+          vacancies,
+          company
+      };
+      try {
+          const res = await axios.patch(`http://localhost:5000/api/v1/job/update/${id}`, formData, {
+              withCredentials: true,
+              headers: {
+                  'Authorization': `Bearer ${token}` // Add the token here
+              }
+          });
+          if (res?.data?.success) {
+              toast.success(res.data.message);
+              getAllRecruiterJobs();
+              navigate('/admin/jobs'); // Redirect only after successful submission
+          } else {
+              toast.error(res.data.message);
+          }
+      } catch (error) {
+          console.error("Error during updating Job:", error);
+          if (error.response) {
+              toast.error(error.response.data.message);
+          } else {
+              toast.error("Job Updation failed. Please try again later.");
+          }
+      }
+  };
 
-    const handleFileChange = (e) => {
-        setFormData({
-            ...formData,
-            logo: e.target.files[0]
-        });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Handle form submission
-        console.log("Form Submitted", formData);
-    };
-
-    return (
-        <div className="form-container">
+  return (
+      <div className="form-container">
           <button className="back-button" onClick={() => navigate(-1)}>← Back</button>
-            <h2>Update Jobs</h2>
-            <form onSubmit={handleSubmit} className="company-form">
-                <label>
-                    Company Name:
-                    <input 
-                        type="text" 
-                        name="name" 
-                        value={formData.name} 
-                        onChange={handleChange} 
-                        required 
-                    />
-                </label>
-                
-                <label>
-                    Description:
-                    <textarea 
-                        name="description" 
-                        value={formData.description} 
-                        onChange={handleChange} 
-                        rows="4"
-                        required 
-                    />
-                </label>
-                
-                <label>
-                    Website Link:
-                    <input 
-                        type="url" 
-                        name="website" 
-                        value={formData.website} 
-                        onChange={handleChange} 
-                        required 
-                    />
-                </label>
+          <h2>Create New Job</h2>
+          <form onSubmit={handleSubmit} className="company-form">
+              <label>
+                  Title
+                  <input 
+                      type="text" 
+                      value={title} 
+                      onChange={(e) => setTitle(e.target.value)} 
+                      required 
+                  />
+              </label>
+              
+              <label>
+                  Requirements:
+                  <input 
+                      type="text" 
+                      value={requirements} 
+                      onChange={(e) => setRequirements(e.target.value)} 
+                      required 
+                  />
+              </label>
 
-                <label>
-                    Location:
-                <div className="preferences">
-                   
-                    <input 
-                        type="text" 
-                        name="preference1" 
-                        value={formData.preference1} 
-                        placeholder="Preference 1"
-                        onChange={handleChange} 
-                    />
-                
-                </div>
-                </label>
-                
-                <label>
-                    Company Logo:
-                    <input 
-                        type="file" 
-                        name="logo" 
-                        onChange={handleFileChange} 
-                        accept="image/*"
-                        required 
-                    />
-                </label>
+              <label>
+                  Salary:
+                  <input 
+                      type="number" 
+                      value={salary} 
+                      onChange={(e) => setSalary(e.target.value)} 
+                      required 
+                  />
+              </label>
 
-                <button type="submit"  onClick={()=>navigate('/admin/jobs')} className="submit-btn">Update Jobs</button>
-            </form>
-        </div>
-    );
+              <label>
+                  Location:
+                  <input 
+                      type="text" 
+                      value={location} 
+                      onChange={(e) => setLocation(e.target.value)} 
+                      required 
+                  />
+              </label>
+              
+              <label>
+                  Job Type
+                  <input 
+                      type="text" 
+                      value={jobType}
+                      onChange={(e) => setJobtype(e.target.value)} 
+                      required 
+                  />
+              </label>
+
+              <label>
+                  Experience Level
+                  <input 
+                      type="text" 
+                      value={experience} 
+                      onChange={(e) => setExperience(e.target.value)} 
+                  />
+              </label>
+
+              <label>
+                  No of Positions:
+                  <input 
+                      type="number" 
+                      value={vacancies} 
+                      onChange={(e) => setvacancies(e.target.value)} 
+                      required 
+                  />
+              </label>
+
+              <label>
+                  Select Company
+              <select value={company} onChange={(e) => setCompany(e.target.value)}>
+                  <option value="">Select Company</option>
+                      {companyData.map((company)=>(
+                         <option key={company._id} value={company._id}>{company.name}</option>
+                      ))}
+                  </select>
+              </label>
+              <label>
+                  Description:
+                  <textarea 
+                      value={description} 
+                      onChange={(e) => setDescription(e.target.value)} 
+                      rows="4"
+                      required 
+                  />
+              </label>
+              <button type="submit" className="submit-btn">Update Job</button>
+          </form>
+      </div>
+  );
 };
 
 export default UpdateJobs;
