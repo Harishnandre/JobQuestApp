@@ -1,27 +1,25 @@
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './index.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { Companycontext } from '../ContextAPI/Companycontext';
 import { LuPencil } from "react-icons/lu";
 
-const Companies = () => {
-    const { companyData } = useContext(Companycontext); // Default to empty array if undefined
-    const navigate = useNavigate();
-    const [input, setInput] = useState(""); // Filter input state
-    const [loading, setLoading] = useState(true); // Loading state
 
-    useEffect(() => {
-        // Check if companyData has been populated
-        if (companyData.length > 0) setLoading(false);
-    }, [companyData]);
+const Companies = () => {
+    const { companyData } = useContext(Companycontext); 
+    // Default to empty array if undefined
+    const navigate = useNavigate();
+    const [input, setInput] = useState(""); // Filter input state // Loading state
+
+    // useEffect(() => {
+    //     // Check if companyData has been populated
+    //     if (companyData.length > 0)
+    // }, [companyData]);
 
     // // Debugging statement to check data load
     console.log("Company data:", companyData);
 
-    if (loading) {
-        return <div>Loading...</div>; // Show loading until data is ready
-    }
 
     return (
         <div>
@@ -37,7 +35,7 @@ const Companies = () => {
                         New Company
                     </button>
                 </div>
-
+        
                 <div className="company-item-content">
     {companyData.map((company) => (
         <div key={company._id} className="company-inner-content">
@@ -66,6 +64,7 @@ const Companies = () => {
             </div>
     ))}
 </div>
+    
 
             </div>
         </div>
