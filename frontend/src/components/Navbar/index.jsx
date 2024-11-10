@@ -48,7 +48,7 @@ const Navbar = () => {
 
               {user ? (
                 <>
-                  <li className="nav-item dropdown">
+                  <li className="nav-item dropdowns">
                     <Link to="#" className="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                       {fullName}
                     </Link>
