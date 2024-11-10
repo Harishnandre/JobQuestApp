@@ -27,36 +27,35 @@ const Navbar = () => {
         <div className="box2">
           <ul className="box21">
             <div className='change'>
-{(role==="Recruiter")?(
-  <>
-    <li><Link to='/admin/companies'>Companies</Link></li>
-    <li><Link to='/admin/jobs'>Jobs</Link></li>
-  </>
+              {/* Conditional rendering based on role */}
+              {role === "Recruiter" ? (
+                <>
+                  <li><Link to='/admin/companies'>Companies</Link></li>
+                  <li><Link to='/admin/jobs'>Jobs</Link></li>
+                </>
+              ) : role === "Job-Seeker" ? (
+                <>
+                  <li><Link to='/'>Home</Link></li>
+                  <li><Link to='/jobs'>Jobs</Link></li>
+                  <li><Link to='/practice'>Practice</Link></li>
+                </>
+              ) : (
+                <>
+                  <li><Link to='/'>Home</Link></li>
+                  <li><Link to='/jobs'>Jobs</Link></li> 
+                </>
+              )}
 
-):(
-  <>
-    <li><Link to='/'>Home</Link></li>
-    <li><Link to='/jobs'>Jobs</Link></li>
-  </>
-)
-}
-
-
-            
               {user ? (
                 <>
-                
                   <li className="nav-item dropdown">
                     <Link to="#" className="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                       {fullName}
                     </Link>
                     <ul className="dropdown-menu dropdown-menu-dark">
-                      {
-              role=='Job-Seeker' &&(
-                <li><Link className="dropdown-item" to="/dashboard">Dashboard</Link></li>
-              )          
-           }
-                    
+                      {role === 'Job-Seeker' && (
+                        <li><Link className="dropdown-item" to="/dashboard">Dashboard</Link></li>
+                      )}
                       <li><Link onClick={handlelogout} className="dropdown-item" to="/">LogOut</Link></li>
                     </ul>
                   </li>
@@ -76,3 +75,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

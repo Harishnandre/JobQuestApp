@@ -5,11 +5,13 @@ import { Companycontext } from '../ContextAPI/Companycontext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Authcontext } from '../ContextAPI/Authcontext';
+import ClipLoader from "react-spinners/ClipLoader";
 
 const CompanyList = () => {
     const { getAllCompany } = useContext(Companycontext);
-    const [auth]=useContext(Authcontext);
-    const {token}=auth;
+    const [loading, setLoading] = useState(false);
+    const [auth] = useContext(Authcontext);
+    const { token } = auth;
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
@@ -36,19 +38,19 @@ const CompanyList = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
-            // console.log(formData);
             const res = await axios.post('http://localhost:5000/api/v1/company/create', formData, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${token}` // Add the token here
+                    'Authorization': `Bearer ${token}`
                 }
             });
             if (res?.data?.success) {
                 toast.success(res.data.message);
                 getAllCompany();
-                navigate('/admin/companies'); // Redirect only after successful submission
+                navigate('/admin/companies');
             } else {
                 toast.error(res.data.message);
             }
@@ -59,75 +61,89 @@ const CompanyList = () => {
             } else {
                 toast.error("Company Registration failed. Please try again later.");
             }
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div className="form-container">
-            <button className="back-button" onClick={() => navigate(-1)}>← Back</button>
-            <h2>Create New Company</h2>
-            <form onSubmit={handleSubmit} className="company-form">
-                <label>
-                    Company Name:
-                    <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
+            {loading ? (
+                <div className="loading-overlay">
+                    <ClipLoader size={50} color={"#123abc"} loading={loading} />
+                  
+                </div>
+            ) : (
+                <>
+                    <button className="back-button" onClick={() => navigate(-1)}>← Back</button>
+                    <h2>Create New Company</h2>
 
-                <label>
-                    Description:
-                    <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        rows="4"
-                        required
-                    />
-                </label>
+                    <form onSubmit={handleSubmit} className="company-form">
+                        <label>
+                            Company Name:
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                required
+                            />
+                        </label>
 
-                <label>
-                    Website Link:
-                    <input
-                        type="url"
-                        name="website"
-                        value={formData.website}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
+                        <label>
+                            Description:
+                            <textarea
+                                name="description"
+                                value={formData.description}
+                                onChange={handleChange}
+                                rows="4"
+                                required
+                            />
+                        </label>
 
-                <label>
-                    Location:
-                    <input
-                        type="text"
-                        name="location"
-                        value={formData.location}
-                        placeholder="Location"
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
+                        <label>
+                            Website Link:
+                            <input
+                                type="url"
+                                name="website"
+                                value={formData.website}
+                                onChange={handleChange}
+                                required
+                            />
+                        </label>
 
-                <label>
-                    Company Logo:
-                    <input
-                        type="file"
-                        name="logo"
-                        onChange={handleFileChange}
-                        accept="image/*"
-                        required
-                    />
-                </label>
+                        <label>
+                            Location:
+                            <input
+                                type="text"
+                                name="location"
+                                value={formData.location}
+                                placeholder="Location"
+                                onChange={handleChange}
+                                required
+                            />
+                        </label>
 
-                <button type="submit" className="submit-btn">Create Company</button>
-            </form>
+                        <label>
+                            Company Logo:
+                            <input
+                                type="file"
+                                name="logo"
+                                onChange={handleFileChange}
+                                accept="image/*"
+                                required
+                            />
+                        </label>
+
+                        <button type="submit" className="submit-btn">Create Company</button>
+                    </form>
+                </>
+            )}
         </div>
     );
 };
 
 export default CompanyList;
+
+
 
