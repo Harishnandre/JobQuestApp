@@ -3,6 +3,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AiOutlineMail, AiOutlinePhone, AiOutlineEnvironment } from 'react-icons/ai'; 
 import './index.css';
+import { Link } from 'react-router-dom';
 
 const Contactus = () => {
   const [name, setName] = useState('');
@@ -52,10 +53,10 @@ const Contactus = () => {
             <p>Phone: <a href="tel:+123456789">+1 234 567 89</a></p>
           </div>
 
-          <div className="info-item">
+          <Link to="/google-map" className="info-item">
             <AiOutlineEnvironment size={30} className="contact-icon" />
             <p>Location: 123 JobQuest St., PrayagRaj, India</p>
-          </div>
+          </Link>
         </div>
 
         <form className="contact-form" onSubmit={handleSubmit}>

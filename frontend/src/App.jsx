@@ -28,6 +28,7 @@ import Applicant from './components/Applicant'
 import QuizPage from './components/Assesment'
 import Aboutus from './components/Aboutus'
 import Contactus from './components/Contactus'
+import GoogleMap from './components/GoogleMap'
 
 
 
@@ -62,6 +63,7 @@ const App = () => {
      <Route exact path='/admin/jobs/applicants/:jobId' Component={Applicant}/>
      <Route exact path='/admin/jobs/updatejob' Component={UpdateJobs}/>
      <Route exact path='/practice' Component={QuizPage}/>
+     <Route exact path='/google-map' Component={GoogleMap}/>
      <Route path='*' Component={NotFound}/>
      </Routes>
      </main>
