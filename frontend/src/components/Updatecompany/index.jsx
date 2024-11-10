@@ -1,18 +1,38 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './index.css'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Companycontext } from '../ContextAPI/Companycontext';
+import { Authcontext } from '../ContextAPI/Authcontext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 const UpdateCompany= () => {
-  const navigate = useNavigate();
+    const {companyData,getAllCompany}=useContext(Companycontext) ;
+    const [auth]=useContext(Authcontext); 
+    const {token}=auth;
+    const navigate = useNavigate();
+    const {id}=useParams();
+    const company = companyData.find(item =>item._id === id);
     const [formData, setFormData] = useState({
-        name: '',
-        description: '',
-        website: '',
-     
-        preference1: '',
-        preference2: '',
-        preference3: '',
+        name: company ? company.name : '',
+        description: company ? company.description : '',
+        website: company ? company.website : '',
+        location: company ? company.location.join(", ") : '',
         logo: null
-    });
+      });
+      console.log(company.location,formData.location);
+      // Update `formData` state when `company` changes (in case data is loaded asynchronously)
+    //   useEffect(() => {
+    //     if (company) {
+    //       setFormData({
+    //         name: company.name,
+    //         description: company.description,
+    //         website: company.website,
+    //         location: company.location,
+    //         logo: null // You might set a default image URL here, if available
+    //       });
+    //     }
+    //   }, [company]);
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -29,10 +49,33 @@ const UpdateCompany= () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
-        // Handle form submission
-        console.log("Form Submitted", formData);
+        console.log(formData);
+        try {
+            console.log(formData);
+            const res = await axios.put(`http://localhost:5000/api/v1/company/update/${id}`, formData, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}` // Add the token here
+                }
+            });
+            if (res?.data?.success) {
+                toast.success(res.data.message);
+                getAllCompany();
+                navigate('/admin/companies'); // Redirect only after successful submission
+            } else {
+                toast.error(res.data.message);
+            }
+        } catch (error) {
+            console.error("Error during registering Company:", error);
+            if (error.response) {
+                toast.error(error.response.data.message);
+            } else {
+                toast.error("Company Registration failed. Please try again later.");
+            }
+        }
     };
 
     return (
@@ -80,8 +123,7 @@ const UpdateCompany= () => {
                     <input 
                         type="text" 
                         name="preference1" 
-                        value={formData.preference1} 
-                        placeholder="Preference 1"
+                        value={formData.location} 
                         onChange={handleChange} 
                     />
                 
@@ -99,7 +141,7 @@ const UpdateCompany= () => {
                     />
                 </label>
 
-                <button type="submit"  onClick={()=>navigate('/admin/companies')} className="submit-btn">Update Company</button>
+                <button type="submit" className="submit-btn">Update Company</button>
             </form>
         </div>
     );

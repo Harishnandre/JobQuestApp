@@ -6,7 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import axios from 'axios'; // for network request
 import './index.css';
-import { Authcontext } from '../ContextAPI/AuthContext';
+import { Authcontext } from '../ContextAPI/Authcontext';
+
 
 const Register = () => {
   const [fullName, setName] = useState("");
@@ -20,6 +21,7 @@ const Register = () => {
   //if already logged in go to home
   const AuthState = useContext(Authcontext)
   const [auth,setauth,isLoggedIn,setisLoggedIn] = AuthState
+  //const {isLoggedIn} = AuthState
   
   const navigate = useNavigate();
   if(isLoggedIn){

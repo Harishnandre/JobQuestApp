@@ -19,13 +19,22 @@ import Jobs from './components/Jobs'
 import CompanyList from './components/companylists'
 import UpdateCompany from './components/Updatecompany'
 
+import Jobform from './components/Jobform'
+import UpdateJobs from './components/Updatejobs'
+
+import CompanycontextProvider from './components/ContextAPI/Companycontext'
+
+
 
 
 const App = () => {
   return (
     <AuthcontextProvider>
+      <CompanycontextProvider>
 <BrowserRouter>
+<div className="app-container">
      <Navbar/>
+     <main className="maincontent">
      <Routes>
       <Route exact path='/' Component={Home}/>
       <Route exact path='/login' Component={LoginRoute}/>
@@ -39,14 +48,17 @@ const App = () => {
      <Route exact path='/admin/companies' Component={Companies}/>
      <Route exact path='/admin/jobs' Component={Jobs}/>
      <Route exact path='/admin/companies/create' Component={CompanyList}/>
-     <Route exact path='/admin/companies/update' Component={UpdateCompany}/>
-
-
-      <Route path='*' Component={NotFound}/>
+     <Route exact path='/admin/companies/update/:id' Component={UpdateCompany}/>
+     <Route exact path='/admin/jobs/createjob' Component={Jobform}/>
+     <Route exact path='/admin/jobs/updatejob' Component={UpdateJobs}/>
+     <Route path='*' Component={NotFound}/>
 
      </Routes>
+     </main>
      <Footer/>
+     </div>
     </BrowserRouter>
+    </CompanycontextProvider>
     </AuthcontextProvider>
     
   )

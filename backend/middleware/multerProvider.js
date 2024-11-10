@@ -4,9 +4,9 @@ import multer from "multer";
 const storage = multer.memoryStorage();
 
 // Configure multer to handle both resume and profile photo fields
-const upload = multer({ storage }).fields([
-  { name: "resume", maxCount: 1 },  // Handle 'resume' field
-  { name: "profilePhoto", maxCount: 1 }  // Handle 'profilePhoto' field
+const singleUpload = multer({ storage }).fields([
+  { name: "resume" },  // Handle 'resume' field
+  { name: "profilePhoto" }  // Handle 'profilePhoto' field
 ]);
 
-export default upload;
+export default singleUpload;

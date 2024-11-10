@@ -1,52 +1,78 @@
 
 import { Company } from "../models/companyModel.js";
-
-export const createCompany=async(req,res)=>{
-     try{
-        const {name,description,website,location}=req.body;
-        const recruiterId=req.id;
-        const file=req.file;
-        //Cloudinary work
-
-        if(!name||!description||!website||!location||!recruiterId){
+import cloudinary from "../Cloudinary/cloudinary.js";
+export const createCompany = async (req, res) => {
+    try {
+        const { name, description, website, location } = req.body;
+        const recruiterId = req.id;
+        const logoFile = req.files.logo; // Access the file from `req.files` 
+        if (!name || !description || !website || !location || !recruiterId || !logoFile) {
             return res.status(400).send({
-                success:false,
-                message:"All fields are required"
-           }); 
+                success: false,
+                message: "All fields are required"
+            });
         }
-        const existCompany=await Company.findOne({name});
-        if(existCompany){
+        // Check if the company already exists
+        const existCompany = await Company.findOne({ name });
+        if (existCompany) {
             return res.status(400).send({
-                success:false,
-                message:"Company with similar name already exist"
-           }); 
+                success: false,
+                message: "Company with a similar name already exists"
+            });
         }
-        const company=new Company({
+
+        // Upload logo to Cloudinary
+        const result = await cloudinary.uploader.upload(logoFile.tempFilePath);
+        // console.log(result);  
+        // console.log(result.secure_url);
+        if(!result){
+            res.status(400).send({
+                success:false,
+                message:"Error in uploading logo of company:Cloudinary Error"
+            });
+        }
+        // Create a new company with the uploaded logo URL
+        const company = new Company({
             name,
             description,
             website,
-            location,
-            recruiterId
+            location: location.split(","),
+            recruiterId,
+            logo: result.secure_url // Store Cloudinary URL
         });
-        const newCompany=await company.save();
+
+        const newCompany = await company.save();
         return res.status(201).send({
-            success:true,
-            message:"Company created successfullly",
+            success: true,
+            message: "Company created successfully",
             newCompany
         });
-     }catch(error){
-        return res.status(500).send("Server error:" + error);
-     }
-}
-
+    } catch (error) {
+        console.error("Error creating company:", error);
+        return res.status(500).send("Server error: " + error);
+    }
+};
 export const updateCompany=async(req,res)=>{
     try {
-        const {name,description,website,location}=req.body;
+        const {name,description,website,location,logo}=req.body;
         const _id=req.params.id;
-        const file=req.file;
+        const logoFile = req.files.logo; // Access the file from `req.files` 
+        if (!name || !description || !website || !location || !logoFile) {
+            return res.status(400).send({
+                success: false,
+                message: "All fields are required for Updating"
+            });
+        }
         //Cloudinary work
-
-        const updatedData=await Company.findByIdAndUpdate(_id,{name,description,website,location},{new:true});
+        const result = await cloudinary.uploader.upload(logoFile.tempFilePath);
+        if(!result){
+            res.status(400).send({
+                success:false,
+                message:"Error in uploading logo of company:Cloudinary Error"
+            });
+        }
+        const newLocation=location.split(",");
+        const updatedData=await Company.findByIdAndUpdate(_id,{name,description,website,location:newLocation,logo:result.secure_url},{new:true});
         if(!updatedData){
             return res.status(404).send({
                 success:false,
@@ -85,7 +111,15 @@ export const getCompanyById=async(req,res)=>{
 export const getAllCompanies=async(req,res)=>{
     try{
        const recruiterId=req.id;
-       const companies=await Company.find({recruiterId});
+       const keyword=req.query.keyword || "";
+       const query={
+          recruiterId,
+          $or:[
+                  {name:{$regex:keyword,$options:"i"}},
+                  {description:{$regex:keyword,$options:"i"}}
+              ]
+          }
+       const companies=await Company.find(query).sort({createdAt:-1});
        if(!companies){
         return res.status(404).send({
             success:false,

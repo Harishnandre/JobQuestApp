@@ -64,7 +64,7 @@ const UpdateProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); // Start loading
-
+  console.log('Form data :',formData)
     try {
       const url = 'http://localhost:5000/api/v1/user/update-profile';
       const res = await axios.post(
@@ -91,6 +91,7 @@ const UpdateProfile = () => {
       }
     } catch (error) {
       setLoading(false); // End loading
+      console.log(error)
       toast.error(error.response?.data?.message || 'An error occurred');
     }
   };

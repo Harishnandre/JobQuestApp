@@ -74,7 +74,7 @@ const JobCard = ({ job }) => {
             <div className="company-info">
                 <h1 className="company-name">{job.company.name}</h1>
                 <FaBookmark 
-                    className={`bookmark-icon ${isBookmarked ? 'bookmarked' : ''}`} 
+                    className={`bookmark-icon ${isBookmarked ? 'bookmarked'  :''}`} 
                     onClick={handleBookmarkClick} // Add click handler
                 />
             </div>

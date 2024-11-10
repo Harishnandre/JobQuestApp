@@ -40,3 +40,117 @@
 .new-company-btn:hover {
   background-color: #0056b3;
 }
+.company-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
+}
+
+.company-inner-content {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  background-color: #fff;
+  max-width: 100%;
+  position: relative;
+}
+
+.company-inner-content:hover {
+  transform: scale(1.02);
+}
+
+.company-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.company-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: contain;
+  margin-right: 10px;
+}
+
+.edit-icon {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.company-detail {
+  flex-grow: 1;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.company-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.company-description {
+  font-size: 1rem;
+  color: #555;
+  margin: 10px 0;
+}
+
+.comp_box{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.company-website a {
+  color: #0073e6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.company-website a:hover {
+  text-decoration: underline;
+}
+
+.company-location {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.company-location li {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  padding: 4px 8px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Responsive Styles */
+@media (min-width: 600px) {
+  .company-inner-content {
+      flex-direction: row;
+      align-items: center;
+  }
+  
+  .company-detail {
+      text-align: left;
+      padding-left: 20px;
+  }
+}
+
+
+

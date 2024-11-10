@@ -39,6 +39,7 @@ function JobsSection() {
     try {
       const response = await axios.get(`http://localhost:5000/api/v1/job/get?keyword=${search}`);
       if (response.data.success) {
+        console.log(response.data.jobs);
         setJobs(response.data.jobs);
       } else {
         setError("Failed to load jobs.");

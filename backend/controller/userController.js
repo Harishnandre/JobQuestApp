@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import { JobModel } from './../models/jobModel.js';
 import getDataUri from "../utils/datauri.js";
-import cloudinary from "../utils/cloudinaryProvider.js";
+import cloudinary from "../Cloudinary/cloudinary.js";
 
 export const registerNewUser=async(req,res)=>{
     try {
@@ -161,7 +161,8 @@ export const updateProfile = async (req, res) => {
     const { fullName, email, address, phoneNumber, bio, role1, role2, role3, id: userId } = req.body;
     const resume = req.files?.resume; // handle multiple file uploads
     const profilePhoto = req.files?.profilePhoto; // handle profile photo field
-
+    console.log(resume)
+    console.log(profilePhoto)
     // Check if all required fields and files are provided
     if (!fullName || !email || !address || !phoneNumber || !bio || !role1 || !role2 || !role3 || !resume || !profilePhoto) {
       return res.status(400).send({
@@ -170,18 +171,12 @@ export const updateProfile = async (req, res) => {
       });
     }
 
-    // Upload resume to Cloudinary
-    const resumeUri = getDataUri(resume[0]); // getDataUri expects a single file
-    const resumeUpload = await cloudinary.uploader.upload(resumeUri.content, { resource_type: "raw" });
-
-    // Upload profile photo to Cloudinary
-    const profilePhotoUri = getDataUri(profilePhoto[0]); // getDataUri expects a single file
-    const profilePhotoUpload = await cloudinary.uploader.upload(profilePhotoUri.content, { 
-      resource_type: "image" 
+    const resumeUpload = await cloudinary.uploader.upload(resume.tempFilePath,{
+        folder: "Job_Seekers_Resume"
     });
 
-    console.log(resumeUpload);
-    console.log(profilePhotoUpload);
+    // Upload profile photo to Cloudinary
+    const profilePhotoUpload = await cloudinary.uploader.upload(profilePhoto.tempFilePath,{folder: "Job_Seekers_Photos"});
 
     // Update user profile in the database
     const updateUser = await User.findByIdAndUpdate(
@@ -195,9 +190,9 @@ export const updateProfile = async (req, res) => {
           bio,
           preferredJobRole: { role1, role2, role3 },
           resume: resumeUpload.secure_url, // save resume URL
-          resumeOriginalName: resume[0].originalname, // save the original resume name
+          resumeOriginalName: String(resume.name), // save the original resume name
           profilePhoto: profilePhotoUpload.secure_url, // save profile photo URL
-          profilePhotoOriginalName: profilePhoto[0].originalname, // save the original profile photo name
+          profilePhotoOriginalName: String(profilePhoto.name), // save the original profile photo name
         },
       },
       { new: true }
