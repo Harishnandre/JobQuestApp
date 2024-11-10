@@ -60,7 +60,7 @@ const Register = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+    const genderDefualtPic = gender === 'male' ? './male_user_default_pic.jpg' : './female_user_default_pic.jpeg'
     const formData = {
       fullName,
       role,
@@ -70,6 +70,7 @@ const Register = () => {
       address,
       answer,
       gender,
+      profilePhoto : genderDefualtPic
     };
   
     console.log("Submitting form with data:", formData); // Log form data

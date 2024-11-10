@@ -7,7 +7,8 @@ import cloudinary from "../utils/cloudinaryProvider.js";
 
 export const registerNewUser=async(req,res)=>{
     try {
-        const {fullName,gender,email,address,phoneNumber,password,role,answer}=req.body;
+        const {fullName,gender,email,address,phoneNumber,password,role,answer,profilePhoto}=req.body;
+        
         if(!fullName||!gender||!email||!address||!phoneNumber||!password||!role||!answer){
         return res.status(400).send({
             success:false,
@@ -36,7 +37,10 @@ export const registerNewUser=async(req,res)=>{
             phoneNumber,
             password:hashedPassword,
             role,
-            answer
+            answer,
+            profile: {
+                profilePhoto
+            }
         });
         const newUser=await user.save();
         res.status(201).send({
