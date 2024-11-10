@@ -3,7 +3,9 @@ import './index.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { Jobcontext } from '../ContextAPI/Jobcontext';
 import { FaBookmark, FaMapMarkerAlt } from "react-icons/fa";
-import { LuPencil } from "react-icons/lu";
+import { PiDotsThreeOutlineThin } from "react-icons/pi";
+import { SlPencil } from "react-icons/sl";
+import { IoEye } from "react-icons/io5";
 
 const Jobs = () => {
     const { recruiterJobs } = useContext(Jobcontext);
@@ -40,13 +42,13 @@ const Jobs = () => {
                                     <h4>{job.company.name}</h4>
                                 </div>
                                 <div className="edit-icon" onClick={() => toggleDropdown(job._id)} title="Options">
-                                    <LuPencil />
+                                <PiDotsThreeOutlineThin size={36}/>
                                 </div>
                                 {/* Dropdown menu */}
                                 {dropdownVisible === job._id && (
                                     <div className="dropdown-menu">
-                                        <Link to={`/admin/jobs/updatejob/${job._id}`} className="dropdown-item">Edit</Link>
-                                        <Link to={`/admin/jobs/applicants/${job._id}`} className="dropdown-item">Applicants</Link>
+                                        <Link to={`/admin/jobs/updatejob/${job._id}`} className="dropdown-item"><span><SlPencil size={13} /></span>    Edit</Link>
+                                        <Link to={`/admin/jobs/applicants/${job._id}`} className="dropdown-item"><span><IoEye size={16} /></span>    Applicants</Link>
                                     </div>
                                 )}
                             </div>

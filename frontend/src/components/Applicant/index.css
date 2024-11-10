@@ -1,0 +1,48 @@
+.back-button {
+  margin-top: 80px;
+  background-color: #0073e6;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 1rem;
+}
+.progressicon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.applications-table {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: 60px;
+  right: -11px;  /* Adjust to position it to the left of the icon */
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100px;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.dropdown-item {
+  padding: 8px;
+  text-align: center;
+  color: #333;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+
+
+
+
+
