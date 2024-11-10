@@ -83,7 +83,15 @@ export const getJobById=async(req,res)=>{
 export const getAllRecruiterJobs=async(req,res)=>{
     try {
         const createdBy=req.id;
-        const jobs=await JobModel.find({createdBy});
+        const keyword=req.query.keyword || "";
+        const query={
+           createdBy,
+           $or:[
+                   {title:{$regex:keyword,$options:"i"}},
+                   {description:{$regex:keyword,$options:"i"}}
+               ]
+           }
+        const jobs=await JobModel.find(query).sort({createdAt:-1});
         if(!jobs){
             return res.status(404).send({
                 success:false,
