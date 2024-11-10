@@ -23,14 +23,14 @@ import Jobform from './components/Jobform'
 import UpdateJobs from './components/Updatejobs'
 
 import CompanycontextProvider from './components/ContextAPI/Companycontext'
-
-
+import JobcontextProvider from './components/ContextAPI/Jobcontext'
 
 
 const App = () => {
   return (
     <AuthcontextProvider>
       <CompanycontextProvider>
+      <JobcontextProvider> 
 <BrowserRouter>
 <div className="app-container">
      <Navbar/>
@@ -58,6 +58,7 @@ const App = () => {
      <Footer/>
      </div>
     </BrowserRouter>
+    </JobcontextProvider> 
     </CompanycontextProvider>
     </AuthcontextProvider>
     
