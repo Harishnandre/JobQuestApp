@@ -38,3 +38,23 @@
 .applications-table tr:hover {
     background-color: #f1f1f1;
 }
+
+.no-applications p {
+    font-size: 18px;
+    color: #555;
+}
+
+.apply-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.apply-button:hover {
+    background-color: #45a049;
+}

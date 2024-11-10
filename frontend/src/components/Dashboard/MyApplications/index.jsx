@@ -10,7 +10,7 @@ const MyApplications = () => {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { user } = auth || {};
+    const { user ,token} = auth || {};
     const navigate = useNavigate()
     const { _id } = user || {};
 
@@ -42,7 +42,9 @@ const MyApplications = () => {
                 return 'Black';
         }
     };
-
+    const handleApplyForJobs  = ()=>{
+         navigate('/jobs')
+    }
     return (
         <div className="my-applications">
             <h1>My Applications</h1>
@@ -50,7 +52,14 @@ const MyApplications = () => {
                 <JobQuestLoader/>
             ) : error ? (
                 <p className="error">{error}</p>
-            ) : (
+            ) : applications.length == 0 ? (
+                <div className="no-applications">
+                    <p>You have not yet applied any job.</p>
+                    <button className="apply-button" onClick={handleApplyForJobs}>
+                        Browse and Apply for Jobs
+                    </button>
+                </div>
+            ) :(
                 <table className="applications-table">
                     <thead>
                         <tr>

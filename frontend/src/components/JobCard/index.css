@@ -90,6 +90,7 @@
 .job-card {
   padding: 20px; /* Padding for the card */
   border-radius: 10px; /* Rounded corners */
+  margin: 10px;
   background-color: #ffffff; /* White background */
   border: 1px solid #e5e7eb; /* Light gray border */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
@@ -133,6 +134,7 @@
 }
 
 .job-description {
+  max-width:400px;
   font-size: 0.875rem; /* Corresponds to text-sm */
   color: #4b5563; /* Darker gray */
 }

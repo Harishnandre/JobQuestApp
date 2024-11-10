@@ -14,9 +14,10 @@ const JobCard = ({ job }) => {
   const {_id } = user || {}
     const [isBookmarked, setIsBookmarked] = useState(false); // State for bookmark
     useEffect(() => {
-        if (user?.profile?.bookmarkJob.includes(job._id)) {
+        if (user?.bookmarkJob?.some(eachJob => eachJob._id === job._id)) {
             setIsBookmarked(true);
         }
+
     }, [user, job._id]);
     const handleDetailsClick = () => {
         navigate(`/job-details/${job._id}`);
@@ -28,7 +29,7 @@ const JobCard = ({ job }) => {
                 ? `http://localhost:5000/api/v1/user/unbookmark/${job._id}` 
                 : `http://localhost:5000/api/v1/user/bookmark/${job._id}`;
                 
-            const method = 'PATCH'
+            const method = 'PATCH';
             const response = await axios({
                 method: method,
                 url: url,
@@ -44,29 +45,27 @@ const JobCard = ({ job }) => {
                 
                 // Update bookmarkJob in context state
                 const updatedBookmarkJobs = isBookmarked 
-                    ? user.profile.bookmarkJob.filter((jobId) => jobId !== job._id) // Remove bookmark
-                    : [...user.profile.bookmarkJob, job._id]; // Add bookmark
-    
+                    ? user.bookmarkJob.filter((eachJob) => eachJob._id !== job._id) // Remove bookmark by ID
+                    : [...user.bookmarkJob, job]; // Add bookmark
+                
                 // Update the context with the new list of bookmarked jobs
                 setAuth({
                     ...auth,
                     user: {
                         ...user,
-                        profile: {
-                            ...user.profile,
-                            bookmarkJob: updatedBookmarkJobs // Update bookmarkJob
-                        }
+                        bookmarkJob: updatedBookmarkJobs // Update bookmarkJob
                     }
                 });
     
                 const message = isBookmarked ? "Job unbookmarked successfully!" : "Job bookmarked successfully!";
-                toast.success(message); // Show success toast
+                isBookmarked ? toast.info(message) : toast.success(message); // Show success toast
             }
         } catch (error) {
-            toast.error("Error bookmarking job: " + error.response?.data?.message || "Server error"); // Show error toast
+            toast.error("Error bookmarking job: " + (error.response?.data?.message || "Server error")); // Show error toast
             console.error("Error bookmarking job:", error);
         }
     };
+    
     
 
     return (

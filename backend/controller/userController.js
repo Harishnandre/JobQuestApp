@@ -147,6 +147,72 @@ export const forgetPassword=async(req,res)=>{
      }
 }
 
+export const updateProfile=async(req,res)=>{
+    try {
+        const {fullName,email,address,phoneNumber,bio,role1,role2,role3,resume,profilePhoto}=req.body;
+        if(!fullName||!email||!address||!phoneNumber||!bio||!role1||!role2||!role3){
+            return res.status(400).send({
+                success:false,
+                message:"All fields are required to complete Profile"
+            });
+        }
+        const userId=req.body.id;
+        const updateUser=await User.findByIdAndUpdate({_id:userId},{fullName,email,address,phoneNumber,
+                                         profile:{
+                                            bio,
+                                            preferredJobRole:{role1,role2,role3}
+                                         }},{new:true});
+        if(!updateUser){
+            return res.status(404).send({
+                success:false,
+                message:"User not found while updating"    
+            }); 
+        } 
+        res.status(200).send({
+            success:true,
+            message:"Profile Updated Successfully",
+            updateUser
+        });                               
+    } catch (error) {
+        return res.status(500).send("Server error:" + error);
+    }
+}
+
+//update Password when user loggein
+export const updatePassword=async(req,res)=>{
+    try {
+        const {newPassword}=req.body;
+        const userId=req.id;
+        if(!newPassword){
+            return res.status(400).send({
+                success:false,
+                message:"Please provide new Password for updation"
+            });
+        }
+        if(newPassword.length < 8){
+            return res.status(400).send({
+                 success : false,
+                 message : "Password must contain at least 8 characters"
+             })
+            }
+        const hashedPassword=await bcrypt.hash(newPassword,10);
+        const updateUserPassword=await User.findByIdAndUpdate({_id:userId},{password:hashedPassword},{new:true});
+        if(!updateUserPassword){
+            return res.status(404).send({
+                success:false,
+                message:"User not found while updating"    
+            });
+        }
+        res.status(200).send({
+            success:true,
+            message:"Password Updated Successfully",
+            updateUserPassword
+        }); 
+    } catch (error) {
+        return res.status(500).send("Server error:" + error);
+    }
+}
+
 //For bookmark Job
 export const bookmarkAnyJobs=async(req,res)=>{
     try {
@@ -159,7 +225,7 @@ export const bookmarkAnyJobs=async(req,res)=>{
                 message:"User not found",
             });
         }
-        user.profile.bookmarkJob.push(jobId);
+        user.bookmarkJob.push(jobId);
         await user.save();
         return res.status(200).send({
             success:true,
@@ -183,7 +249,7 @@ export const unbookmarkJob=async(req,res)=>{
                 message:"User not found"
             });
         }
-        user.profile.bookmarkJob = user.profile.bookmarkJob.filter(
+        user.bookmarkJob = user.bookmarkJob.filter(
             _id => !_id.equals(jobId) 
         );
         await user.save();
@@ -206,6 +272,12 @@ export const getUserById=async(req,res)=>{
             options:{sort:{createdAt:-1}},
             populate:{path:"company",options:{sort:{createdAt:-1}}}
         })
+        .populate({
+            path:"bookmarkJob",
+            options:{sort:{createdAt:-1}},
+            populate:{path:"company",options:{sort:{createdAt:-1}}}
+        })
+
         if(!user){
             return res.status(404).send({
                 success:false,
