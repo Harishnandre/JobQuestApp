@@ -69,7 +69,7 @@ const Applicant=()=>{
                     <td>{app.applicant.fullName}</td>
                     <td>{app.applicant.email}</td>
                     <td>{app.applicant.phoneNumber}</td>
-                    <td>{app.applicant.resume}</td>
+                    <td><a href={app.applicant.profile.resume} target="_blank">View Resume</a></td>
                     <td>{new Date(app.createdAt).toLocaleString()}</td>
                     <td>Accepted</td>
                 </tr>
