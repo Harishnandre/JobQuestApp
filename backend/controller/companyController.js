@@ -111,7 +111,15 @@ export const getCompanyById=async(req,res)=>{
 export const getAllCompanies=async(req,res)=>{
     try{
        const recruiterId=req.id;
-       const companies=await Company.find({recruiterId});
+       const keyword=req.query.keyword || "";
+       const query={
+          recruiterId,
+          $or:[
+                  {name:{$regex:keyword,$options:"i"}},
+                  {description:{$regex:keyword,$options:"i"}}
+              ]
+          }
+       const companies=await Company.find(query).sort({createdAt:-1});
        if(!companies){
         return res.status(404).send({
             success:false,
