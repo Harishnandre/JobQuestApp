@@ -54,12 +54,25 @@ export const createCompany = async (req, res) => {
 };
 export const updateCompany=async(req,res)=>{
     try {
-        const {name,description,website,location}=req.body;
+        const {name,description,website,location,logo}=req.body;
         const _id=req.params.id;
-        const file=req.file;
+        const logoFile = req.files.logo; // Access the file from `req.files` 
+        if (!name || !description || !website || !location || !logoFile) {
+            return res.status(400).send({
+                success: false,
+                message: "All fields are required for Updating"
+            });
+        }
         //Cloudinary work
-
-        const updatedData=await Company.findByIdAndUpdate(_id,{name,description,website,location},{new:true});
+        const result = await cloudinary.uploader.upload(logoFile.tempFilePath);
+        if(!result){
+            res.status(400).send({
+                success:false,
+                message:"Error in uploading logo of company:Cloudinary Error"
+            });
+        }
+        const newLocation=location.split(",");
+        const updatedData=await Company.findByIdAndUpdate(_id,{name,description,website,location:newLocation,logo:result.secure_url},{new:true});
         if(!updatedData){
             return res.status(404).send({
                 success:false,

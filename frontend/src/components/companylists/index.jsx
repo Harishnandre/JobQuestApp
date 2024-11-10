@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { Authcontext } from '../ContextAPI/Authcontext';
 
 const CompanyList = () => {
-    const { getAllcompany } = useContext(Companycontext);
+    const { getAllCompany } = useContext(Companycontext);
     const [auth]=useContext(Authcontext);
     const {token}=auth;
     const navigate = useNavigate();
@@ -47,7 +47,7 @@ const CompanyList = () => {
             });
             if (res?.data?.success) {
                 toast.success(res.data.message);
-                getAllcompany();
+                getAllCompany();
                 navigate('/admin/companies'); // Redirect only after successful submission
             } else {
                 toast.error(res.data.message);

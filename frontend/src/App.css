@@ -1,0 +1,10 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 150vh; /* Full viewport height */
+}
+.maincontent {
+  flex-grow: 1; /* Expands to fill the available space */
+  padding: 2rem;
+  background-color: 	#f4f3ec;
+} 

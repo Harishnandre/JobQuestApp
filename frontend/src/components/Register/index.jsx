@@ -8,6 +8,7 @@ import axios from 'axios'; // for network request
 import './index.css';
 import { Authcontext } from '../ContextAPI/Authcontext';
 
+
 const Register = () => {
   const [fullName, setName] = useState("");
   const [role, setRole] = useState("");

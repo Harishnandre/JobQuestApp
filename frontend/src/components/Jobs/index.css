@@ -1,0 +1,42 @@
+/* Container for the main content */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  margin-top: 80px;
+}
+
+/* Flex container for input and button */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+/* Styling for the filter input */
+.filter-input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Styling for the New Company button */
+.new-company-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Button hover effect */
+.new-company-btn:hover {
+  background-color: #0056b3;
+}
