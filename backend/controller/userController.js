@@ -218,39 +218,70 @@ export const updateProfile = async (req, res) => {
 };
 
 //update Password when user loggein
-export const updatePassword=async(req,res)=>{
+import bcrypt from 'bcrypt';
+import User from '../models/User'; // Make sure the path is correct for the User model
+
+export const updatePassword = async (req, res) => {
     try {
-        const {newPassword}=req.body;
-        const userId=req.id;
-        if(!newPassword){
+        const { currentPassword, newPassword } = req.body;
+        const userId = req.id;
+
+        if (!currentPassword || !newPassword) {
             return res.status(400).send({
-                success:false,
-                message:"Please provide new Password for updation"
+                success: false,
+                message: "Please provide both current and new passwords for updating."
             });
         }
-        if(newPassword.length < 8){
+
+        if (newPassword.length < 8) {
             return res.status(400).send({
-                 success : false,
-                 message : "Password must contain at least 8 characters"
-             })
-            }
-        const hashedPassword=await bcrypt.hash(newPassword,10);
-        const updateUserPassword=await User.findByIdAndUpdate({_id:userId},{password:hashedPassword},{new:true});
-        if(!updateUserPassword){
+                success: false,
+                message: "New password must contain at least 8 characters."
+            });
+        }
+
+        // Find the user by ID
+        const user = await User.findById(userId);
+        if (!user) {
             return res.status(404).send({
-                success:false,
-                message:"User not found while updating"    
+                success: false,
+                message: "User not found."
             });
         }
+
+        // Check if the current password matches
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).send({
+                success: false,
+                message: "Current password is incorrect."
+            });
+        }
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update the password in the database
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { password: hashedPassword },
+            { new: true }
+        );
+
         res.status(200).send({
-            success:true,
-            message:"Password Updated Successfully",
-            updateUserPassword
-        }); 
+            success: true,
+            message: "Password updated successfully.",
+            updatedUser
+        });
+
     } catch (error) {
-        return res.status(500).send("Server error:" + error);
+        return res.status(500).send({
+            success: false,
+            message: "Server error: " + error.message
+        });
     }
-}
+};
+
 
 //For bookmark Job
 export const bookmarkAnyJobs=async(req,res)=>{
