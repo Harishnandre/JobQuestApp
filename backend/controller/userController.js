@@ -218,15 +218,14 @@ export const updateProfile = async (req, res) => {
 };
 
 //update Password when user loggein
-import bcrypt from 'bcrypt';
-import User from '../models/User'; // Make sure the path is correct for the User model
+ // Make sure the path is correct for the User model
 
 export const updatePassword = async (req, res) => {
     try {
-        const { currentPassword, newPassword } = req.body;
+        const { oldPassword, newPassword } = req.body;
         const userId = req.id;
 
-        if (!currentPassword || !newPassword) {
+        if (!oldPassword || !newPassword) {
             return res.status(400).send({
                 success: false,
                 message: "Please provide both current and new passwords for updating."
@@ -250,7 +249,7 @@ export const updatePassword = async (req, res) => {
         }
 
         // Check if the current password matches
-        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
         if (!isMatch) {
             return res.status(400).send({
                 success: false,
