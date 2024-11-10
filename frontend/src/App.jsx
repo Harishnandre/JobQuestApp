@@ -24,6 +24,7 @@ import UpdateJobs from './components/Updatejobs'
 
 import CompanycontextProvider from './components/ContextAPI/Companycontext'
 import JobcontextProvider from './components/ContextAPI/Jobcontext'
+import Applicant from './components/Applicant'
 
 
 const App = () => {
@@ -51,8 +52,8 @@ const App = () => {
      <Route exact path='/admin/companies/update/:id' Component={UpdateCompany}/>
      <Route exact path='/admin/jobs/createjob' Component={Jobform}/>
      <Route exact path='/admin/jobs/updatejob/:id' Component={UpdateJobs}/>
+     <Route exact path='/admin/jobs/applicants/:jobId' Component={Applicant}/>
      <Route path='*' Component={NotFound}/>
-
      </Routes>
      </main>
      <Footer/>

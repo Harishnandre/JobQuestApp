@@ -125,16 +125,17 @@ export const updateJob=async(req,res)=>{
                 message:"Job id is required"
             });
         }
-        const updatedJob=await JobModel.findByIdAndUpdate({_id:jobId},{title,description,
-                                                                  requirements:requirements.split(","),
-                                                                  salary,
-                                                                  location,
-                                                                  jobType,
-                                                                  vacancies,
-                                                                  experience,
-                                                                  company,
-                                                                  createdBy
-                                                                  },{new:true});
+        const updatedJob=await JobModel.findByIdAndUpdate({_id:jobId},{title,
+                                                                       description,
+                                                                       requirements:requirements.split(","),
+                                                                       salary,
+                                                                       location,
+                                                                       jobType,
+                                                                       vacancies,
+                                                                       experience,
+                                                                       company,
+                                                                       createdBy
+                                                                       },{new:true});
         if(!updatedJob){
             return res.status(404).send({
                 success:false,
