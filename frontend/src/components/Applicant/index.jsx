@@ -142,11 +142,11 @@ const Applicant = () => {
                                             style={{ cursor: 'pointer', marginLeft: '10px' }}
                                         />
                                         {dropdownOpen[app._id] && (
-                                            <div className="dropdown">
-                                                <div onClick={() => handleStatusChange(app._id, "Accepted")} className="dropdown-item">
+                                            <div className="dropdown-applicant">
+                                                <div onClick={() => handleStatusChange(app._id, "Accepted")} className="dropdown-item-applicant">
                                                     Accepted
                                                 </div>
-                                                <div onClick={() => handleStatusChange(app._id, "Rejected")} className="dropdown-item">
+                                                <div onClick={() => handleStatusChange(app._id, "Rejected")} className="dropdown-item-applicant">
                                                     Rejected
                                                 </div>
                                             </div>

@@ -45,11 +45,11 @@
 .job-item-content {
   display: grid; 
   grid-template-columns: repeat(2, 1fr); 
-  gap: 20px; /* Space between cards */
+  gap: 20px; 
   padding: 20px; 
   
   flex-direction: column;
-  background-color: #f4f4f8;/* Padding around the grid */
+  background-color: #f4f4f8;
 }
 
 
@@ -212,7 +212,7 @@
       font-size: 0.9rem;
   }
 }
-.dropdown-menu {
+.dropdown-menu-job {
   position: absolute;
   top: 40px; /* Adjust based on the icon's position */
   right: 10px;
@@ -224,7 +224,7 @@
   z-index: 1000;
 }
 
-.dropdown-item {
+.dropdown-item-job {
   padding: 10px 15px;
   text-decoration: none;
   color: #333;
@@ -232,6 +232,6 @@
   transition: background-color 0.2s;
 }
 
-.dropdown-item:hover {
+.dropdown-item-job:hover {
   background-color: #f4f4f4;
 }

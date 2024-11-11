@@ -49,9 +49,9 @@ const Jobs = () => {
                                 </div>
                                 {/* Dropdown menu */}
                                 {dropdownVisible === job._id && (
-                                    <div className="dropdown-menu">
-                                        <Link to={`/admin/jobs/updatejob/${job._id}`} className="dropdown-item"><span><SlPencil size={13} /></span>    Edit</Link>
-                                        <Link to={`/admin/jobs/applicants/${job._id}`} className="dropdown-item"><span><IoEye size={16} /></span>    Applicants</Link>
+                                    <div className="dropdown-menu-job">
+                                        <Link to={`/admin/jobs/updatejob/${job._id}`} className="dropdown-item-job"><span><SlPencil size={13} /></span>    Edit</Link>
+                                        <Link to={`/admin/jobs/applicants/${job._id}`} className="dropdown-item-job"><span><IoEye size={16} /></span>    Applicants</Link>
                                     </div>
                                 )}
                             </div>

@@ -20,7 +20,7 @@
   position: relative;
 }
 
-.dropdown {
+.dropdown-applicant {
   position: absolute;
   top: 60px;
   right: -11px;  /* Adjust to position it to the left of the icon */
@@ -32,13 +32,13 @@
   cursor: pointer;
 }
 
-.dropdown-item {
+.dropdown-item-applicant {
   padding: 8px;
   text-align: center;
   color: #333;
 }
 
-.dropdown-item:hover {
+.dropdown-item-applicant:hover {
   background-color: #f0f0f0;
 }
 
