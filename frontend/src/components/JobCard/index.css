@@ -91,6 +91,7 @@
   padding: 20px; /* Padding for the card */
   border-radius: 10px; /* Rounded corners */
   margin: 10px;
+  min-height: 300px;
   background-color: #ffffff; /* White background */
   border: 1px solid #e5e7eb; /* Light gray border */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
@@ -125,6 +126,7 @@
 /* Styles for job info */
 .job-info {
   margin: 16px 0; /* Space above and below job info */
+  min-height: 120px;
 }
 
 .job-title {
@@ -151,8 +153,9 @@
 .badge {
   padding: 4px 8px; /* Padding for badges */
   border-radius: 12px; /* Rounded corners */
-  font-weight: bold; /* Bold text for badges */
+   /* Bold text for badges */
   color: #ffffff; /* Text color */
+  font-size: 15px;
 }
 
 .badge.blue {
@@ -188,16 +191,23 @@
   .alignment{
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
 
 
-  .bookmark-icon {
+  .bookmark-icon-1 {
     cursor: pointer;
     font-size: 20px;
-    color: #8888; /* Default color when not bookmarked */
+    color:gray; /* Default color when not bookmarked */
     transition: color 0.1 ease; /* Smooth color transition */
 }
 
-.bookmark-icon.bookmarked {
+.bookmarked {
     color: gold; /* Gold color when bookmarked */
+}
+.job-card-user-logo{
+  display: flex;
+}
+.b-1{
+  font-size: 12px !important; 
 }

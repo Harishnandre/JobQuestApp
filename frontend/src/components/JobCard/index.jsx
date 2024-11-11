@@ -1,6 +1,7 @@
 
 import './index.css';
-import { FaBookmark, FaMapMarkerAlt } from "react-icons/fa";
+import {  FaMapMarkerAlt ,FaBookmark} from "react-icons/fa";
+import { CiBookmark} from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { useState,useContext,useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -72,9 +73,12 @@ const JobCard = ({ job }) => {
         <div key={job._id} className="job-card">
             {/* Company Info */}
             <div className="company-info">
-                <h1 className="company-name">{job.company.name}</h1>
-                <FaBookmark 
-                    className={`bookmark-icon ${isBookmarked ? 'bookmarked'  :''}`} 
+            <div className='job-card-user-logo'>
+            <img src={job.company.logo} alt="Company Logo" className="company-logo" />
+                                    <h4>{job.company.name}</h4>
+                                </div>
+                <FaBookmark
+                    className={`bookmark-icon-1 ${isBookmarked ? 'bookmarked'  :''}`} 
                     onClick={handleBookmarkClick} // Add click handler
                 />
             </div>
@@ -94,9 +98,9 @@ const JobCard = ({ job }) => {
             {/* Badges and Details Button */}
             <div className="alignment">
                 <div className="badges-container">
-                    <span className="badge blue">{job.vacancies} Positions</span>
-                    <span className="badge orange">{job.jobType}</span>
-                    <span className="badge purple">{job.salary} LPA</span>
+                    <span className="badge b-1 blue">{job.vacancies} Positions</span>
+                    <span className="badge b-1 orange">{job.jobType}</span>
+                    <span className="badge b-1 purple">{job.salary} LPA</span>
                 </div>
                 <button className="details-button" onClick={handleDetailsClick}>Details</button>
             </div>

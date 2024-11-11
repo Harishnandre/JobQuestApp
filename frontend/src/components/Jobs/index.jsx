@@ -37,7 +37,8 @@ const Jobs = () => {
                 </div>
 
                 <div className="job-item-content">
-                    {filteredJobs.map((job) => (
+
+                    {filteredJobs.length > 0 ? filteredJobs.map((job) => (
                         <div key={job._id} className="job-inner-content">
                             <div className="company-header">
                                 <div>
@@ -78,7 +79,9 @@ const Jobs = () => {
                                 </div>
                             </div>
                         </div>
-                    ))}
+                    ))
+                : <h2>No Jobs created yet..</h2>
+                }
                 </div>
             </div>
         </div>
