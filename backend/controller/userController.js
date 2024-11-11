@@ -168,42 +168,31 @@ export const updateProfile = async (req, res) => {
         role3,
         id: userId,
         role,
+        resume,  // Now expecting this to be a URL string
       } = req.body;
+      let profilePhoto = req.files?.profilePhoto;
   
-      let resume = req.files?.resume;
-      let profilePhoto =  req.files?.profilePhoto;
-      // Check required fields and file presence
+      // Validate required fields
       if (!fullName || !email || !address || !phoneNumber || !profilePhoto) {
         return res.status(400).send({
           success: false,
-          message: "All fields and files are required to complete Profile",
+          message: "All fields and profile photo are required to complete Profile",
         });
       }
   
       if (role === "Job-Seeker" && (!bio || !role1 || !role2 || !role3 || !resume)) {
         return res.status(400).send({
           success: false,
-          message: "All fields and files are required to complete Profile",
+          message: "All fields and a resume link are required to complete Profile",
         });
       }
-  
-      // Initialize variables for file upload results
-      let profilePhotoUpload = {};
-      let resumeUpload = {};
   
       // Upload profile photo to Cloudinary
-      profilePhotoUpload = await cloudinary.uploader.upload(profilePhoto.tempFilePath, {
-        folder: "Job_Seekers_Photos",
+      let profilePhotoUpload = await cloudinary.uploader.upload(profilePhoto.tempFilePath, {
+        resource_type: "image",
       });
   
-      // Upload resume if user role is Job-Seeker
-      if (role === "Job-Seeker" && resume) {
-        resumeUpload = await cloudinary.uploader.upload(resume.tempFilePath, {
-          folder: "Job_Seekers_Resume",
-        });
-      }
-  
-      // Prepare the update data
+      // Prepare data for profile update
       const updateData = {
         fullName,
         email,
@@ -213,14 +202,12 @@ export const updateProfile = async (req, res) => {
           bio,
           preferredJobRole: { role1, role2, role3 },
           profilePhoto: profilePhotoUpload.secure_url,
-          profilePhotoOriginalName: profilePhoto.originalname,
         },
       };
   
-      // Add resume details if role is Job-Seeker
-      if (role === "Job-Seeker" && resumeUpload.secure_url) {
-        updateData.profile.resume = resumeUpload.secure_url;
-        updateData.profile.resumeOriginalName = resume.originalname;
+      // Add resume link if the role is Job-Seeker
+      if (role === "Job-Seeker" && resume) {
+        updateData.profile.resume = resume;
       }
   
       // Update user profile in the database

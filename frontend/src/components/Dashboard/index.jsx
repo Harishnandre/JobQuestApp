@@ -69,12 +69,14 @@ const Dashboard = () => {
             >
               Update Profile
             </li>
-         { user.role === 'Job-Seeker' &&  <><li
-              className={activeComponent === 'My Applicantions' ? 'active' : ''}
-              onClick={() => setActiveComponent('My Applications')}
-            >
-              My Applications
-            </li>
+         { user.role === 'Job-Seeker' &&  <>
+          <li
+  className={activeComponent === 'My Applications' ? 'active' : ''}
+  onClick={() => setActiveComponent('My Applications')}
+>
+  My Applications
+</li>
+
         
 <li
               className={activeComponent === 'Bookmarks' ? 'active' : ''}

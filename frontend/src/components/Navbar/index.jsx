@@ -6,7 +6,7 @@ import { Authcontext } from '../ContextAPI/Authcontext';
 const Navbar = () => {
   let [auth, setauth, isLoggedIn, setisLoggedIn] = useContext(Authcontext);
   const { user } = auth;
-  const { role, fullName } = user || {};
+  const { role, fullName ,profile} = user || {};
 
   let handlelogout = () => {
     setauth({
@@ -49,6 +49,7 @@ const Navbar = () => {
               {user ? (
                 <>
                   <li className="nav-item dropdowns">
+                    <img src={profile.profilePhoto} className='user-pic' alt="Your Pic"/>
                     <Link to="#" className="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                       {fullName}
                     </Link>

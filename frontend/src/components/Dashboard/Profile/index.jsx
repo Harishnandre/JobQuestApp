@@ -6,8 +6,7 @@ import { Authcontext } from '../../ContextAPI/Authcontext';
 const Profile = () => {
   const [auth] = useContext(Authcontext);
   const { user } = auth || {};
-  const [resumeUrl, setResumeUrl] = useState('');
-  
+
   const { 
     fullName = "Please provide data", 
     gender = "Please provide data", 
@@ -23,20 +22,6 @@ const Profile = () => {
   const { role1, role2, role3 } = preferredJobRole || {};
   const preferredJobRoleDisplay = preferredJobRole == null ? "Please provide data" : `${role1 || ""}, ${role2 || ""}, ${role3 || ""}`;
 
-  useEffect(() => {
-    if (resume) {
-      axios
-        .get(resume, { responseType: 'blob' })
-        .then((response) => {
-          console.log(response.data)
-          const url = URL.createObjectURL(response.data);
-          setResumeUrl(url);
-        })
-        .catch((error) => {
-          console.error("Error loading PDF:", error.message);
-        });
-    }
-  }, [resume]);
 
   return (
     <div className="profile-container">
@@ -55,8 +40,8 @@ const Profile = () => {
           <p className="profile-item">
             <strong>Resume: </strong>
             {resume ? (
-              <a href={resume} download={resume} target="_blank" rel="noopener noreferrer">
-                {resumeOriginalName || "Download Resume"}
+              <a href={resume} target="_blank" rel="noopener noreferrer">
+                 View Resume
               </a>
             ) : (
               "Please provide data"

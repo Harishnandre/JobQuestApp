@@ -17,7 +17,7 @@ const UpdateProfile = () => {
     fullName: fullName || '',
     email: email || '',
     phoneNumber: phoneNumber || '',
-    resume: resume || null,
+    resume: resume || '',  // Expecting a URL for the resume
     address: address || '',
     bio: bio || '',
     role1: role1 || '',
@@ -34,7 +34,7 @@ const UpdateProfile = () => {
       fullName: fullName || '',
       email: email || '',
       phoneNumber: phoneNumber || '',
-      resume: resume || null,
+      resume: resume || '',
       address: address || '',
       bio: bio || '',
       role1: role1 || '',
@@ -73,7 +73,6 @@ const UpdateProfile = () => {
     form.append('token', token);
     form.append('id', _id);
     form.append('role', role);
-
     try {
       const url = 'http://localhost:5000/api/v1/user/update-profile';
       const res = await axios.post(url, form, {
@@ -167,12 +166,13 @@ const UpdateProfile = () => {
             </label>
 
             <label>
-              Resume:
+              Resume: (Link)
               <input
-                type="file"
+                type="url"
                 name="resume"
-                accept=".pdf,.doc,.docx"
-                onChange={handleFileChange}
+                placeholder="Enter valid resume drive link and make sure that it is public access"
+                value={formData.resume}
+                onChange={handleChange}
               />
             </label>
 

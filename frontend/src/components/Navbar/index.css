@@ -108,3 +108,9 @@ body {
    width: 25px;
    height: 25px;
 }
+.user-pic{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}

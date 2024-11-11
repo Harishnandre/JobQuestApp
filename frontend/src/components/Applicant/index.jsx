@@ -7,18 +7,23 @@ import { Jobcontext } from "../ContextAPI/Jobcontext";
 import './index.css';
 import { AiOutlineDownSquare } from "react-icons/ai";
 
-const Applicant=()=>{
-      const {jobId}=useParams();
-      const [auth]=useContext(Authcontext);
-      const {token}=auth;
-      const [applicantsDetail,setApplicantsDetail]=useState([]);
-      const [loader,setLoader] = useState(true)
-      const {recruiterJobs}=useContext(Jobcontext);
-      const job = recruiterJobs.find(job =>job._id === jobId);
-      console.log(recruiterJobs,job);
-      useEffect(()=>{
+const Applicant = () => {
+    const { jobId } = useParams();
+    const [auth] = useContext(Authcontext);
+    const { token } = auth;
+    const [applicantsDetail, setApplicantsDetail] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const { recruiterJobs } = useContext(Jobcontext);
+    const job = recruiterJobs.find(job => job._id === jobId);
+    const navigate = useNavigate();
+
+    // States for dropdown and status management
+    const [status, setStatus] = useState({});
+    const [dropdownOpen, setDropdownOpen] = useState({});
+
+    useEffect(() => {
         window.scrollTo(0, 0);
-          const fetchAllApplicants=async()=>{
+        const fetchAllApplicants = async () => {
             try {
                 const res = await axios.get(
                     `http://localhost:5000/api/v1/application/get/job/${jobId}`,
@@ -29,9 +34,9 @@ const Applicant=()=>{
                 );
                 if (res?.data?.success) {
                     toast.success(res.data.message);
-                    console.log(res.data.job.applications);
-                    setLoader(false)
                     setApplicantsDetail(res.data.job.applications);
+
+                    // Initialize status for each applicant
                     const initialStatus = res.data.job.applications.reduce((acc, app) => {
                         acc[app._id] = app.status || "Pending";
                         return acc;
@@ -50,12 +55,10 @@ const Applicant=()=>{
     }, [jobId, token]);
 
     useEffect(() => {
-        const handleClickOutside = (event) => {
+        const handleClickOutside = () => {
             setDropdownOpen({});
         };
-
         document.addEventListener("click", handleClickOutside);
-
         return () => {
             document.removeEventListener("click", handleClickOutside);
         };
@@ -100,6 +103,7 @@ const Applicant=()=>{
 
     return (
         <>
+            <ToastContainer />
             {applicantsDetail.length === 0 ? (
                 <h1>No applicants applied to this job</h1>
             ) : (
@@ -123,7 +127,9 @@ const Applicant=()=>{
                                     <td>{app.applicant.fullName}</td>
                                     <td>{app.applicant.email}</td>
                                     <td>{app.applicant.phoneNumber}</td>
-                                    <td>{app.applicant.resume}</td>
+                                    <td> <a href={app.applicant.profile.resume} target="_blank" rel="noopener noreferrer">
+                                        View Resume
+                                    </a></td>
                                     <td>{new Date(app.createdAt).toLocaleString()}</td>
                                     <td>
                                         {status[app._id]}
@@ -157,4 +163,4 @@ const Applicant=()=>{
 };
 
 export default Applicant;
-     
+

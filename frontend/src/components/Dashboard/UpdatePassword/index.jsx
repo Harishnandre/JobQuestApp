@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState ,useContext} from 'react';
 import './index.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-
+import { Authcontext } from '../../ContextAPI/Authcontext';
 const UpdatePassword = () => {
+  const [auth, setAuth] = useContext(Authcontext);
+  const { user, token } = auth || {};
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -21,10 +23,13 @@ const UpdatePassword = () => {
       setLoading(true);
       const response = await axios.patch('http://localhost:5000/api/v1/user/update-password', {
         oldPassword,
-        newPassword,
+        newPassword, token
       });
 
       if (response.data.success) {
+        setConfirmPassword('')
+        setNewPassword('')
+        setOldPassword('')
         toast.success("Password updated successfully!");
       } else {
         toast.error(response.data.message || "Failed to update password");
