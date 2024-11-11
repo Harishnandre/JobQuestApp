@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 import { AiOutlineMail, AiOutlinePhone, AiOutlineEnvironment } from 'react-icons/ai'; 
 import './index.css';
@@ -9,26 +8,12 @@ const Contactus = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [feedback, setFeedback] = useState('');
-  const [loading, setLoading] = useState(false);
 
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!name || !email || !feedback) {
-      toast.error("All fields are required!");
-      return;
-    }
-
-    setLoading(true);
-
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("Thank you for your feedback!");
       setName('');
       setEmail('');
       setFeedback('');
-    }, 2000);
   };
 
   return (
@@ -55,11 +40,11 @@ const Contactus = () => {
 
           <Link to="/google-map" className="info-item">
             <AiOutlineEnvironment size={30} className="contact-icon" />
-            <p>Location: 123 JobQuest St., PrayagRaj, India</p>
+            <p>Location: 123 JobQuest , PrayagRaj, India</p>
           </Link>
         </div>
 
-        <form className="contact-form" onSubmit={handleSubmit}>
+        <form action="https://formspree.io/f/mleqoedk" method="POST"  className="contact-form" >
           <div className="input-group">
             <label htmlFor="name">Your Name</label>
             <input
@@ -100,18 +85,17 @@ const Contactus = () => {
           </div>
 
           <div className="button-container">
-            <button type="submit" disabled={loading} className="submit-btn">
-              {loading ? 'Submitting...' : 'Submit Feedback'}
+            <button type="submit" onSubmit={handleSubmit} className="submit-btn">
+               Submit Feedback
             </button>
           </div>
         </form>
       </div>
 
-      <footer className="footer">
+      <footer className="footer-contact">
         <p>Crafted with ❤️ by the JobQuest Team</p>
       </footer>
     </div>
-    <ToastContainer />
     </>
   );
 };

@@ -129,7 +129,7 @@
 }
 
 .creator-avatar {
-  background-color:#0ac536;
+  background-color:#12b939;
   color: #fff;
   font-size: 2rem;
   width: 60px;
@@ -161,7 +161,8 @@
 .about-us-footer {
   text-align: center;
   padding: 20px;
-  background-color: #0fc94a;
+  background-color: #1bb74c;
+  border-radius: 5px;
   color: white;
   border-top: 3px solid #fff;
   margin-top: 40px;
