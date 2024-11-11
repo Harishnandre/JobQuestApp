@@ -1,4 +1,3 @@
-/* Center the form container and give it some padding */
 .form-container {
   max-width: 600px;
   margin: 2rem auto;
@@ -8,7 +7,6 @@
   border-radius: 8px;
 }
 
-/* Style the back button */
 .back-button {
   background-color: #0073e6;
   color: #ffffff;
@@ -25,7 +23,6 @@
   background-color: #005bb5;
 }
 
-/* Style the title */
 h2 {
   font-size: 1.5rem;
   color: #333;
@@ -33,7 +30,6 @@ h2 {
   text-align: center;
 }
 
-/* Style the labels and inputs */
 .company-form label {
   display: block;
   margin-bottom: 1rem;
@@ -60,12 +56,10 @@ h2 {
   outline: none;
 }
 
-/* Style text areas */
 textarea {
   resize: vertical;
 }
 
-/* Style the submit button */
 .submit-btn {
   display: block;
   width: 100%;
@@ -84,7 +78,6 @@ textarea {
   background-color: #005bb5;
 }
 
-/* Spacing for form sections */
 .company-form .preferences {
   display: flex;
   flex-direction: column;

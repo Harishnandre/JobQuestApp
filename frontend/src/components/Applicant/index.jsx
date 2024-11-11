@@ -5,21 +5,18 @@ import { toast, ToastContainer } from "react-toastify";
 import { Authcontext } from "../ContextAPI/Authcontext";
 import { Jobcontext } from "../ContextAPI/Jobcontext";
 import './index.css';
-import { AiOutlineDownSquare } from "react-icons/ai";
 
 const Applicant = () => {
     const { jobId } = useParams();
     const [auth] = useContext(Authcontext);
     const { token } = auth;
     const [applicantsDetail, setApplicantsDetail] = useState([]);
-    const [loading, setLoading] = useState(true);
     const { recruiterJobs } = useContext(Jobcontext);
     const job = recruiterJobs.find(job => job._id === jobId);
     const navigate = useNavigate();
 
-    // States for dropdown and status management
+    // State for managing applicant status
     const [status, setStatus] = useState({});
-    const [dropdownOpen, setDropdownOpen] = useState({});
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -34,6 +31,7 @@ const Applicant = () => {
                 );
                 if (res?.data?.success) {
                     toast.success(res.data.message);
+
                     setApplicantsDetail(res.data.job.applications);
 
                     // Initialize status for each applicant
@@ -47,26 +45,10 @@ const Applicant = () => {
                 }
             } catch (error) {
                 toast.error("Fetching of Applicants failed.");
-            } finally {
-                setLoading(false);
             }
         };
         fetchAllApplicants();
     }, [jobId, token]);
-
-    useEffect(() => {
-        const handleClickOutside = () => {
-            setDropdownOpen({});
-        };
-        document.addEventListener("click", handleClickOutside);
-        return () => {
-            document.removeEventListener("click", handleClickOutside);
-        };
-    }, []);
-
-    const toggleDropdown = (applicantId) => {
-        setDropdownOpen(prev => ({ ...prev, [applicantId]: !prev[applicantId] }));
-    };
 
     const handleStatusChange = async (applicantId, newStatus) => {
         const confirmChange = window.confirm(`Are you sure you want to set status to ${newStatus}?`);
@@ -92,10 +74,6 @@ const Applicant = () => {
             toast.error("An error occurred while updating the status.");
         }
     };
-
-    if (loading) {
-        return <h1>Loading applicants...</h1>;
-    }
 
     if (!job) {
         return <h1>Job not found. Please try again.</h1>;
@@ -127,29 +105,31 @@ const Applicant = () => {
                                     <td>{app.applicant.fullName}</td>
                                     <td>{app.applicant.email}</td>
                                     <td>{app.applicant.phoneNumber}</td>
-                                    <td> <a href={app.applicant.profile.resume} target="_blank" rel="noopener noreferrer">
-                                        View Resume
-                                    </a></td>
+                                    <td>
+                                        <a href={app.applicant.profile.resume} target="_blank" rel="noopener noreferrer">
+                                            View Resume
+                                        </a>
+                                    </td>
                                     <td>{new Date(app.createdAt).toLocaleString()}</td>
                                     <td>
-                                        {status[app._id]}
-                                        <AiOutlineDownSquare
-                                            size={20}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                toggleDropdown(app._id);
-                                            }}
-                                            style={{ cursor: 'pointer', marginLeft: '10px' }}
-                                        />
-                                        {dropdownOpen[app._id] && (
-                                            <div className="dropdown-applicant">
-                                                <div onClick={() => handleStatusChange(app._id, "Accepted")} className="dropdown-item-applicant">
-                                                    Accepted
-                                                </div>
-                                                <div onClick={() => handleStatusChange(app._id, "Rejected")} className="dropdown-item-applicant">
-                                                    Rejected
-                                                </div>
+                                        {/* Conditionally render buttons or status text based on current status */}
+                                        {status[app._id] === "Pending" ? (
+                                            <div className="status-buttons">
+                                                <button
+                                                    onClick={() => handleStatusChange(app._id, "Accepted")}
+                                                    className="status-button accepted"
+                                                >
+                                                    Accept
+                                                </button>
+                                                <button
+                                                    onClick={() => handleStatusChange(app._id, "Rejected")}
+                                                    className="status-button rejected"
+                                                >
+                                                    Reject
+                                                </button>
                                             </div>
+                                        ) : (
+                                            <span>{status[app._id]}</span>
                                         )}
                                     </td>
                                 </tr>
@@ -163,4 +143,3 @@ const Applicant = () => {
 };
 
 export default Applicant;
-

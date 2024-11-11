@@ -19,30 +19,24 @@
 .applications-table {
   position: relative;
 }
+.status-buttons {
+  display: flex;
+  gap: 10px;
+}
 
-.dropdown-applicant {
-  position: absolute;
-  top: 60px;
-  right: -11px;  /* Adjust to position it to the left of the icon */
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100px;
-  z-index: 1;
+.status-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  color: white;
+  font-weight: bold;
 }
 
-.dropdown-item-applicant {
-  padding: 8px;
-  text-align: center;
-  color: #333;
+.status-button.accepted {
+  background-color: #28a745; /* Green for Accept */
 }
 
-.dropdown-item-applicant:hover {
-  background-color: #f0f0f0;
+.status-button.rejected {
+  background-color: #dc3545; /* Red for Reject */
 }
-
-.applicants-container{
-    margin-top: 80px;
-}
-

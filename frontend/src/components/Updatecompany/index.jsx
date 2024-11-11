@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Companycontext } from '../ContextAPI/Companycontext';
 import { Authcontext } from '../ContextAPI/Authcontext';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import ClipLoader from "react-spinners/ClipLoader";
 const UpdateCompany= () => {
     const {companyData,getAllCompany}=useContext(Companycontext) ;
@@ -22,20 +22,6 @@ const UpdateCompany= () => {
         logo: null
       });
       console.log(company.location,formData.location);
-      // Update `formData` state when `company` changes (in case data is loaded asynchronously)
-    //   useEffect(() => {
-    //     if (company) {
-    //       setFormData({
-    //         name: company.name,
-    //         description: company.description,
-    //         website: company.website,
-    //         location: company.location,
-    //         logo: null // You might set a default image URL here, if available
-    //       });
-    //     }
-    //   }, [company]);
-    
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -158,6 +144,7 @@ const UpdateCompany= () => {
             </form>
             </>
             )}
+            <ToastContainer/>
         </div>
     );
 };

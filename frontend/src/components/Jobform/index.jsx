@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { Companycontext } from '../ContextAPI/Companycontext';
 import { Jobcontext } from '../ContextAPI/Jobcontext';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { Authcontext } from '../ContextAPI/Authcontext';
-
+const employmentTypes = [ "Full Time", "Intern", 
+    "Part Time", "Freelance"
+];
 const Jobform = () => {
     const navigate = useNavigate();
     const [title, setTitle] = useState("");
@@ -16,13 +18,15 @@ const Jobform = () => {
     const [location, setLocation] = useState("");
     const [jobType, setJobtype] = useState("");
     const [experience, setExperience] = useState("");
-    const [vacancies, setvacancies] = useState(""); 
+    const [vacancies, setVacancies] = useState(""); 
     const [company, setCompany] = useState(""); 
-    const {companyData}=useContext(Companycontext);
-    const {getAllRecruiterJobs}=useContext(Jobcontext);
-    const [auth]=useContext(Authcontext);
-    const {token}=auth;
-    const handleSubmit = async(e) => {
+    const [jobLastDate, setJobLastDate] = useState(""); // New state for job last date
+    const { companyData } = useContext(Companycontext);
+    const { getAllRecruiterJobs } = useContext(Jobcontext);
+    const [auth] = useContext(Authcontext);
+    const { token } = auth;
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = {
             title,
@@ -33,21 +37,23 @@ const Jobform = () => {
             jobType,
             experience,
             vacancies,
-            company
+            company,
+            jobLastDate // Include jobLastDate in form data
         };
         console.log("Form Submitted", formData);
         try {
             const res = await axios.post('http://localhost:5000/api/v1/job/create', formData, {
                 withCredentials: true,
                 headers: {
-                    // 'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}` // Add the token here
                 }
             });
             if (res?.data?.success) {
                 toast.success(res.data.message);
                 getAllRecruiterJobs();
-                navigate('/admin/jobs'); // Redirect only after successful submission
+                setTimeout(() => {
+                    navigate('/admin/jobs');
+                }, 1000);// Redirect only after successful submission
             } else {
                 toast.error(res.data.message);
             }
@@ -107,14 +113,20 @@ const Jobform = () => {
                 </label>
                 
                 <label>
-                    Job Type
-                    <input 
-                        type="text" 
-                        value={jobType}
-                        onChange={(e) => setJobtype(e.target.value)} 
-                        required 
-                    />
-                </label>
+    Job Type
+    <select 
+        value={jobType} 
+        onChange={(e) => setJobtype(e.target.value)} 
+        required
+    >
+        <option value="">Select Job Type</option>
+        {employmentTypes.map((type, index) => (
+            <option key={index} value={type}>
+                {type}
+            </option>
+        ))}
+    </select>
+</label>
 
                 <label>
                     Experience Level
@@ -130,20 +142,21 @@ const Jobform = () => {
                     <input 
                         type="number" 
                         value={vacancies} 
-                        onChange={(e) => setvacancies(e.target.value)} 
+                        onChange={(e) => setVacancies(e.target.value)} 
                         required 
                     />
                 </label>
 
                 <label>
                     Company Name
-                <select value={company} onChange={(e) => setCompany(e.target.value)}>
-                    <option value="">Select Company</option>
-                        {companyData.map((company)=>(
-                           <option key={company._id} value={company._id}>{company.name}</option>
+                    <select value={company} onChange={(e) => setCompany(e.target.value)}>
+                        <option value="">Select Company</option>
+                        {companyData.map((company) => (
+                            <option key={company._id} value={company._id}>{company.name}</option>
                         ))}
                     </select>
                 </label>
+
                 <label>
                     Description:
                     <textarea 
@@ -153,9 +166,22 @@ const Jobform = () => {
                         required 
                     />
                 </label>
+
+                <label>
+                    Last Application Date:
+                    <input
+                        type="datetime-local"
+                        value={new Date(jobLastDate)}
+                        onChange={(e) => setJobLastDate(e.target.value)}
+                        required
+                    />
+                </label>
+
                 <button type="submit" className="submit-btn">Create Job</button>
             </form>
+            <ToastContainer />
         </div>
     );
 };
-export default Jobform
+
+export default Jobform;

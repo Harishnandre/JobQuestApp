@@ -1,8 +1,8 @@
 .card-container {
     display: grid; 
     grid-template-columns: repeat(3, 1fr); 
-    gap: 20px; /* Space between cards */
-    padding: 20px; /* Padding around the grid */
+    gap: 20px; 
+    padding: 20px; 
   }
 
   .changecolor {
@@ -11,16 +11,16 @@
   }
 
   
-  /* Responsive Styles */
+
   @media (max-width: 1024px) {
     .card-container {
-      grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+      grid-template-columns: repeat(2, 1fr);
     }
   }
   
   @media (max-width: 600px) {
     .card-container {
-      grid-template-columns: 1fr; /* 1 column on small screens */
+      grid-template-columns: 1fr; 
     }
   }
  

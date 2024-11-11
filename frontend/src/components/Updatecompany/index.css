@@ -20,7 +20,7 @@
   background-color: rgba(248, 242, 242, 0.882);
   color: rgb(37, 36, 36);
   flex-direction: column;
-  /* z-index: 999; Ensures it overlays everything */
+
 }
 
 .form-container h2 {
@@ -69,7 +69,7 @@
   flex: 1;
 }
 
-/* Style for the submit button */
+
 .submit-btn {
   padding: 0.7rem;
   font-size: 1rem;

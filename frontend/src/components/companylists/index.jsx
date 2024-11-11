@@ -3,7 +3,7 @@ import './index.css';
 import { useNavigate } from 'react-router-dom';
 import { Companycontext } from '../ContextAPI/Companycontext';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { Authcontext } from '../ContextAPI/Authcontext';
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -139,6 +139,7 @@ const CompanyList = () => {
                     </form>
                 </>
             )}
+            <ToastContainer/>
         </div>
     );
 };

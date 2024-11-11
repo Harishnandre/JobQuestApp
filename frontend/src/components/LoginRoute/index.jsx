@@ -101,7 +101,7 @@ const Login = () => {
                 <div className='inputTag'>
                   <select value={role} onChange={handleRoleChange}>
                     <option value="">Select Role</option>
-                    <option value="Recruiter">Login as an Employer</option>
+                    <option value="Recruiter">Login as a Recruiter</option>
                     <option value="Job-Seeker">Login as a Job Seeker</option>
                   </select>
                 </div>

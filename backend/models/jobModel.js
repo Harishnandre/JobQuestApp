@@ -50,6 +50,16 @@ const jobSchema = new mongoose.Schema({
         ref: 'Company',
         required: true
     },
+    jobLastDate : {
+        type: Date,
+        required: true,
+        validate: {
+            validator: function (value) {
+                return value > new Date();
+            },
+            message: 'Job last date must be in the future'
+        }
+    },
     createdBy:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

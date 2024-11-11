@@ -19,6 +19,13 @@ export const applyForJob=async(req,res)=>{
                 message:"Job not found"
             });
         }
+        const jobLastDateObj = new Date(job.jobLastDate);
+        if (jobLastDateObj < new Date()) {
+            return res.status(400).send({
+                success: false,
+                message: "This application has been closed,You are Late!"
+            });
+        }
         const application=new Application({
             jobInquiry:jobId,
             applicant:userId

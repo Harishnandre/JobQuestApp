@@ -96,6 +96,7 @@ const Jobdetails = () => {
       <div className="job-details-card">
         <h1 className="job-title">{job.title} at {job.company.name}</h1>
         <p className="job-location"><strong>Location:</strong> {job.location}</p>
+        <p className="job-location"><strong>Closing Date and Time:</strong> {new Date(job.jobLastDate).toLocaleString()}</p>
         <p className="job-type"><strong>Type:</strong> {job.jobType}</p>
         <p className="job-salary"><strong>Salary:</strong> {job.salary} LPA</p>
         <p className="job-positions"><strong>Open Positions:</strong> {job.vacancies}</p>

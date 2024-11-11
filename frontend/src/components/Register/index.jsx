@@ -112,7 +112,7 @@ const Register = () => {
                 <p>Register As</p>
                 <select value={role} onChange={handleRoleChange}>
                   <option value="">Select Role</option>
-                  <option value="Recruiter">Register as an Employer</option>
+                  <option value="Recruiter">Register as a Recruiter</option>
                   <option value="Job-Seeker">Register as a Job Seeker</option>
                 </select>
               </div>

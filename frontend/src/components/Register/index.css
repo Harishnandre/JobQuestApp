@@ -1,15 +1,13 @@
-/* Main container styling */
 .form-container {
   max-width: 900px;
   margin: 80px auto;
   padding: 30px;
-  background-color: #e6f2ff; /* Light blue background */
+  background-color: #e6f2ff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   font-family: Arial, sans-serif;
 }
 
-/* Form title */
 .form-container h3 {
   font-size: 24px;
   color: #333333;
@@ -17,7 +15,6 @@
   margin-bottom: 20px;
 }
 
-/* Wrapper for row-style layout */
 .wrapper1,
 .wrapper2,
 .wrapper3 {
@@ -28,12 +25,11 @@
   flex-wrap: wrap;
 }
 
-/* Input label and box styling */
 .inputTag {
   display: flex;
   flex-direction: column;
-  flex: 1;  /* Flex basis set to responsive size */
-  min-width: 250px; /* Ensures minimum width */
+  flex: 1;
+  min-width: 250px;
   box-sizing: border-box;
 }
 
@@ -44,28 +40,25 @@
   font-weight: 500;
 }
 
-/* Styling for input, select, and textarea */
 .inputTag input,
 .inputTag select,
 .inputTag textarea {
   padding: 12px;
   font-size: 14px;
   border-radius: 8px;
-  border: 2px solid #c4b5fd; /* Light purple border */
+  border: 2px solid #c4b5fd;
   width: 100%;
   box-sizing: border-box;
   transition: border-color 0.3s, background-color 0.3s;
 }
 
-/* Input focus effect */
 .inputTag input:focus,
 .inputTag select:focus,
 .inputTag textarea:focus {
-  border-color: #7c3aed; /* Change border color on focus */
-  background-color: #f9f9f9; /* Light background on focus */
+  border-color: #7c3aed;
+  background-color: #f9f9f9;
 }
 
-/* Button Styling */
 .button input[type="submit"] {
   background-color: #7c3aed;
   color: #ffffff;
@@ -84,7 +77,6 @@
   background-color: #5b21b6;
 }
 
-/* Terms & Conditions section with responsive styling */
 .policy {
   display: flex;
   align-items: center;
@@ -92,14 +84,13 @@
   gap: 10px;
   font-size: 14px;
   color: #333333;
-  flex-wrap: wrap;  /* Wraps items if necessary */
+  flex-wrap: wrap;
 }
 
 .policy input[type="checkbox"] {
   margin-right: 8px;
 }
 
-/* Text link styles */
 .text h3 {
   text-align: center;
   font-size: 14px;
@@ -116,57 +107,49 @@
   text-decoration: underline;
 }
 
-/* Responsive Styling */
 @media (max-width: 768px) {
   .wrapper1,
   .wrapper2,
   .wrapper3 {
       flex-direction: column;
-      gap: 15px; /* Reduces gap to fit on smaller screens */
+      gap: 15px;
   }
 
-  /* Policy section alignment for smaller screens */
   .policy {
       flex-direction: column;
       align-items: flex-start;
       font-size: 13px;
   }
 
-  /* Adjust form container padding */
   .form-container {
       padding: 20px;
       margin: 20px;
   }
 
-  /* Input field adjustments for smaller screens */
   .inputTag {
-      flex: 1 1 100%; /* Each input takes full width */
+      flex: 1 1 100%;
   }
 }
 
 @media (max-width: 850px) {
-  /* Adjust margin for .fornow class */
   .fornow {
-      margin-top: 80px; /* Move .fornow down by 80px */
+      margin-top: 80px;
   }
 }
 
 @media (max-width: 480px) {
-  /* Extra small screen adjustments */
   .form-container {
       padding: 15px;
       margin: 15px;
   }
 
-  /* Smaller text for policy section */
   .policy {
       font-size: 12px;
   }
 }
 
-/* Additional margin for the resume input */
 .newone {
-  margin-top: 100px; /* Maintain this margin for resume input */
+  margin-top: 100px;
 }
 
 .registerbox {

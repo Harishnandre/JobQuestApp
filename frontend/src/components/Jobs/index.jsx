@@ -6,6 +6,7 @@ import { FaBookmark, FaMapMarkerAlt } from "react-icons/fa";
 import { PiDotsThreeOutlineThin } from "react-icons/pi";
 import { SlPencil } from "react-icons/sl";
 import { IoEye } from "react-icons/io5";
+import { MdDateRange } from "react-icons/md";
 
 const Jobs = () => {
     const [keyword,setKeyword] = useState('')
@@ -19,7 +20,7 @@ const Jobs = () => {
         setDropdownVisible(dropdownVisible === id ? null : id);
     };
     const filteredJobs =  recruiterJobs.filter((eachJob)=>{
-    return  eachJob.title.toLowerCase().includes(keyword.toLowerCase())
+    return  eachJob.title.toLowerCase().includes(keyword.toLowerCase()) || eachJob.company.name.toLowerCase().includes(keyword.toLocaleLowerCase())
     })
     return (
         <div>
@@ -70,6 +71,10 @@ const Jobs = () => {
                                     <div className="job-location" style={{ fontWeight: 'bold' }}>
                                         <FaMapMarkerAlt className="location-icon" /> 
                                         <span>{job.location}</span>
+                                    </div>
+                                    <div className="job-location" style={{ fontWeight: 'bold' }}>
+                                        <MdDateRange className="location-icon" /> 
+                                        <span>{new Date(job.jobLastDate).toLocaleString()}</span>
                                     </div>
                                     <div className="badges-container">
                                         <span className="badge blue">{job.vacancies} Positions</span>

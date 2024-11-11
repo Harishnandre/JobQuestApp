@@ -6,8 +6,8 @@ import './index.css'
 const RecommendedJobs = () => {
   const [auth] = useContext(Authcontext);
   const { user } = auth || {};
-  const recommendedJobs = user?.recommendedJobs || []; // Default to an empty array if undefined
-
+  const recommendedJobs = user.recommendedJobs || []; // Default to an empty array if undefined
+  console.log(recommendedJobs)
   return (
     <div className="recommended-jobs-container">
       <h1>Recommended Jobs</h1>

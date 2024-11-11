@@ -12,19 +12,24 @@ export const createCompany = async (req, res) => {
                 message: "All fields are required"
             });
         }
-        // Check if the company already exists
-        const existCompany = await Company.findOne({ name });
-        if (existCompany) {
+        // Check if the company already exists by same recruiter
+        const existCompany = await Company.findOne({ name ,recruiterId});
+        if (existCompany ) {
             return res.status(400).send({
                 success: false,
                 message: "Company with a similar name already exists"
             });
         }
-
+    //Check if the company already exists but created by other recruiter then website must be same
+    const webCompany = await Company.findOne({ website});
+        if(webCompany&&webCompany.name!==name){
+            return res.status(400).send({
+                success: false,
+                message: "You are giving wrong website for that company"
+            });
+        }
         // Upload logo to Cloudinary
         const result = await cloudinary.uploader.upload(logoFile.tempFilePath);
-        // console.log(result);  
-        // console.log(result.secure_url);
         if(!result){
             res.status(400).send({
                 success:false,
@@ -40,7 +45,6 @@ export const createCompany = async (req, res) => {
             recruiterId,
             logo: result.secure_url // Store Cloudinary URL
         });
-
         const newCompany = await company.save();
         return res.status(201).send({
             success: true,
@@ -56,11 +60,20 @@ export const updateCompany=async(req,res)=>{
     try {
         const {name,description,website,location,logo}=req.body;
         const _id=req.params.id;
+        const recruiterId=req.id;
         const logoFile = req.files.logo; // Access the file from `req.files` 
         if (!name || !description || !website || !location || !logoFile) {
             return res.status(400).send({
                 success: false,
                 message: "All fields are required for Updating"
+            });
+        }
+    //Check if the company already exists but created by other recruiter then website must be same
+    const webCompany = await Company.findOne({ website});
+        if(webCompany&&webCompany.name!==name){
+            return res.status(400).send({
+                success: false,
+                message: "The website you provided is matched with other company's website"
             });
         }
         //Cloudinary work

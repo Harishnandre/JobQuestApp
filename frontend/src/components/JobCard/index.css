@@ -1,213 +1,132 @@
-/* .job-card {
-    background: #fff;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-    margin-bottom: 20px;
-  }
-  
-  .job-card:hover {
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  }
-  
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .card-header h4 {
-    font-size: 18px;
-    color: #333;
-    font-weight: bold;
-  }
-  
-  .bookmark-icon {
-    cursor: pointer;
-    color: #f39c12;
-    font-size: 20px;
-  }
-  
-  .location {
-    color: #777;
-    font-size: 14px;
-    margin-top: 5px;
-  }
-  
-  .description {
-    margin: 10px 0;
-    color: #333;
-    font-size: 15px;
-    line-height: 1.5;
-  }
-  
-  .card-footer {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    color: #555;
-    margin-top: 10px;
-  }
-  
-  .details-button {
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 15px;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .details-button:hover {
-    background-color: #2980b9;
-  }
-   */
-
-
-  /* LatestJobCards.css */
-
-/* Container for the cards */
-
-
 .changecolor {
   color: #021ffa;
   margin-left: 16px;
 }
+
 .bookmark-icon {
   cursor: pointer;
-  
   font-size: 20px;
 }
 
-/* Individual job card styles */
 .job-card {
-  padding: 20px; /* Padding for the card */
-  border-radius: 10px; /* Rounded corners */
+  padding: 20px;
+  border-radius: 10px;
   margin: 10px;
   min-height: 300px;
-  background-color: #ffffff; /* White background */
-  border: 1px solid #e5e7eb; /* Light gray border */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: transform 0.2s, box-shadow 0.2s; /* Animation for hover effect */
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* Hover effect for the card */
 .job-card:hover {
-  transform: translateY(-2px); /* Slight lift on hover */
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Styles for company info */
 .company-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;/* Space below company info */
+  margin-bottom: 10px;
 }
 
 .company-name {
-  font-weight: 500; /* Medium weight */
-  font-size: 1.125rem; /* Corresponds to text-lg */
+  font-weight: 500;
+  font-size: 1.125rem;
 }
 
 .location {
-  font-size: 0.875rem; /* Corresponds to text-sm */
-  color: #6b7280; /* Gray color */
+  font-size: 0.875rem;
+  color: #6b7280;
 }
 
-/* Styles for job info */
 .job-info {
-  margin: 16px 0; /* Space above and below job info */
+  margin: 16px 0;
   min-height: 120px;
 }
 
 .job-title {
-  font-weight: 700; /* Bold weight */
-  font-size: 1.125rem; /* Corresponds to text-lg */
-  margin: 8px 0; /* Space above and below title */
+  font-weight: 700;
+  font-size: 1.125rem;
+  margin: 8px 0;
 }
 
 .job-description {
-  max-width:400px;
-  font-size: 0.875rem; /* Corresponds to text-sm */
-  color: #4b5563; /* Darker gray */
+  max-width: 400px;
+  font-size: 0.875rem;
+  color: #4b5563;
 }
 
-/* Badges container */
 .badges-container {
-  display: flex; /* Use flexbox for layout */
-  align-items: center; /* Center items vertically */
-  gap: 8px; /* Space between badges */
-  margin-top: 16px; /* Space above badges */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
 }
 
-/* Styles for badges */
 .badge {
-  padding: 4px 8px; /* Padding for badges */
-  border-radius: 12px; /* Rounded corners */
-   /* Bold text for badges */
-  color: #ffffff; /* Text color */
+  padding: 4px 8px;
+  border-radius: 12px;
+  color: #ffffff;
   font-size: 15px;
 }
 
 .badge.blue {
-  background-color: #3b82f6; /* Blue background for position */
+  background-color: #3b82f6;
 }
 
 .badge.orange {
-  background-color: #f97316; /* Orange background for job type */
+  background-color: #f97316;
 }
 
 .badge.purple {
-  background-color: #7209b7; /* Purple background for salary */
+  background-color: #7209b7;
 }
 
-/* Style for changing color */
+.job-card {
+  padding: 15px;
+}
 
+.company-name, .job-title {
+  font-size: 1rem;
+}
 
-  .job-card {
-    padding: 15px; /* Reduced padding for smaller screens */
-  }
+.location, .job-description {
+  font-size: 0.8rem;
+}
 
-  .company-name, .job-title {
-    font-size: 1rem; /* Slightly smaller font size */
-  }
+.badge {
+  font-size: 0.75rem;
+}
 
-  .location, .job-description {
-    font-size: 0.8rem; /* Smaller font size */
-  }
+.alignment {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  .badge {
-    font-size: 0.75rem; /* Smaller badge font */
-  }
-  .alignment{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-
-  .bookmark-icon-1 {
-    cursor: pointer;
-    font-size: 20px;
-    color:gray; /* Default color when not bookmarked */
-    transition: color 0.1 ease; /* Smooth color transition */
+.bookmark-icon-1 {
+  cursor: pointer;
+  font-size: 20px;
+  color: gray;
+  transition: color 0.1s ease;
 }
 
 .bookmarked {
-    color: gold; /* Gold color when bookmarked */
+  color: gold;
 }
-.job-card-user-logo{
+
+.job-card-user-logo {
   display: flex;
 }
-.b-1{
-  font-size: 12px !important; 
+
+.b-1 {
+  font-size: 12px !important;
+}
+.closed{
+  color:red;
+  font-weight: bold;
+  font-size: 15px;
 }

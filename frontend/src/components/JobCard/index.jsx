@@ -7,6 +7,8 @@ import { useState,useContext,useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Authcontext } from '../ContextAPI/Authcontext';
 import axios from 'axios';
+import { MdDateRange } from "react-icons/md";
+
 
 const JobCard = ({ job }) => {
     const navigate = useNavigate();
@@ -88,11 +90,16 @@ const JobCard = ({ job }) => {
                 <FaMapMarkerAlt className="location-icon" /> 
                 {Array.isArray(job.location) ? job.location.join(', ') : job.location}
             </p>
+            <div className="job-location" style={{ fontWeight: 'bold' }}>
+                                        <MdDateRange className="location-icon" /> 
+                                        <span>{new Date(job.jobLastDate).toLocaleString()}</span>
+                                    </div>
 
             {/* Job Info */}
             <div className="job-info">
                 <h1 className="job-title">{job.title}</h1>
                 <p className="job-description">{job.description}</p>
+                {(new Date(job.jobLastDate) < new Date()) && <p className='closed'>Closed</p>}
             </div>
 
             {/* Badges and Details Button */}

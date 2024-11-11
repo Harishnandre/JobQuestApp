@@ -1,11 +1,8 @@
-/* LatestJobCards.css */
-
-/* Container for the cards */
 .card-container {
   display: grid; 
   grid-template-columns: repeat(3, 1fr); 
-  gap: 20px; /* Space between cards */
-  padding: 20px; /* Padding around the grid */
+  gap: 20px; 
+  padding: 20px; 
 }
 
 .changecolor {
@@ -13,100 +10,88 @@
   margin-left: 16px;
 }
 
-
-/* Individual job card styles */
 .job-card {
-  padding: 20px; /* Padding for the card */
-  border-radius: 10px; /* Rounded corners */
-  background-color: #ffffff; /* White background */
-  border: 1px solid #e5e7eb; /* Light gray border */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: transform 0.2s, box-shadow 0.2s; /* Animation for hover effect */
+  padding: 20px; 
+  border-radius: 10px; 
+  background-color: #ffffff; 
+  border: 1px solid #e5e7eb; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+  cursor: pointer; 
+  transition: transform 0.2s, box-shadow 0.2s; 
 }
 
-/* Hover effect for the card */
 .job-card:hover {
-  transform: translateY(-2px); /* Slight lift on hover */
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow on hover */
+  transform: translateY(-2px); 
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); 
 }
 
-/* Styles for company info */
 .company-info {
-  margin-bottom: 8px; /* Space below company info */
+  margin-bottom: 8px;
 }
 
 .company-name {
-  font-weight: 500; /* Medium weight */
-  font-size: 1.125rem; /* Corresponds to text-lg */
+  font-weight: 500; 
+  font-size: 1.125rem; 
 }
 
 .location {
-  font-size: 0.875rem; /* Corresponds to text-sm */
-  color: #6b7280; /* Gray color */
+  font-size: 0.875rem; 
+  color: #6b7280; 
 }
 
-/* Styles for job info */
 .job-info {
-  margin: 16px 0; /* Space above and below job info */
+  margin: 16px 0; 
 }
 
 .job-title {
-  font-weight: 700; /* Bold weight */
-  font-size: 1.125rem; /* Corresponds to text-lg */
-  margin: 8px 0; /* Space above and below title */
+  font-weight: 700; 
+  font-size: 1.125rem; 
+  margin: 8px 0; 
 }
 
 .job-description {
-  font-size: 0.875rem; /* Corresponds to text-sm */
-  color: #4b5563; /* Darker gray */
+  font-size: 0.875rem; 
+  color: #4b5563; 
 }
 
-/* Badges container */
 .badges-container {
-  display: flex; /* Use flexbox for layout */
-  align-items: center; /* Center items vertically */
-  gap: 8px; /* Space between badges */
-  margin-top: 16px; /* Space above badges */
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  margin-top: 16px; 
 }
 
-/* Styles for badges */
 .badge {
-  padding: 4px 8px; /* Padding for badges */
-  border-radius: 12px; /* Rounded corners */
-  font-weight: bold; /* Bold text for badges */
-  color: #ffffff; /* Text color */
+  padding: 4px 8px; 
+  border-radius: 12px; 
+  font-weight: bold; 
+  color: #ffffff; 
 }
 
 .badge.blue {
-  background-color: #3b82f6; /* Blue background for position */
+  background-color: #3b82f6; 
 }
 
 .badge.orange {
-  background-color: #f97316; /* Orange background for job type */
+  background-color: #f97316; 
 }
 
 .badge.purple {
-  background-color: #7209b7; /* Purple background for salary */
+  background-color: #7209b7; 
 }
 
-/* Style for changing color */
+.job-card {
+  padding: 15px; 
+}
 
+.company-name, .job-title {
+  font-size: 1rem; 
+}
 
-  .job-card {
-    padding: 15px; /* Reduced padding for smaller screens */
-  }
+.location, .job-description {
+  font-size: 0.8rem; 
+}
 
-  .company-name, .job-title {
-    font-size: 1rem; /* Slightly smaller font size */
-  }
-
-  .location, .job-description {
-    font-size: 0.8rem; /* Smaller font size */
-  }
-
-  .badge {
-    font-size: 0.75rem; /* Smaller badge font */
-  }
-
-
+.badge {
+  font-size: 0.75rem; 
+}

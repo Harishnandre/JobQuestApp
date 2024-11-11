@@ -1,10 +1,19 @@
+import { Company } from "../models/companyModel.js";
 import { JobModel } from "../models/jobModel.js";
 
 export const createJob=async(req,res)=>{
     try {
-        const {title,description,requirements,salary,location,jobType,vacancies,experience,company}=req.body;
+        const {title,description,requirements,salary,location,jobType,vacancies,experience,company,jobLastDate}=req.body;
         const createdBy=req.id;
-        if(!title||!description||!requirements||!salary||!location||!jobType||!vacancies||!company||!createdBy||!experience){
+        const jobLastDateObj = new Date(jobLastDate);
+        if (jobLastDateObj < new Date()) {
+            return res.status(400).send({
+                success: false,
+                message: "Job Last Date must be in the future"
+            });
+        }
+
+        if(!title||!description||!requirements||!salary||!location|| !jobLastDate ||!jobType||!vacancies||!company||!createdBy||!experience){
             return res.status(400).send({
                 success:false,
                 message:"All fields are required"
@@ -20,6 +29,7 @@ export const createJob=async(req,res)=>{
                   vacancies,
                   experience,
                   company,
+                  jobLastDate,
                   createdBy
         });
         const newJob=await job.save();
@@ -29,6 +39,8 @@ export const createJob=async(req,res)=>{
             newJob
         });
     } catch (error) {
+        console.log(error);
+        
         return res.status(500).send("Server error:" + error);
     }
 }
@@ -36,13 +48,18 @@ export const createJob=async(req,res)=>{
 //For Job Seeker getAllJobs
 export const getAllJobs=async(req,res)=>{
     try {
-         const keyword=req.query.keyword || "";
-         const query={
-            $or:[
-                    {title:{$regex:keyword,$options:"i"}},
-                    {description:{$regex:keyword,$options:"i"}}
-                ]
-            }
+        const keyword = req.query.keyword || "";
+        const companies = await Company.find({
+        name: { $regex: keyword, $options: "i" }
+        });
+        const companyIds = companies.map(company => company._id);
+        const query = {
+        $or: [
+            { title: { $regex: keyword, $options: "i" } },
+            { description: { $regex: keyword, $options: "i" } },
+            { company: { $in: companyIds } }  // Search by company IDs
+        ]
+    };  
        const jobs=await JobModel.find(query).populate({path:"company"}).sort({createdAt:-1});
        if(!jobs){
         return res.status(404).send({
@@ -112,13 +129,27 @@ export const updateJob=async(req,res)=>{
     try {
         const jobId=req.params.id;
         const createdBy=req.id;
-        const {title,description,requirements,salary,location,jobType,vacancies,experience,company}=req.body;
-        if(!title||!description||!requirements||!salary||!location||!jobType||!vacancies||!company||!createdBy||!experience){
+        const {title,description,requirements,salary,location,jobType,vacancies,jobLastDate,experience,company}=req.body;
+        const jobLastDateObj = new Date(jobLastDate);
+        if (jobLastDateObj < new Date()) {
+            return res.status(400).send({
+                success: false,
+                message: "Job Last Date must be in the future"
+            });
+        }
+
+        if(vacancies <= 0 || salary<=0){
+            return res.status(400).send({
+                success:false,
+                message:"Salary or Positions must be positive"
+           });
+        }
+        if(!title||!description||!requirements||!salary||!jobLastDate||!location||!jobType||!company||!createdBy||!experience){
             return res.status(400).send({
                 success:false,
                 message:"All fields are required"
            });
-        }
+        }     
         if(!jobId){
             return res.status(400).send({
                 success:false,
@@ -134,6 +165,7 @@ export const updateJob=async(req,res)=>{
                                                                        vacancies,
                                                                        experience,
                                                                        company,
+                                                                       jobLastDate,
                                                                        createdBy
                                                                        },{new:true});
         if(!updatedJob){

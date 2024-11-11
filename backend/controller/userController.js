@@ -382,28 +382,46 @@ export const getUserById=async(req,res)=>{
     }
 }
 
-export const getRecomendedJobs=async(req,res)=>{
-    try{
-        const userId= req.id;
-  const user=await User.findById(userId);//sirf prference job role aaega user ke saath in profile me
-  if(!user){
-    return res.status(404).json({
-        success:false,
-        message:'user not found'
-    })
-  }
-  const {role1, role2,role3}=user.profile.preferredJobRole;
-  let matchedJobs=await JobModel.find({
-        $or:[{title:role1},{title:role2},{title:role3}]
-  }).sort({createdAt:-1}).limit(10);
-    user.recommendedJobs=matchedJobs.map(job=>job._id);  // Save only job IDs
-   //user.profile.recommendedJobs=matchedJobs;  // Save only job IDs
-await user.save();  // Save the updated recommendedJobs array to the user
-res.json({success:true, jobs:matchedJobs});
-
+export const getRecomendedJobs = async (req, res) => {
+    try {
+      const userId = req.id;
+      const user = await User.findById(userId); // Get the user by ID
+  
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: 'User not found',
+        });
+      }
+  
+      // Destructure the preferred job roles from the user profile
+      const { role1, role2, role3 } = user.profile.preferredJobRole;
+  
+      // Search for jobs that match each role and sort them by creation time
+      let matchedJobs = [];
+      const roles = [role1, role2, role3];
+  
+      for (const role of roles) {
+        const jobs = await JobModel.find({
+          title: role, // Regex search for job titles
+        })
+          .sort({ createdAt: -1 }) // Sort by creation date within each role
+          .limit(10); // Limit the results to 10 jobs per role
+        matchedJobs = [...matchedJobs, ...jobs]; // Append the new results
+      }
+  
+      // Save the recommended jobs in the user profile
+      user.recommendedJobs = matchedJobs.map(job => job._id);
+      console.log(user.recommendedJobs);
+  
+      await user.save(); // Save the updated user document
+  
+      // Return the recommended jobs
+      res.json({ success: true, jobs: matchedJobs });
+  
+    } catch (error) {
+      console.error('Error fetching and saving recommended jobs:', error);
+      res.status(500).json({ success: false, message: 'Server error', error });
     }
-    catch(error){
-        console.error('Error fetching and saving recommended jobs:', error);
-    res.status(500).json({ success: false, message: 'Server error' ,error});
-    }
-}
+  };
+  

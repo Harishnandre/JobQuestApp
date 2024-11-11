@@ -1,4 +1,3 @@
-/* Container for the main content */
 .container {
   max-width: 960px;
   margin: 0 auto;
@@ -6,7 +5,6 @@
   margin-top: 80px;
 }
 
-/* Flex container for input and button */
 .header {
   display: flex;
   align-items: center;
@@ -14,7 +12,6 @@
   margin-bottom: 2rem;
 }
 
-/* Styling for the filter input */
 .filter-input {
   padding: 0.5rem;
   font-size: 1rem;
@@ -24,7 +21,6 @@
   max-width: 300px;
 }
 
-/* Styling for the New Company button */
 .new-company-btn {
   padding: 0.5rem 1rem;
   font-size: 1rem;
@@ -36,22 +32,18 @@
   transition: background-color 0.3s ease;
 }
 
-/* Button hover effect */
 .new-company-btn:hover {
   background-color: #0056b3;
 }
-
 
 .job-item-content {
   display: grid; 
   grid-template-columns: repeat(2, 1fr); 
   gap: 20px; 
   padding: 20px; 
-  
   flex-direction: column;
   background-color: #f4f4f8;
 }
-
 
 .job-inner-content {
   background-color: #ffffff;
@@ -185,36 +177,36 @@
   background-color: #8e24aa;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .job-inner-content {
-      padding: 1rem;
+    padding: 1rem;
   }
 
   .company-header h4,
   .job-title {
-      font-size: 1.1rem;
+    font-size: 1.1rem;
   }
 
   .company-logo {
-      width: 40px;
-      height: 40px;
+    width: 40px;
+    height: 40px;
   }
 
   .edit-icon {
-      font-size: 1rem;
+    font-size: 1rem;
   }
 
   .job-description,
   .job-requirements,
   .job-experience,
   .job-location {
-      font-size: 0.9rem;
+    font-size: 0.9rem;
   }
 }
+
 .dropdown-menu-job {
   position: absolute;
-  top: 40px; /* Adjust based on the icon's position */
+  top: 40px;
   right: 10px;
   background-color: #fff;
   border: 1px solid #ccc;
