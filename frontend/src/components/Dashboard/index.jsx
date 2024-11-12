@@ -15,6 +15,7 @@ const Dashboard = () => {
   if(!isLoggedIn){
     return <Navigate to='/login'/>
  }
+
   
   const [activeComponent, setActiveComponent] = useState('Profile'); // State to track active component
   const { profile, fullName } = user || {};
