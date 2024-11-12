@@ -1,250 +1,266 @@
 import { User } from "../models/userModel.js";
-import bcrypt from "bcryptjs"
-import jwt from "jsonwebtoken"
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { JobModel } from './../models/jobModel.js';
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../Cloudinary/cloudinary.js";
 
-export const registerNewUser=async(req,res)=>{
+// Function to register a new user
+export const registerNewUser = async (req, res) => {
     try {
-        const {fullName,gender,email,address,phoneNumber,password,role,answer,profilePhoto}=req.body;
-        
-        if(!fullName||!gender||!email||!address||!phoneNumber||!password||!role||!answer){
-        return res.status(400).send({
-            success:false,
-            message:"All fields are required for creating account"    
-        });
-        }
-        const existUser=await User.findOne({email});
-        if(existUser){
-        return res.status(400).send({
-               success:false,
-               message:"A user with this email id is already exist"
-          });  
-        }
-        if(password.length < 8){
+        const { fullName, gender, email, address, phoneNumber, password, role, answer, profilePhoto } = req.body;
+
+        // Validate required fields
+        if (!fullName || !gender || !email || !address || !phoneNumber || !password || !role || !answer) {
             return res.status(400).send({
-                 success : false,
-                 message : "Password must contain at least 8 characters"
-             })
-            }
-        const hashedPassword=await bcrypt.hash(password,10);
-        const user=new User({
+                success: false,
+                message: "All fields are required for creating account"
+            });
+        }
+
+        // Check if user with the given email already exists
+        const existUser = await User.findOne({ email });
+        if (existUser) {
+            return res.status(400).send({
+                success: false,
+                message: "A user with this email id already exists"
+            });
+        }
+
+        // Validate password length
+        if (password.length < 8) {
+            return res.status(400).send({
+                success: false,
+                message: "Password must contain at least 8 characters"
+            });
+        }
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create a new user object and save it to the database
+        const user = new User({
             fullName,
             gender,
             email,
             address,
             phoneNumber,
-            password:hashedPassword,
+            password: hashedPassword,
             role,
             answer,
             profile: {
                 profilePhoto
             }
         });
-        const newUser=await user.save();
+        const newUser = await user.save();
+
+        // Send success response
         res.status(201).send({
-            success:true,
-            message:"Register Successfully",
+            success: true,
+            message: "Registered Successfully",
             newUser
-        });      
+        });
     } catch (error) {
         return res.status(500).send("Server error:" + error);
     }
-}
+};
 
-export const loginUser=async (req,res)=>{
+// Function to log in an existing user
+export const loginUser = async (req, res) => {
     try {
-        const {email,password,role}=req.body;
-        if(!email||!password||!role){
-        return res.status(400).send({
-            success:false,
-            message:"All fields are required"    
-        }); 
-        }
-        let user=await User.findOne({email});
-        if(!user){
-        return res.status(400).send({
-            success:false,
-            message:"Invalid email or password"    
-        }); 
-        }
-        const isPasswordMatch=await bcrypt.compare(password,user.password);
-        if(!isPasswordMatch){   
-        return res.status(400).send({
-            success:false,
-            message:"Invalid email or password"    
-        }); 
-        }
-        if(role!=user.role)
-        return res.status(400).send({
-            success:false,
-            message:"Account with current role doesn't exist."    
-        });  
-        user.password=password;  
-        const tokenData={
-            userId:user._id
-        }
-        const token=jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: '1d' });
-        return res.status(200).cookie("token",token,{maxAge:1*24*60*60*1000,httpsOnly:true,secure:true,sameSite:'strict'})
-                 .send({
-                    success:true,
-                    message:`Welcome user: ${user.fullName}`,
-                    auth:{
-                        user,
-                        token
-                    }
-                 });
+        const { email, password, role } = req.body;
 
+        // Validate required fields
+        if (!email || !password || !role) {
+            return res.status(400).send({
+                success: false,
+                message: "All fields are required"
+            });
+        }
+
+        // Check if user exists
+        let user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).send({
+                success: false,
+                message: "Invalid email or password"
+            });
+        }
+
+        // Verify password
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        if (!isPasswordMatch) {
+            return res.status(400).send({
+                success: false,
+                message: "Invalid email or password"
+            });
+        }
+
+        // Check if the role matches
+        if (role != user.role) {
+            return res.status(400).send({
+                success: false,
+                message: "Account with current role doesn't exist."
+            });
+        }
+
+        // Generate a JWT token
+        const tokenData = { userId: user._id };
+        const token = jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: '1d' });
+
+        // Send token in a cookie and respond with success
+        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpsOnly: true, secure: true, sameSite: 'strict' })
+            .send({
+                success: true,
+                message: `Welcome user: ${user.fullName}`,
+                auth: {
+                    user,
+                    token
+                }
+            });
     } catch (error) {
         return res.status(500).send("Server error:" + error);
     }
-}
+};
 
-export const logoutUser=async (req,res)=>{
-     try {
-       return res.status(200).cookie("token","",{maxAge:0, httpOnly: true, secure: true, sameSite: 'Strict'}).send({
-                  success:true,
-                  message:"Logged out Successfully"
-                  });
-     }catch (error){
+// Function to log out a user
+export const logoutUser = async (req, res) => {
+    try {
+        return res.status(200).cookie("token", "", { maxAge: 0, httpOnly: true, secure: true, sameSite: 'Strict' }).send({
+            success: true,
+            message: "Logged out Successfully"
+        });
+    } catch (error) {
         return res.status(500).send("Server error:" + error);
     }
-}
+};
 
-export const forgetPassword=async(req,res)=>{
-     try {
-         const {email,answer,newPassword}=req.body;
-         if(!email||!answer||!newPassword){
+// Function to reset password with security answer verification
+export const forgetPassword = async (req, res) => {
+    try {
+        const { email, answer, newPassword } = req.body;
+
+        // Validate required fields
+        if (!email || !answer || !newPassword) {
             return res.status(400).send({
-                success:false,
-                message:"All fields are required"    
+                success: false,
+                message: "All fields are required"
             });
-        }   
-        const user=await User.findOne({email,answer});
-        if(!user){
-            return res.status(400).send({
-                success:false,
-                message:"Invalid Email or Answer"    
-            });   
         }
 
-        if(newPassword.length < 8){
+        // Check if user exists and answer matches
+        const user = await User.findOne({ email, answer });
+        if (!user) {
             return res.status(400).send({
-                 success : false,
-                 message : "Password must contain at least 8 characters"
-             })
-            }
+                success: false,
+                message: "Invalid Email or Answer"
+            });
+        }
 
-        const hashedPassword=await bcrypt.hash(newPassword,10);
-        const updateUser=await User.findByIdAndUpdate({_id:user._id},{password:hashedPassword},{new:true});
-        if(!updateUser){
+        // Validate new password length
+        if (newPassword.length < 8) {
+            return res.status(400).send({
+                success: false,
+                message: "Password must contain at least 8 characters"
+            });
+        }
+
+        // Hash the new password and update user in the database
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        const updateUser = await User.findByIdAndUpdate({ _id: user._id }, { password: hashedPassword }, { new: true });
+
+        if (!updateUser) {
             return res.status(404).send({
-                success:false,
-                message:"User not found while updating"    
-            }); 
+                success: false,
+                message: "User not found while updating"
+            });
         }
+
+        // Send success response
         res.status(200).send({
-            success:true,
-            message:"Password Updated Successfully",
+            success: true,
+            message: "Password Updated Successfully",
             updateUser
         });
-     } catch (error) {
+    } catch (error) {
         return res.status(500).send("Server error:" + error);
-     }
-}
+    }
+};
 
-
+// Function to update a user's profile
 export const updateProfile = async (req, res) => {
     try {
-      const {
-        fullName,
-        email,
-        address,
-        phoneNumber,
-        bio,
-        role1,
-        role2,
-        role3,
-        id: userId,
-        role,
-        resume,  // Now expecting this to be a URL string
-      } = req.body;
-      let profilePhoto = req.files?.profilePhoto;
-  
-      // Validate required fields
-      if (!fullName || !email || !address || !phoneNumber || !profilePhoto) {
-        return res.status(400).send({
-          success: false,
-          message: "All fields and profile photo are required to complete Profile",
+        const { fullName, email, address, phoneNumber, bio, role1, role2, role3, id: userId, role, resume } = req.body;
+        let profilePhoto = req.files?.profilePhoto;
+
+        // Validate required fields
+        if (!fullName || !email || !address || !phoneNumber || !profilePhoto) {
+            return res.status(400).send({
+                success: false,
+                message: "All fields and profile photo are required to complete Profile",
+            });
+        }
+
+        // Additional validation for job seekers
+        if (role === "Job-Seeker" && (!bio || !role1 || !role2 || !role3 || !resume)) {
+            return res.status(400).send({
+                success: false,
+                message: "All fields and a resume link are required to complete Profile",
+            });
+        }
+
+        // Upload profile photo to Cloudinary
+        let profilePhotoUpload = await cloudinary.uploader.upload(profilePhoto.tempFilePath, {
+            resource_type: "image",
         });
-      }
-  
-      if (role === "Job-Seeker" && (!bio || !role1 || !role2 || !role3 || !resume)) {
-        return res.status(400).send({
-          success: false,
-          message: "All fields and a resume link are required to complete Profile",
+
+        // Prepare data for profile update
+        const updateData = {
+            fullName,
+            email,
+            address,
+            phoneNumber,
+            profile: {
+                bio,
+                preferredJobRole: { role1, role2, role3 },
+                profilePhoto: profilePhotoUpload.secure_url,
+            },
+        };
+
+        // Add resume link if the role is Job-Seeker
+        if (role === "Job-Seeker" && resume) {
+            updateData.profile.resume = resume;
+        }
+
+        // Update user profile in the database
+        const updateUser = await User.findByIdAndUpdate(userId, updateData, { new: true });
+
+        if (!updateUser) {
+            return res.status(404).send({
+                success: false,
+                message: "User not found while updating",
+            });
+        }
+
+        // Send success response
+        res.status(200).send({
+            success: true,
+            message: "Profile Updated Successfully",
+            updateUser,
         });
-      }
-  
-      // Upload profile photo to Cloudinary
-      let profilePhotoUpload = await cloudinary.uploader.upload(profilePhoto.tempFilePath, {
-        resource_type: "image",
-      });
-  
-      // Prepare data for profile update
-      const updateData = {
-        fullName,
-        email,
-        address,
-        phoneNumber,
-        profile: {
-          bio,
-          preferredJobRole: { role1, role2, role3 },
-          profilePhoto: profilePhotoUpload.secure_url,
-        },
-      };
-  
-      // Add resume link if the role is Job-Seeker
-      if (role === "Job-Seeker" && resume) {
-        updateData.profile.resume = resume;
-      }
-  
-      // Update user profile in the database
-      const updateUser = await User.findByIdAndUpdate(
-        userId,
-        updateData,
-        { new: true }
-      );
-  
-      if (!updateUser) {
-        return res.status(404).send({
-          success: false,
-          message: "User not found while updating",
-        });
-      }
-  
-      // Send success response
-      res.status(200).send({
-        success: true,
-        message: "Profile Updated Successfully",
-        updateUser,
-      });
     } catch (error) {
-      console.log(error);
-      return res.status(500).send({ success: false, message: "Server error: " + error.message });
+        console.log(error);
+        return res.status(500).send({ success: false, message: "Server error: " + error.message });
     }
-  };
-  
+};
 
-//update Password when user loggein
- // Make sure the path is correct for the User model
-
+// Function to update password when user is logged in
 export const updatePassword = async (req, res) => {
     try {
         const { oldPassword, newPassword } = req.body;
         const userId = req.id;
 
+        // Validate required fields
         if (!oldPassword || !newPassword) {
             return res.status(400).send({
                 success: false,
@@ -252,6 +268,7 @@ export const updatePassword = async (req, res) => {
             });
         }
 
+        // Validate new password length
         if (newPassword.length < 8) {
             return res.status(400).send({
                 success: false,
@@ -259,7 +276,7 @@ export const updatePassword = async (req, res) => {
             });
         }
 
-        // Find the user by ID
+        // Find the user by ID and verify current password
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).send({
@@ -277,150 +294,71 @@ export const updatePassword = async (req, res) => {
             });
         }
 
-        // Hash the new password
+        // Hash the new password and update it in the database
         const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await User.findByIdAndUpdate(userId, { password: hashedPassword });
 
-        // Update the password in the database
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            { password: hashedPassword },
-            { new: true }
-        );
-
-        res.status(200).send({
+        // Send success response
+        return res.status(200).send({
             success: true,
-            message: "Password updated successfully.",
-            updatedUser
+            message: "Password updated successfully."
         });
-
     } catch (error) {
-        return res.status(500).send({
-            success: false,
-            message: "Server error: " + error.message
-        });
+        return res.status(500).send("Server error:" + error);
     }
 };
 
-
-//For bookmark Job
-export const bookmarkAnyJobs=async(req,res)=>{
+// Function to handle bookmark or unbookmark actions on jobs
+export const bookmarkJob = async (req, res) => {
     try {
-        const jobId=req.params.id;
-        const userId=req.id;
-        const user=await User.findById({_id:userId});
-        if(!user){
-            return res.status(404).send({
-                success:false,
-                message:"User not found",
-            });
+        const jobId = req.params.jobId;
+        const userId = req.id;
+
+        // Find user by ID
+        const user = await User.findById(userId);
+
+        // Check if job is already bookmarked
+        const isBookmarked = user.profile.bookmarks.includes(jobId);
+
+        // Add or remove bookmark based on current state
+        if (isBookmarked) {
+            user.profile.bookmarks.pull(jobId); // Remove bookmark
+        } else {
+            user.profile.bookmarks.push(jobId); // Add bookmark
         }
-        user.bookmarkJob.push(jobId);
+
         await user.save();
-        return res.status(200).send({
-            success:true,
-            message:"Job Bookmark Successfully",
-            user
-        });  
-    } catch (error) {
-        return res.status(500).send("Server error:" + error); 
-    }
-}
 
-//For unbookmark job
-export const unbookmarkJob=async(req,res)=>{
-    try {
-        const jobId=req.params.id;
-        const userId=req.id;
-        const user=await User.findById({_id:userId});
-        if(!user){
-            return res.status(404).send({
-                success:false,
-                message:"User not found"
-            });
-        }
-        user.bookmarkJob = user.bookmarkJob.filter(
-            _id => !_id.equals(jobId) 
-        );
-        await user.save();
+        // Send success response
         return res.status(200).send({
-            success:true,
-            message:"Job UnBookmark Successfully",
-            user
+            success: true,
+            message: isBookmarked ? "Job unbookmarked successfully" : "Job bookmarked successfully",
         });
     } catch (error) {
-        return res.status(500).send("Server error:" + error); 
+        return res.status(500).send("Server error:" + error);
     }
-}
+};
 
-//Get user by Id
-export const getUserById=async(req,res)=>{
+// Function to recommend jobs based on user's preferred roles
+export const getRecommendedJobs = async (req, res) => {
     try {
-        const userId=req.params.id;
-        const user=await User.findById({_id:userId}).populate({
-            path:"recommendedJobs",
-            populate:{path:"company",options:{sort:{createdAt:-1}}}
-        })
-        .populate({
-            path:"bookmarkJob",
-            options:{sort:{createdAt:-1}},
-            populate:{path:"company",options:{sort:{createdAt:-1}}}
-        })
+        const userId = req.id;
 
-        if(!user){
-            return res.status(404).send({
-                success:false,
-                message:"User not found"
-            });
-        }
-        return res.status(200).send({
-            success:true,
-            user
-        });
-    } catch (error) {
-        return res.status(500).send("Server error:" + error); 
-    }
-}
+        // Find user and get preferred job roles
+        const user = await User.findById(userId);
+        const preferredRoles = user.profile.preferredJobRole;
 
-export const getRecomendedJobs = async (req, res) => {
-    try {
-      const userId = req.id;
-      const user = await User.findById(userId); // Get the user by ID
-  
-      if (!user) {
-        return res.status(404).json({
-          success: false,
-          message: 'User not found',
-        });
-      }
-  
-      // Destructure the preferred job roles from the user profile
-      const { role1, role2, role3 } = user.profile.preferredJobRole;
-  
-      // Search for jobs that match each role and sort them by creation time
-      let matchedJobs = [];
-      const roles = [role1, role2, role3];
-  
-      for (const role of roles) {
+        // Fetch jobs that match the preferred roles
         const jobs = await JobModel.find({
-          title: {$regex:role,$options:"i"}, // Regex search for job titles
-        })
-          .sort({ createdAt: -1 }) // Sort by creation date within each role
-          .limit(10); // Limit the results to 10 jobs per role
-        matchedJobs = [...matchedJobs, ...jobs]; // Append the new results
-      }
-  
-      // Save the recommended jobs in the user profile
-      user.recommendedJobs = matchedJobs.map(job => job._id);
-    
-  
-      await user.save(); // Save the updated user document
-  
-      // Return the recommended jobs
-      res.json({ success: true, jobs: matchedJobs });
-  
+            "role": { $in: [preferredRoles.role1, preferredRoles.role2, preferredRoles.role3] }
+        });
+
+        // Send success response with recommended jobs
+        return res.status(200).send({
+            success: true,
+            jobs,
+        });
     } catch (error) {
-      console.error('Error fetching and saving recommended jobs:', error);
-      res.status(500).json({ success: false, message: 'Server error', error });
+        return res.status(500).send("Server error:" + error);
     }
-  };
-  
+};
