@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams,Navigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { Authcontext } from "../ContextAPI/Authcontext";
@@ -7,6 +7,11 @@ import { Jobcontext } from "../ContextAPI/Jobcontext";
 import './index.css';
 
 const Applicant = () => {
+    const storedData = JSON.parse(localStorage.getItem("auth"));
+    if(!storedData){
+         alert("Please Login")
+        return  <Navigate to='/login' replace/>
+    }
     const { jobId } = useParams();
     const [auth] = useContext(Authcontext);
     const { token } = auth;

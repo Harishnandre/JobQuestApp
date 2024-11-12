@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './index.css';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams ,Navigate} from 'react-router-dom';
 import { Jobcontext } from '../ContextAPI/Jobcontext';
 import { Companycontext } from '../ContextAPI/Companycontext';
 import axios from 'axios';
@@ -12,6 +12,11 @@ const employmentTypes = [
 ];
 
 const UpdateJobs = () => {
+    const storedData = JSON.parse(localStorage.getItem("auth"));
+    if(!storedData){
+         alert("Please Login")
+        return  <Navigate to='/login' replace/>
+    }
     const { recruiterJobs, getAllRecruiterJobs } = useContext(Jobcontext);
     const { companyData } = useContext(Companycontext);
     const [auth] = useContext(Authcontext);

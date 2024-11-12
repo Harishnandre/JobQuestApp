@@ -358,7 +358,6 @@ export const getUserById=async(req,res)=>{
         const userId=req.params.id;
         const user=await User.findById({_id:userId}).populate({
             path:"recommendedJobs",
-            options:{sort:{createdAt:-1}},
             populate:{path:"company",options:{sort:{createdAt:-1}}}
         })
         .populate({
@@ -403,7 +402,7 @@ export const getRecomendedJobs = async (req, res) => {
   
       for (const role of roles) {
         const jobs = await JobModel.find({
-          title: role, // Regex search for job titles
+          title: {$regex:role,$options:"i"}, // Regex search for job titles
         })
           .sort({ createdAt: -1 }) // Sort by creation date within each role
           .limit(10); // Limit the results to 10 jobs per role
@@ -412,7 +411,7 @@ export const getRecomendedJobs = async (req, res) => {
   
       // Save the recommended jobs in the user profile
       user.recommendedJobs = matchedJobs.map(job => job._id);
-      console.log(user.recommendedJobs);
+    
   
       await user.save(); // Save the updated user document
   

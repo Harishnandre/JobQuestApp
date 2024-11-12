@@ -1,11 +1,16 @@
 import React, { useContext, useState, useEffect } from 'react';
 import './index.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate,Navigate } from 'react-router-dom';
 import { Companycontext } from '../ContextAPI/Companycontext';
 import { LuPencil } from "react-icons/lu";
 import JobQuestLoader from "../Loader";
 
 const Companies = () => {
+    const storedData = JSON.parse(localStorage.getItem("auth"));
+    if(!storedData){
+         alert("Please Login")
+        return  <Navigate to='/login' replace/>
+    }
     const { companyData } = useContext(Companycontext);
     const navigate = useNavigate();
     const [input, setInput] = useState(""); // Filter input state

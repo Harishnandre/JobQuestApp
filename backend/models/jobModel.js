@@ -65,6 +65,10 @@ const jobSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    newsLetterSent:{
+        type:Boolean,
+        default:false
+    },
     applications: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Application'

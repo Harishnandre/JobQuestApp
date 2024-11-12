@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import './index.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Navigate } from 'react-router-dom';
 import { Companycontext } from '../ContextAPI/Companycontext';
 import { Jobcontext } from '../ContextAPI/Jobcontext';
 import axios from 'axios';
@@ -10,6 +10,11 @@ const employmentTypes = [ "Full Time", "Intern",
     "Part Time", "Freelance"
 ];
 const Jobform = () => {
+    const storedData = JSON.parse(localStorage.getItem("auth"));
+    if(!storedData){
+         alert("Please Login")
+        return  <Navigate to='/login' replace/>
+    }
     const navigate = useNavigate();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -27,6 +32,7 @@ const Jobform = () => {
     const { token } = auth;
 
     const handleSubmit = async (e) => {
+        
         e.preventDefault();
         const formData = {
             title,
@@ -171,7 +177,7 @@ const Jobform = () => {
                     Last Application Date:
                     <input
                         type="datetime-local"
-                        value={new Date(jobLastDate)}
+                        value={jobLastDate ? new Date(jobLastDate).toISOString().slice(0, 16) : ''} 
                         onChange={(e) => setJobLastDate(e.target.value)}
                         required
                     />

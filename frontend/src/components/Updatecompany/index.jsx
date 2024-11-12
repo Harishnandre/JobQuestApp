@@ -1,13 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './index.css'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams ,Navigate} from 'react-router-dom';
 import { Companycontext } from '../ContextAPI/Companycontext';
 import { Authcontext } from '../ContextAPI/Authcontext';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import ClipLoader from "react-spinners/ClipLoader";
 const UpdateCompany= () => {
+    const storedData = JSON.parse(localStorage.getItem("auth"));
+    if(!storedData){
+         alert("Please Login")
+        return  <Navigate to='/login' replace/>
+    }
     const {companyData,getAllCompany}=useContext(Companycontext) ;
+    
     const [auth]=useContext(Authcontext); 
     const [loading,setloading]=useState(false);
     const {token}=auth;
@@ -118,10 +124,10 @@ const UpdateCompany= () => {
                 <label>
                     Location:
                 <div className="preferences">
-                   
+
                     <input 
                         type="text" 
-                        name="preference1" 
+                        name="location" 
                         value={formData.location} 
                         onChange={handleChange} 
                     />

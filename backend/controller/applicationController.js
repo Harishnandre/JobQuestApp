@@ -1,5 +1,6 @@
 import { Application } from "../models/applicationModel.js";
 import { JobModel } from "../models/jobModel.js";
+import { sendEmail } from "../utils/sendEmail.js";
 
 export const applyForJob=async(req,res)=>{
     try {
@@ -101,13 +102,23 @@ export const updateStatus=async(req,res)=>{
     try {
         const {status}=req.body;
         const application_id=req.params.id;
-        const application=await Application.findByIdAndUpdate({_id:application_id},{status},{new:true});
+        const application=await Application.findByIdAndUpdate({_id:application_id},{status},{new:true}).populate({path:'applicant'}).populate({path:'jobInquiry'});
         if(!application){
             return res.status(404).send({
                 success:false,
                 message:"No application found"
             });
         }
+        console.log(application, application_id);
+        // Send email notification
+        const applicant = application.applicant;
+        const subject = `Application Status Update: ${status}`;
+        const message = `Dear ${applicant.fullName},\n\nYour application status for the position of ${application.jobInquiry.title} has been updated to "${status}".\n\nThank you for your interest.\n\nBest regards,\nJobQuest Team`;
+        await sendEmail({
+            email: applicant.email,
+            subject,
+            message
+        });
         return res.status(200).send({
                 success:true,
                 message:"Status Updated Successfully",

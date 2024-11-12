@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import './index.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Navigate } from 'react-router-dom';
 import { Companycontext } from '../ContextAPI/Companycontext';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
@@ -8,6 +8,11 @@ import { Authcontext } from '../ContextAPI/Authcontext';
 import ClipLoader from "react-spinners/ClipLoader";
 
 const CompanyList = () => {
+    const storedData = JSON.parse(localStorage.getItem("auth"));
+    if(!storedData){
+         alert("Please Login")
+        return  <Navigate to='/login' replace/>
+    }
     const { getAllCompany } = useContext(Companycontext);
     const [loading, setLoading] = useState(false);
     const [auth] = useContext(Authcontext);

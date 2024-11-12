@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { readdirSync } from 'fs';
 import cookieParser from 'cookie-parser';
 import fileUpload from 'express-fileupload';
+import { newsLetterCorn } from './Automation/newsLetterCron.js';
 dotenv.config();
 const app=express();
 
@@ -24,7 +25,7 @@ app.use(fileUpload({
     tempFileDir:"/tmp/"
 }));
 
-
+newsLetterCorn()
 // Load routes dynamically
 readdirSync('./routes').forEach(async (file) => {
     const route = await import(`./routes/${file}`);

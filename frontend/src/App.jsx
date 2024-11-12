@@ -29,7 +29,7 @@ import QuizPage from './components/Assesment'
 import Aboutus from './components/Aboutus'
 import Contactus from './components/Contactus'
 import GoogleMap from './components/GoogleMap'
-
+import ProtectedRoute from './components/ProtectedRoute'
 
 
 
@@ -38,6 +38,7 @@ const App = () => {
     <AuthcontextProvider>
       <CompanycontextProvider>
       <JobcontextProvider> 
+       
 <BrowserRouter>
 <div className="app-container">
      <Navbar/>
@@ -53,8 +54,8 @@ const App = () => {
       <Route exact path='/job-details/:JobId' Component={Jobdetails}/>
       <Route exact path='/dashboard' Component={Dashboard}/>
       <Route exact path='/jobs-search/:searchTerm' Component={SearchResults} />
-     <Route exact path='/recommended-jobs' Component={RecommendedJobs}/>
-     <Route exact path='/admin/companies' Component={Companies}/>
+     <Route exact path='/recommended-jobs'  Component={RecommendedJobs}/>
+     <Route  exact path='/admin/companies' Component={Companies}/>
      <Route exact path='/admin/jobs' Component={Jobs}/>
      <Route exact path='/admin/companies/create' Component={CompanyList}/>
      <Route exact path='/admin/companies/update/:id' Component={UpdateCompany}/>
