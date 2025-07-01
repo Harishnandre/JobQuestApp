@@ -6,40 +6,39 @@ import JobCard from "../JobCard";
 import JobQuestLoader from "../Loader";
 import { ToastContainer } from 'react-toastify';
 
-// Filter options
 const locations = [
-  "All Locations", "Mumbai", "Bangalore", "Hyderabad", 
-  "Chennai", "Pune", "Noida", "Gurgaon", 
+  "All Locations", "Mumbai", "Bangalore", "Hyderabad",
+  "Chennai", "Pune", "Noida", "Gurgaon",
   "Ahmedabad", "Kolkata", "Jaipur"
 ];
 
 const salaryRanges = [
-  "All Salaries", "Below 10 LPA", "10 LPA and above", 
+  "All Salaries", "Below 10 LPA", "10 LPA and above",
   "20 LPA and above", "30 LPA and above", "40 LPA and above"
 ];
 
 const employmentTypes = [
-  "All Types", "Full Time", "Intern", 
+  "All Types", "Full Time", "Intern",
   "Part Time", "Freelance"
 ];
 
 function JobsSection() {
   const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
   const [location, setLocation] = useState("");
   const [salaryRange, setSalaryRange] = useState("");
   const [employmentType, setEmploymentType] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [showOpened, setShowOpened] = useState(true);
+  const [showClosed, setShowClosed] = useState(false);
   const [error, setError] = useState(null);
 
-  // Function to fetch jobs from the backend
   const fetchJobs = async (search = "") => {
     setLoading(true);
     setError(null);
     try {
       const response = await axios.get(`http://localhost:5000/api/v1/job/get?keyword=${search}`);
       if (response.data.success) {
-        console.log(response.data.jobs);
         setJobs(response.data.jobs);
       } else {
         setError("Failed to load jobs.");
@@ -52,22 +51,30 @@ function JobsSection() {
     }
   };
 
-  // useEffect to fetch jobs on initial load and when filters/search change
   useEffect(() => {
     fetchJobs(searchTerm);
   }, [searchTerm]);
 
   const filteredJobs = jobs.filter(job => {
-    const salaryCondition = salaryRange 
+    const now = new Date();
+    const isOpened = new Date(job.jobLastDate) >= now;
+    const isClosed = !isOpened;
+
+    const matchesStatus =
+      (showOpened && isOpened) ||
+      (showClosed && isClosed);
+
+    const salaryCondition = salaryRange
       ? (salaryRange === "Below 10 LPA" ? job.salary < 10 :
-         salaryRange === "10 LPA and above" ? job.salary >= 10 && job.salary < 20 :
-         salaryRange === "20 LPA and above" ? job.salary >= 20 && job.salary < 30 :
-         salaryRange === "30 LPA and above" ? job.salary >= 30 && job.salary < 40 :
-         salaryRange === "40 LPA and above" ? job.salary >= 40 :
-         true)
+        salaryRange === "10 LPA and above" ? job.salary >= 10 && job.salary < 20 :
+        salaryRange === "20 LPA and above" ? job.salary >= 20 && job.salary < 30 :
+        salaryRange === "30 LPA and above" ? job.salary >= 30 && job.salary < 40 :
+        salaryRange === "40 LPA and above" ? job.salary >= 40 :
+        true)
       : true;
 
     return (
+      matchesStatus &&
       salaryCondition &&
       (!location || job.location === location) &&
       (!employmentType || job.jobType === employmentType)
@@ -79,7 +86,9 @@ function JobsSection() {
     setSalaryRange("");
     setEmploymentType("");
     setSearchTerm("");
-    fetchJobs(""); // Fetch all jobs after clearing filters
+    setShowOpened(true);
+    setShowClosed(true);
+    fetchJobs("");
   };
 
   return (
@@ -90,9 +99,9 @@ function JobsSection() {
 
         <div className="filter-group">
           <p>Location</p>
-          <select value={location} onChange={(e) => { 
+          <select value={location} onChange={(e) => {
             setLocation(e.target.value);
-            fetchJobs(searchTerm); // Re-fetch jobs with search term
+            fetchJobs(searchTerm);
           }}>
             {locations.map((loc, index) => (
               <option key={index} value={loc === "All Locations" ? "" : loc}>
@@ -104,9 +113,9 @@ function JobsSection() {
 
         <div className="filter-group">
           <p>Salary Range</p>
-          <select value={salaryRange} onChange={(e) => { 
+          <select value={salaryRange} onChange={(e) => {
             setSalaryRange(e.target.value);
-            fetchJobs(searchTerm); // Re-fetch jobs with search term
+            fetchJobs(searchTerm);
           }}>
             {salaryRanges.map((range, index) => (
               <option key={index} value={range === "All Salaries" ? "" : range}>
@@ -118,9 +127,9 @@ function JobsSection() {
 
         <div className="filter-group">
           <p>Type of Employment</p>
-          <select value={employmentType} onChange={(e) => { 
+          <select value={employmentType} onChange={(e) => {
             setEmploymentType(e.target.value);
-            fetchJobs(searchTerm); // Re-fetch jobs with search term
+            fetchJobs(searchTerm);
           }}>
             {employmentTypes.map((type, index) => (
               <option key={index} value={type === "All Types" ? "" : type}>
@@ -128,6 +137,30 @@ function JobsSection() {
               </option>
             ))}
           </select>
+        </div>
+
+        <div className="filter-group">
+          <p>Status</p>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                checked={showOpened}
+                onChange={() => setShowOpened(!showOpened)}
+              />{" "}
+              Opened
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                checked={showClosed}
+                onChange={() => setShowClosed(!showClosed)}
+              />{" "}
+              Closed
+            </label>
+          </div>
         </div>
 
         <button className="clear-filters" onClick={handleClearFilters}>Clear Filters</button>
@@ -142,20 +175,19 @@ function JobsSection() {
             type="text"
             placeholder="Search by job title or description or company name"
             value={searchTerm}
-            onChange={(e) => { 
+            onChange={(e) => {
               setSearchTerm(e.target.value);
-              fetchJobs(e.target.value); // Fetch jobs with updated search term
+              fetchJobs(e.target.value);
             }}
           />
         </div>
 
-        {/* Display loading spinner, filtered jobs, or 'No results' */}
         {loading ? (
- <JobQuestLoader/>
+          <JobQuestLoader />
         ) : (
           <div className="card-containers">
-            {filteredJobs.length > 0 ? ( 
-              filteredJobs.map((job) => <JobCard key={job._id} job={job} />) // Use job._id for the key
+            {filteredJobs.length > 0 ? (
+              filteredJobs.map((job) => <JobCard key={job._id} job={job} />)
             ) : (
               <div className="no-results">
                 <img src="https://img.freepik.com/premium-vector/search-result-find-illustration_585024-17.jpg" alt="No results" />
@@ -164,7 +196,7 @@ function JobsSection() {
           </div>
         )}
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 }

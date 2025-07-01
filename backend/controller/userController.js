@@ -393,44 +393,44 @@ export const getUserById=async(req,res)=>{
 
 //Get all jobs according to the prefference of job seeker
 export const getRecomendedJobs = async (req, res) => {
-    try {
-      const userId = req.id;
-      const user = await User.findById(userId); // Get the user by ID
-  
-      if (!user) {
-        return res.status(404).json({
-          success: false,
-          message: 'User not found',
-        });
-      }
-  
-      // Destructure the preferred job roles from the user profile
-      const { role1, role2, role3 } = user.profile.preferredJobRole;
-  
-      // Search for jobs that match each role and sort them by creation time
-      let matchedJobs = [];
-      const roles = [role1, role2, role3];
-  
-      for (const role of roles) {
-        const jobs = await JobModel.find({
-          title: {$regex:role,$options:"i"}, // Regex search for job titles
-        })
-          .sort({ createdAt: -1 }) // Sort by creation date within each role
-          .limit(10); // Limit the results to 10 jobs per role
-        matchedJobs = [...matchedJobs, ...jobs]; // Append the new results
-      }
-  
-      // Save the recommended jobs in the user profile
-      user.recommendedJobs = matchedJobs.map(job => job._id);
-    
-  
-      await user.save(); // Save the updated user document
-  
-      // Return the recommended jobs
-      res.json({ success: true, jobs: matchedJobs });
-  
-    } catch (error) {
-      console.error('Error fetching and saving recommended jobs:', error);
-      res.status(500).json({ success: false, message: 'Server error', error });
+  try {
+    const userId = req.id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
     }
-  };
+
+    const { role1, role2, role3 } = user.profile.preferredJobRole;
+    const roles = [role1, role2, role3];
+
+    let matchedJobs = [];
+    for (const role of roles) {
+      const jobs = await JobModel.find({
+        title: { $regex: role, $options: "i" },
+      })
+        .sort({ createdAt: -1 })
+        .limit(10);
+      matchedJobs = [...matchedJobs, ...jobs];
+    }
+
+    // Separate opened and closed jobs
+    const now = new Date();
+    const openedJobs = matchedJobs.filter(job => new Date(job.jobLastDate) >= now);
+    const closedJobs = matchedJobs.filter(job => new Date(job.jobLastDate) < now);
+
+    // Save the recommended jobs in the user profile (all jobs, opened first)
+    user.recommendedJobs = [...openedJobs, ...closedJobs].map(job => job._id);
+    await user.save();
+
+    // Return opened jobs first, then closed jobs
+    res.json({ success: true, jobs: [...openedJobs, ...closedJobs] });
+
+  } catch (error) {
+    console.error('Error fetching and saving recommended jobs:', error);
+    res.status(500).json({ success: false, message: 'Server error', error });
+  }
+};

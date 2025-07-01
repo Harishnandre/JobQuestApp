@@ -111,7 +111,9 @@ const Navbar = () => {
     <div className="navbar">
       <div className="box1">
         <h1 className="logo">
+         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <img src="/businessman.png" alt="Logo" className="logo-img" /> Job <span className="highlight">Quest</span>
+        </Link>
         </h1>
         <div className="box2">
           <ul className="box21">
